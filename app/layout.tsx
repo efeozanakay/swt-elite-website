@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Newsreader, IBM_Plex_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const display = Newsreader({
@@ -47,7 +48,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Script
+          id="cloudflare-web-analytics"
+          strategy="afterInteractive"
+          type="module"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token":"fd43c44f8f5842ea9e12642f63fd7e2a"}'
+        />
+      </body>
     </html>
   );
 }
