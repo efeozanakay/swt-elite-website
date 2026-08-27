@@ -5,12 +5,22 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Fires once when the element first crosses the viewport threshold.
  * Falls back to "already visible" if IntersectionObserver is unavailable.
+ *
+ * `disabled` opts an element out of observation entirely and reports it as
+ * visible from the very first render, server included. Above-the-fold
+ * content needs this: gating it on hydration means the browser has HTML it
+ * could paint immediately but is told to keep it at opacity 0 until a
+ * client bundle loads and an observer fires.
  */
-export function useInView<T extends HTMLElement>(threshold = 0.2) {
+export function useInView<T extends HTMLElement>(
+  threshold = 0.2,
+  disabled = false
+) {
   const ref = useRef<T | null>(null);
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(disabled);
 
   useEffect(() => {
+    if (disabled) return;
     const node = ref.current;
     if (!node) return;
 
@@ -31,7 +41,7 @@ export function useInView<T extends HTMLElement>(threshold = 0.2) {
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, [threshold, disabled]);
 
   return { ref, inView };
 }

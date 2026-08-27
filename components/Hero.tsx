@@ -61,7 +61,7 @@ export function Hero() {
         desktop width, not just at exactly 1440px.
       */}
       <div className="edge wrap relative z-10 pb-20 pt-40 sm:pb-28 lg:absolute lg:left-[8%] lg:top-[132px] lg:mx-0 lg:max-w-none lg:px-0 lg:pb-0 lg:pt-0">
-        <Reveal className="lg:max-w-lg">
+        <Reveal immediate className="lg:max-w-lg">
           <p className="eyebrow mb-6 flex items-center gap-3">
             <span className="h-1.5 w-1.5 bg-swt-orange" aria-hidden="true" />
             Ground Operations — Türkiye
