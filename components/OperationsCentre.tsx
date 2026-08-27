@@ -61,7 +61,7 @@ export function OperationsCentre() {
               >
                 {item}
                 {i < CAPABILITIES.length - 1 && (
-                  <span className="ml-3 text-ivory/30" aria-hidden="true">
+                  <span className="ml-3 text-ivory/50" aria-hidden="true">
                     /
                   </span>
                 )}

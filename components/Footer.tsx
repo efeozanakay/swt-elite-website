@@ -72,7 +72,10 @@ export function Footer() {
                 {item.label}
               </a>
             ))}
-            <span className="font-sans text-small text-ivory/30">
+            {/* Was ivory/30, which measures 2.51:1 on charcoal. ivory/50
+                is the lowest step that clears 4.5:1 and is already the
+                weight used by the copyright and legal links beside it. */}
+            <span className="font-sans text-small text-ivory/50">
               Designed by Ozzy
             </span>
           </div>

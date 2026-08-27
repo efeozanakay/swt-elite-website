@@ -1,3 +1,4 @@
+import { HeroMedia } from "@/components/HeroMedia";
 import { Reveal } from "@/components/Reveal";
 
 export function Hero() {
@@ -12,36 +13,11 @@ export function Hero() {
         left for the typography below; object-position keeps that framing
         intact under object-cover rather than defaulting to center.
 
-        Muted, looping video is the Hero background. The same still
-        photograph is used as the video's `poster` — shown instantly
-        (preventing layout shift while the video loads) and as the
-        fallback if playback genuinely fails — via the poster attribute
-        only, not a separate visible layer. (prefers-reduced-motion
-        handling intentionally removed for now — video is always the
-        visible media; revisit in a later pass if reduced-motion support
-        is required.)
+        The film, its scrims and its playback control live in HeroMedia,
+        which is a client component because reduced-motion has to be read
+        at runtime. The still used as the poster is unchanged.
       */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/images/swt-elite-hero-airport-vito.png"
-          className="absolute inset-0 h-full w-full object-cover object-[78%_38%]"
-        >
-          <source src="/videos/swt-hero-final.webm" type="video/webm" />
-          <source src="/videos/swt-hero-final.mp4" type="video/mp4" />
-        </video>
-        {/* restrained readability treatment — left side only, so the
-            photograph itself is never globally darkened or flattened.
-            Slightly stronger than a bare minimum since the content block
-            now sits in the upper-left, over sky rather than the darker
-            road area the original bottom scrim was tuned for. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-charcoal/55 via-charcoal/10 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent lg:hidden" />
-      </div>
+      <HeroMedia />
 
       {/*
         Content sits bottom-left on mobile/tablet and moves to an

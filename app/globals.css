@@ -89,6 +89,16 @@
     @apply bg-ivory;
   }
 
+ /* Keyboard-only escape hatch past the fixed header and the whole
+     nav. Off-screen until focused, so it costs nothing visually. */
+  .skip-link {
+    @apply absolute left-6 top-6 z-[100] -translate-y-[200%] border border-ink bg-ivory px-6 py-3 font-sans text-small uppercase tracking-[0.12em] text-ink transition-transform duration-200;
+  }
+
+  .skip-link:focus {
+    @apply translate-y-0;
+  }
+
   .btn-primary {
     @apply inline-flex items-center justify-center border border-ink bg-ink px-8 py-4 font-sans text-small uppercase tracking-[0.12em] text-ivory transition-colors duration-300 hover:bg-transparent hover:text-ink;
   }

@@ -122,7 +122,10 @@ export function Coverage() {
               </div>
             ))}
           </dl>
-          <p className="mt-10 max-w-lg font-sans text-small italic text-graphite/70">
+          {/* graphite/70 measured 3.83:1 on ivory. /80 is the lowest step
+              that clears 4.5 and keeps the caption subordinate to the
+              city labels above it, which run at full graphite. */}
+          <p className="mt-10 max-w-lg font-sans text-small italic text-graphite/80">
             Operational network shown schematically relative to our Antalya base.
           </p>
         </Reveal>
