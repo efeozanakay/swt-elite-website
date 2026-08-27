@@ -73,7 +73,16 @@ export function CapabilitySequence() {
         </Reveal>
       </div>
 
-      {/* 03 — Destination Services: full-bleed band, lower-left text over image */}
+      {/* 03 — Destination Services: full-bleed band, lower-left text over image.
+
+          The 21/11 band is only 196px tall at 375px while the overlay
+          block is ~257px, so the text used to spill above the photo and
+          render ivory-on-ivory: the "03", the eyebrow and the headline's
+          first line were all effectively invisible on every phone.
+          Enforce a minimum band height below sm so the overlay always has
+          image beneath it, reusing the min-h idiom OperationsCentre
+          already applies to its own overlay. sm:min-h-0 hands control
+          back to the 21/11 aspect once the band is naturally tall enough. */}
       <Reveal>
         <div className="relative w-full">
           <Photo
@@ -81,8 +90,13 @@ export function CapabilitySequence() {
             alt="SWT hotel representative assisting guests in a resort lobby"
             aspect="21 / 11"
             position="50% 32%"
+            className="min-h-[480px] sm:min-h-0"
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent" />
+          {/* Text covers a much larger share of the band on mobile, so the
+              scrim has to reach higher and hold more density there. The
+              original lighter treatment resumes at sm, where the band is
+              wide and the text sits in the lower third. */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/55 via-60% to-charcoal/0 sm:from-charcoal/70 sm:via-charcoal/10 sm:via-50%" />
           <div className="on-dark edge wrap absolute inset-x-0 bottom-0 pb-10 sm:pb-14">
             <span className="font-sans text-small text-ivory/70">03</span>
             <p className="eyebrow mb-4 mt-2">Destination Services</p>
