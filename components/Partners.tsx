@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { Reveal } from "@/components/Reveal";
 
 type Partner = {
@@ -17,6 +18,10 @@ type Partner = {
 // uniform 2-column flow for the remaining five logos, which left Trend
 // Sport Travel alone in a trailing row — now a balanced 3-across row with
 // a centred 2-up row beneath it.
+//
+// All three rows are 2-up on mobile. One logo per row made this the
+// third-tallest section on the page at 375px (1376px, taller than its own
+// desktop height) for seven small marks.
 const TOP: Partner[] = [
   { name: "ForYou Travel", file: "foryou-travel.png", tightCrop: true, maxWidth: 235 },
   { name: "Onextur", file: "onextur.png", tightCrop: true, maxWidth: 235 },
@@ -51,22 +56,24 @@ function PartnerLogo({
   fixedWidth = false,
 }: {
   partner: Partner;
-  /** Grid tracks below (grid-cols-N / fr units) resolve `w-full` +
-   * `max-w` correctly, letting items shrink on mobile. `grid-cols-[auto
-   * auto]` (used for the centred pair) sizes its tracks from content, and
-   * a percentage-width child inside an auto track collapses to 0×0 in
-   * this case — so that row passes `fixedWidth` to use an explicit pixel
-   * width instead, which content-sized grid tracks can measure. */
+  /** Fractional grid tracks (grid-cols-N) resolve `w-full` + `max-w`
+   * correctly, letting items shrink on mobile. `grid-cols-[auto auto]`
+   * (used for the centred pair at lg and up) sizes its tracks from
+   * content, and a percentage-width child inside an auto track collapses
+   * to 0x0 — so that row needs a measurable pixel width there. Setting it
+   * through --logo-w lets the same value act as a max-width in the
+   * fractional mobile grid and an exact width in the auto track at lg,
+   * so the pair can go 2-up on mobile without overflowing. */
   fixedWidth?: boolean;
 }) {
   return (
     <li
-      className={`relative mx-auto ${fixedWidth ? "" : "w-full"} ${
-        partner.tightCrop ? "aspect-[8/5]" : "aspect-[32/11]"
-      }`}
+      className={`relative mx-auto w-full ${
+        fixedWidth ? "max-w-[var(--logo-w)] lg:w-[var(--logo-w)] lg:max-w-none" : ""
+      } ${partner.tightCrop ? "aspect-[8/5]" : "aspect-[32/11]"}`}
       style={
         fixedWidth
-          ? { width: partner.maxWidth }
+          ? ({ "--logo-w": `${partner.maxWidth}px` } as CSSProperties)
           : { maxWidth: partner.maxWidth }
       }
     >
@@ -86,14 +93,12 @@ function PartnerLogo({
 
 export function Partners() {
   return (
-    <section className="py-20 sm:py-24 lg:py-28">
-      <div className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
+    <section className="bg-ivory py-20 sm:py-24 lg:py-28">
+      <div className="edge wrap">
         <Reveal>
-          <p className="text-[11px] uppercase tracking-[0.24em] text-graphite">
-            Partners
-          </p>
+          <p className="eyebrow">Partners</p>
 
-          <h2 className="mt-5 max-w-[610px] font-serif text-[36px] leading-[1.16] tracking-[-0.025em] text-graphite sm:text-[42px] lg:text-[48px]">
+          <h2 className="mt-5 max-w-2xl font-display text-display text-ink">
             Working with tour operators and DMC partners across Europe and
             Türkiye.
           </h2>
@@ -107,13 +112,13 @@ export function Partners() {
               ))}
             </ul>
 
-            <ul className="mt-16 grid grid-cols-1 items-center justify-items-center gap-y-16 sm:mt-20 lg:grid-cols-3 lg:gap-x-14 lg:gap-y-0">
+            <ul className="mt-16 grid grid-cols-2 items-center justify-items-center gap-x-16 gap-y-16 sm:mt-20 sm:gap-x-24 lg:grid-cols-3 lg:gap-x-14 lg:gap-y-0">
               {TRIO.map((partner) => (
                 <PartnerLogo key={partner.file} partner={partner} />
               ))}
             </ul>
 
-            <ul className="mx-auto mt-16 grid w-fit grid-cols-1 items-center justify-items-center gap-y-16 sm:mt-20 lg:grid-cols-[auto_auto] lg:gap-x-16">
+            <ul className="mx-auto mt-16 grid grid-cols-2 items-center justify-items-center gap-x-12 gap-y-16 sm:mt-20 sm:gap-x-16 lg:w-fit lg:grid-cols-[auto_auto] lg:gap-x-16">
               {PAIR.map((partner) => (
                 <PartnerLogo key={partner.file} partner={partner} fixedWidth />
               ))}
