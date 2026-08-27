@@ -25,7 +25,7 @@ export function Coverage() {
       <div className="edge wrap">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Coverage</p>
-          <h2 className="font-display text-display-sm text-ink">
+          <h2 className="font-display text-display text-ink">
             One Partner. Across Türkiye.
           </h2>
         </Reveal>

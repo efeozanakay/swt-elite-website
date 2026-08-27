@@ -45,8 +45,15 @@ const config: Config = {
           "clamp(1.875rem, 1.5rem + 1.6vw, 3.25rem)",
           { lineHeight: "1.12" },
         ],
+        // Item-level headings: the h3s inside a section, and the data
+        // labels in Coverage and Fleet. This step used to sit at 24-36px
+        // and was doing two jobs at once, titling whole sections as well
+        // as their contents, so an h2 and its own child h3 rendered at an
+        // identical 33.76px and no section heading outranked what sat
+        // beneath it. Section titles moved up to `display`; this step
+        // moved down to clear them.
         "display-sm": [
-          "clamp(1.5rem, 1.3rem + 0.9vw, 2.25rem)",
+          "clamp(1.375rem, 1.2rem + 0.55vw, 1.75rem)",
           { lineHeight: "1.18" },
         ],
         stat: [

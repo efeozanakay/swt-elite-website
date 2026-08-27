@@ -36,6 +36,14 @@ export function OperationsCentre() {
             <p className="font-display italic text-stat leading-none text-ivory">
               24/7
             </p>
+            {/*
+              Deliberately left at the item step rather than promoted to
+              `display` with the other section titles. This section's
+              heading weight is carried by the 24/7 stat directly above
+              it at 80-118px; a 47px line under that would compete with
+              it rather than support it. The same reasoning applies to
+              OperationalProof, where the stat is itself the h2.
+            */}
             <h2 className="mt-6 max-w-md font-display text-display-sm text-ivory">
               Always on the ground.
             </h2>

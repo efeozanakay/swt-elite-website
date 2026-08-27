@@ -33,7 +33,7 @@ export function OperationalJourney() {
       <div className="edge wrap">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">The Operating Cycle</p>
-          <h2 className="font-display text-display-sm text-ink">
+          <h2 className="font-display text-display text-ink">
             From <span className="italic">Touchdown</span> to{" "}
             <span className="italic">Takeoff</span>.
           </h2>

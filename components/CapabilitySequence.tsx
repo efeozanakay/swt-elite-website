@@ -7,7 +7,7 @@ export function CapabilitySequence() {
       <div className="edge wrap py-28 sm:py-36">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Capabilities</p>
-          <h2 className="font-display text-display-sm text-ink">
+          <h2 className="font-display text-display text-ink">
             Four disciplines, one operation on the ground.
           </h2>
         </Reveal>

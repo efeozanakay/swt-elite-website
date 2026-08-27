@@ -17,7 +17,7 @@ export function People() {
 
         <Reveal delay={100} className="lg:col-span-4 lg:col-start-9">
           <p className="eyebrow mb-6">Field Team</p>
-          <h2 className="font-display text-display-sm text-ink">
+          <h2 className="font-display text-display text-ink">
             Operations are built by people.
           </h2>
           <p className="mt-6 max-w-md font-sans text-body text-graphite">

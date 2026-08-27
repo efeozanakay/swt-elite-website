@@ -30,7 +30,7 @@ export function Fleet() {
       <div className="edge wrap mb-12 sm:mb-16">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Fleet</p>
-          <h2 className="font-display text-display-sm text-ivory">
+          <h2 className="font-display text-display text-ivory">
             A fleet sized to the operation, not the other way round.
           </h2>
         </Reveal>
