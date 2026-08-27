@@ -26,6 +26,17 @@ const config: Config = {
           "clamp(2.75rem, 2rem + 3.5vw, 6.25rem)",
           { lineHeight: "1.04", letterSpacing: "-0.01em" },
         ],
+        // Sub-sm counterpart to `hero`. The hero headline carries a hard
+        // line break, and below 640px `hero` renders each half too wide
+        // for the measure, so both halves wrap again and the headline
+        // breaks into four lines with two orphans. This curve keeps each
+        // half on one line from 320px up, and its 3.4rem ceiling is the
+        // exact value `hero` resolves to at 640px, so the two meet
+        // continuously at the sm breakpoint.
+        "hero-sm": [
+          "clamp(1.9rem, 9.3vw, 3.4rem)",
+          { lineHeight: "1.04", letterSpacing: "-0.01em" },
+        ],
         "display-lg": [
           "clamp(2.25rem, 1.65rem + 2.75vw, 4.5rem)",
           { lineHeight: "1.08", letterSpacing: "-0.01em" },
