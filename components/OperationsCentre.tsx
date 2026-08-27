@@ -11,7 +11,7 @@ const CAPABILITIES = [
 
 export function OperationsCentre() {
   return (
-    <section className="on-dark bg-charcoal py-28 sm:py-36">
+    <section className="on-dark bg-charcoal py-28 md:py-32 lg:py-36">
       {/* full-bleed immersive panel, text anchored top-left — deliberately
           distinct from Capability 03's bottom-left overlay and Fleet's
           text-free band, so the three cinematic moments don't repeat. */}
@@ -25,7 +25,7 @@ export function OperationsCentre() {
             className="min-h-[440px] sm:min-h-0"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-charcoal/85 via-charcoal/15 to-transparent" />
-          <div className="edge wrap absolute inset-x-0 top-0 pt-10 sm:pt-20">
+          <div className="edge wrap absolute inset-x-0 top-0 pt-10 md:pt-14 lg:pt-20">
             <p className="eyebrow mb-6 flex items-center gap-3">
               <span
                 className="h-1.5 w-1.5 bg-swt-orange"
@@ -51,7 +51,7 @@ export function OperationsCentre() {
         </div>
       </Reveal>
 
-      <div className="edge wrap mt-12 sm:mt-16">
+      <div className="edge wrap mt-12 lg:mt-16">
         <Reveal delay={100}>
           <ul className="flex flex-wrap gap-x-3 gap-y-2 border-t border-ivory/15 pt-8">
             {CAPABILITIES.map((item, i) => (

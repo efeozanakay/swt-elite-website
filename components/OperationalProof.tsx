@@ -3,9 +3,17 @@ import { Reveal } from "@/components/Reveal";
 
 export function OperationalProof() {
   return (
-    <section className="on-dark bg-charcoal py-24 sm:py-32">
-      <div className="edge wrap grid grid-cols-1 gap-16 lg:grid-cols-12 lg:items-start lg:gap-8">
-        <Reveal className="lg:col-span-6">
+    <section className="on-dark bg-charcoal py-24 md:py-28 lg:py-32">
+      {/*
+        Two columns from md. Stacked, this was the single most expensive
+        section at tablet: 1027px against 558px at 1024, because the
+        3:2 photograph took the full 753px width and pushed the statistic
+        a whole screen away from its own evidence. Splitting at md puts
+        the two back beside each other and gives the photo ~344px, which
+        is close to the ~430px it already gets in the 6-col at 1024.
+      */}
+      <div className="edge wrap grid grid-cols-1 gap-12 md:grid-cols-12 md:items-start md:gap-8">
+        <Reveal className="md:col-span-6">
           <p className="eyebrow mb-8">Operational Scale</p>
           <h2 className="font-display italic text-stat text-ivory">
             300,000+
@@ -27,7 +35,7 @@ export function OperationalProof() {
             keeps it the dominant element regardless of column width. */}
         <Reveal
           delay={120}
-          className="lg:col-span-6 lg:col-start-7 lg:pt-2"
+          className="md:col-span-6 md:col-start-7 md:pt-2"
         >
           <Photo
             src="/images/operations/operational-scale-real-fleet-lineup.png"

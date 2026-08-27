@@ -21,7 +21,7 @@ const CITIES = [
 
 export function Coverage() {
   return (
-    <section id="coverage" className="bg-ivory py-28 sm:py-36">
+    <section id="coverage" className="bg-ivory py-28 md:py-32 lg:py-36">
       <div className="edge wrap">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Coverage</p>
@@ -104,6 +104,12 @@ export function Coverage() {
         </Reveal>
 
         <Reveal delay={120}>
+          {/*
+            Three across from sm, six only at lg. Six columns at 768
+            resolve to about 88px per cell once the gaps are taken out,
+            and the longest city name needs roughly 130px at this step,
+            so the row would break.
+          */}
           <dl className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 border-t border-graphite/20 pt-10 sm:mt-10 sm:grid-cols-3 lg:grid-cols-6">
             {CITIES.map((city) => (
               <div key={city.name}>

@@ -71,7 +71,7 @@ export function Hero() {
 
         The top offset derives from --header-h so it tracks the nav.
       */}
-      <div className="edge wrap relative z-10 w-full pb-20 pt-40 sm:pb-28 lg:absolute lg:inset-x-0 lg:top-[calc(var(--header-h)+8px)] lg:pb-0 lg:pt-0">
+      <div className="edge wrap relative z-10 w-full pb-20 pt-40 md:pb-28 lg:absolute lg:inset-x-0 lg:top-[calc(var(--header-h)+8px)] lg:pb-0 lg:pt-0">
         <Reveal immediate className="lg:max-w-lg xl:max-w-2xl">
           <p className="eyebrow mb-6 flex items-center gap-3">
             <span className="h-1.5 w-1.5 bg-swt-orange" aria-hidden="true" />

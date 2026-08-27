@@ -3,7 +3,14 @@ import { Reveal } from "@/components/Reveal";
 
 export function People() {
   return (
-    <section id="people" className="bg-bone py-24 sm:py-32">
+    <section id="people" className="bg-bone py-24 md:py-28 lg:py-32">
+      {/*
+        Stacked through md, two columns at lg. A 4-col text rail at 768
+        would leave the heading about 229px of measure at 36px, and the
+        photograph about 400px. Stacked it runs full width, which suits a
+        field photograph better than the ~90px of page height a tablet
+        split would save.
+      */}
       <div className="edge wrap grid grid-cols-1 gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
         <Reveal className="lg:col-span-7">
           <Photo

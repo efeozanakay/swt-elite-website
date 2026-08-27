@@ -29,7 +29,7 @@ const STAGES = [
 
 export function OperationalJourney() {
   return (
-    <section className="bg-bone py-28 sm:py-36">
+    <section className="bg-bone py-28 md:py-32 lg:py-36">
       <div className="edge wrap">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">The Operating Cycle</p>
@@ -40,6 +40,13 @@ export function OperationalJourney() {
         </Reveal>
 
         <Reveal delay={100}>
+          {/*
+            Two up from sm, four across only at lg. Four columns at 768
+            would give each stage about 140px of usable width after its
+            own padding, and the detail line under each would break into
+            six or seven lines. The 2x2 block is the right tablet
+            composition, not an unfinished desktop one.
+          */}
           <div className="mt-16 grid grid-cols-1 border-graphite/20 sm:grid-cols-2 sm:border-t lg:grid-cols-4">
             {STAGES.map((stage, i) => (
               <div

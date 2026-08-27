@@ -93,7 +93,7 @@ function PartnerLogo({
 
 export function Partners() {
   return (
-    <section className="bg-ivory py-20 sm:py-24 lg:py-28">
+    <section className="bg-ivory py-20 md:py-24 lg:py-28">
       <div className="edge wrap">
         <Reveal>
           <p className="eyebrow">Partners</p>

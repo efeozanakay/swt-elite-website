@@ -4,7 +4,7 @@ export function FinalCTA() {
   return (
     <section
       id="handover"
-      className="on-dark bg-charcoal py-32 sm:py-40"
+      className="on-dark bg-charcoal py-32 md:py-36 lg:py-40"
     >
       <div className="edge wrap flex flex-col items-start">
         <Reveal>

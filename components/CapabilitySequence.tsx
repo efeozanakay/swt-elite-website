@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 export function CapabilitySequence() {
   return (
     <section id="capabilities" className="bg-ivory">
-      <div className="edge wrap py-28 sm:py-36">
+      <div className="edge wrap py-28 md:py-32 lg:py-36">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Capabilities</p>
           <h2 className="font-display text-display text-ink">
@@ -13,10 +13,19 @@ export function CapabilitySequence() {
         </Reveal>
       </div>
 
+      {/*
+        Blocks 01, 02 and 04 stay stacked through md and only split at
+        lg. Splitting them at tablet would put each photograph in roughly
+        a 400px column; stacked, they run the full 753px. These are
+        large-format documentary photographs and they carry the section,
+        so width matters more here than the vertical space stacking
+        costs. The text also reads better at 688px than in the 3-col
+        (284px) measure block 01 gets at lg.
+      */}
       {/* 01 — Ground Handling: text left, wide image right. Gap tightened
           (10→8) and column re-split (5/7→3/9) to give the photograph
           substantially more presence, per the desktop scale pass. */}
-      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 sm:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 md:pb-28 lg:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
         <Reveal className="lg:col-span-3">
           <span className="font-sans text-small text-graphite">01</span>
           <p className="eyebrow mb-5 mt-3">Ground Handling</p>
@@ -46,7 +55,7 @@ export function CapabilitySequence() {
           Gap tightened (10→8) and column re-split (6/5→8/4) so the
           vehicle and branding read immediately, per the desktop scale
           pass. */}
-      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 sm:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 md:pb-28 lg:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
         <Reveal className="order-2 lg:order-1 lg:col-span-8">
           <Photo
             src="/images/operations/transportation-airport-vito.png"
@@ -114,7 +123,7 @@ export function CapabilitySequence() {
       {/* 04 — Groups & MICE: single approved photograph. Gap tightened
           (10→8) and image column widened (5→6) to give it editorial
           authority comparable to Ground Handling/Transportation. */}
-      <div className="edge wrap grid grid-cols-1 gap-12 py-24 sm:py-32 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="edge wrap grid grid-cols-1 gap-12 py-24 md:py-28 lg:py-32 lg:grid-cols-12 lg:items-center lg:gap-8">
         <Reveal className="lg:col-span-6">
           <span className="font-sans text-small text-graphite">04</span>
           <p className="eyebrow mb-5 mt-3">Groups &amp; MICE</p>
