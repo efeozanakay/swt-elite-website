@@ -7,8 +7,19 @@
     @apply border-stone/40;
   }
 
+  :root {
+    /* Single source of truth for the fixed header's height. Consumed by
+       Navigation's own height and by scroll-padding-top below, so the two
+       can never drift apart. */
+    --header-h: 124px;
+  }
+
   html {
     scroll-behavior: smooth;
+    /* The header is fixed, so an unadjusted anchor jump lands the target
+       section's eyebrow and heading underneath it. Offset every in-page
+       jump by the header plus a small breathing gap. */
+    scroll-padding-top: calc(var(--header-h) + 24px);
   }
 
   body {

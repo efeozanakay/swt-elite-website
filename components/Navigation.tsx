@@ -39,7 +39,7 @@ export function Navigation() {
           : "border-b border-transparent bg-transparent text-ivory"
       }`}
     >
-      <div className="edge wrap flex h-[124px] items-center justify-between">
+      <div className="edge wrap flex h-[var(--header-h)] items-center justify-between">
         <a href="#top" onClick={() => setOpen(false)} className="shrink-0">
           <BrandMark height={118} priority />
         </a>
