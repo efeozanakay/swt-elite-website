@@ -107,6 +107,40 @@
     @apply border-ivory bg-ivory text-charcoal hover:bg-transparent hover:text-ivory;
   }
 
+  /* Enquiry form controls. Bottom rule only, transparent ground, no box
+     and no radius, so a field reads like the hairline dividers already
+     used in Fleet, Coverage and the footer rather than like a widget
+     dropped into the page. The focus ring from :focus-visible is left
+     intact; the rule brightening is an addition to it, not a
+     replacement for it. */
+  .field-label {
+    @apply block font-sans text-eyebrow uppercase tracking-[0.2em] text-stone;
+  }
+
+  .field-control {
+    @apply mt-3 w-full appearance-none rounded-none border-0 border-b border-ivory/25 bg-transparent pb-3 font-sans text-body text-ivory transition-colors duration-300;
+  }
+
+  .field-control::placeholder {
+    @apply text-ivory/35;
+  }
+
+  .field-control:hover {
+    @apply border-ivory/45;
+  }
+
+  .field-control:focus {
+    @apply border-ivory;
+  }
+
+  .field-control[aria-invalid="true"] {
+    @apply border-swt-orange;
+  }
+
+  .field-error {
+    @apply mt-2 font-sans text-small text-swt-orange;
+  }
+
   .btn-ghost {
     @apply inline-flex items-center justify-center border border-ink/30 px-8 py-4 font-sans text-small uppercase tracking-[0.12em] text-ink transition-colors duration-300 hover:border-ink;
   }
