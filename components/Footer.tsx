@@ -69,15 +69,36 @@ export function Footer() {
                 Kepez / Antalya / Türkiye
               </p>
             </address>
+            {/*
+              A utility affordance rather than a call to action. The
+              wordmark-and-arrow version read as a third CTA in a footer
+              that already has two, and the raw glyph sat off the baseline.
+              The project has no icon set and no icon dependency, so this
+              is drawn inline in the same hairline stroke language as the
+              Coverage schematic: stroke only, currentColor, no fill.
+            */}
             <a
               href={MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 font-sans text-small uppercase tracking-[0.08em] text-ivory/70 transition-colors duration-300 hover:text-ivory"
+              aria-label="Open SWT ELITE headquarters in Google Maps"
+              className="group mt-5 inline-flex text-ivory/60 transition-colors duration-300 hover:text-ivory"
             >
-              View on Google Maps
-              <span aria-hidden="true">↗</span>
-              <span className="sr-only">(opens in a new tab)</span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="transition-transform duration-300 ease-editorial group-hover:-translate-y-0.5"
+              >
+                <path d="M12 21c4.667-4.4 7-7.933 7-10.6a7 7 0 1 0-14 0C5 13.067 7.333 16.6 12 21Z" />
+                <circle cx="12" cy="10.4" r="2.4" />
+              </svg>
             </a>
           </div>
 
