@@ -1,0 +1,945 @@
+{
+  "/images/swt-elite-hero-airport-vito.png": {
+    "slug": "hero-airport-vito",
+    "sourceWidth": 1448,
+    "sourceHeight": 1086,
+    "maxCss": 1905,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1448
+    ],
+    "sourceShortfall": 457,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 7914
+        },
+        {
+          "w": 640,
+          "bytes": 16550
+        },
+        {
+          "w": 828,
+          "bytes": 25218
+        },
+        {
+          "w": 1080,
+          "bytes": 38399
+        },
+        {
+          "w": 1280,
+          "bytes": 49285
+        },
+        {
+          "w": 1448,
+          "bytes": 59871
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 13100
+        },
+        {
+          "w": 640,
+          "bytes": 28042
+        },
+        {
+          "w": 828,
+          "bytes": 42846
+        },
+        {
+          "w": 1080,
+          "bytes": 66028
+        },
+        {
+          "w": 1280,
+          "bytes": 83712
+        },
+        {
+          "w": 1448,
+          "bytes": 101578
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 16256
+        },
+        {
+          "w": 640,
+          "bytes": 35114
+        },
+        {
+          "w": 828,
+          "bytes": 54952
+        },
+        {
+          "w": 1080,
+          "bytes": 85961
+        },
+        {
+          "w": 1280,
+          "bytes": 113553
+        },
+        {
+          "w": 1448,
+          "bytes": 140145
+        }
+      ]
+    }
+  },
+  "/images/operations/ground-handling-meet-greet.png": {
+    "slug": "ground-handling-meet-greet",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "maxCss": 1410,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1600,
+      1672
+    ],
+    "sourceShortfall": 0,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 9186
+        },
+        {
+          "w": 640,
+          "bytes": 17125
+        },
+        {
+          "w": 828,
+          "bytes": 24481
+        },
+        {
+          "w": 1080,
+          "bytes": 34615
+        },
+        {
+          "w": 1280,
+          "bytes": 42931
+        },
+        {
+          "w": 1600,
+          "bytes": 56962
+        },
+        {
+          "w": 1672,
+          "bytes": 60308
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 17314
+        },
+        {
+          "w": 640,
+          "bytes": 31852
+        },
+        {
+          "w": 828,
+          "bytes": 44794
+        },
+        {
+          "w": 1080,
+          "bytes": 61576
+        },
+        {
+          "w": 1280,
+          "bytes": 76330
+        },
+        {
+          "w": 1600,
+          "bytes": 100662
+        },
+        {
+          "w": 1672,
+          "bytes": 103996
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 19226
+        },
+        {
+          "w": 640,
+          "bytes": 38738
+        },
+        {
+          "w": 828,
+          "bytes": 56934
+        },
+        {
+          "w": 1080,
+          "bytes": 83328
+        },
+        {
+          "w": 1280,
+          "bytes": 107122
+        },
+        {
+          "w": 1600,
+          "bytes": 148249
+        },
+        {
+          "w": 1672,
+          "bytes": 157751
+        }
+      ]
+    }
+  },
+  "/images/operations/transportation-airport-vito.png": {
+    "slug": "transportation-airport-vito",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "maxCss": 1181,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1600,
+      1672
+    ],
+    "sourceShortfall": 0,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 7018
+        },
+        {
+          "w": 640,
+          "bytes": 14720
+        },
+        {
+          "w": 828,
+          "bytes": 22504
+        },
+        {
+          "w": 1080,
+          "bytes": 34441
+        },
+        {
+          "w": 1280,
+          "bytes": 45187
+        },
+        {
+          "w": 1600,
+          "bytes": 63164
+        },
+        {
+          "w": 1672,
+          "bytes": 67723
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 11988
+        },
+        {
+          "w": 640,
+          "bytes": 24914
+        },
+        {
+          "w": 828,
+          "bytes": 37864
+        },
+        {
+          "w": 1080,
+          "bytes": 57016
+        },
+        {
+          "w": 1280,
+          "bytes": 72914
+        },
+        {
+          "w": 1600,
+          "bytes": 100892
+        },
+        {
+          "w": 1672,
+          "bytes": 107796
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 14129
+        },
+        {
+          "w": 640,
+          "bytes": 30501
+        },
+        {
+          "w": 828,
+          "bytes": 46913
+        },
+        {
+          "w": 1080,
+          "bytes": 72852
+        },
+        {
+          "w": 1280,
+          "bytes": 96277
+        },
+        {
+          "w": 1600,
+          "bytes": 138270
+        },
+        {
+          "w": 1672,
+          "bytes": 148373
+        }
+      ]
+    }
+  },
+  "/images/operations/destination-services-hotel-representative.png": {
+    "slug": "destination-services-hotel-representative",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "maxCss": 1905,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1600,
+      1672
+    ],
+    "sourceShortfall": 233,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 8662
+        },
+        {
+          "w": 640,
+          "bytes": 16270
+        },
+        {
+          "w": 828,
+          "bytes": 23068
+        },
+        {
+          "w": 1080,
+          "bytes": 32780
+        },
+        {
+          "w": 1280,
+          "bytes": 41083
+        },
+        {
+          "w": 1600,
+          "bytes": 54083
+        },
+        {
+          "w": 1672,
+          "bytes": 56666
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 15454
+        },
+        {
+          "w": 640,
+          "bytes": 28544
+        },
+        {
+          "w": 828,
+          "bytes": 39704
+        },
+        {
+          "w": 1080,
+          "bytes": 55506
+        },
+        {
+          "w": 1280,
+          "bytes": 67386
+        },
+        {
+          "w": 1600,
+          "bytes": 88308
+        },
+        {
+          "w": 1672,
+          "bytes": 94444
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 17786
+        },
+        {
+          "w": 640,
+          "bytes": 35905
+        },
+        {
+          "w": 828,
+          "bytes": 52972
+        },
+        {
+          "w": 1080,
+          "bytes": 78140
+        },
+        {
+          "w": 1280,
+          "bytes": 99767
+        },
+        {
+          "w": 1600,
+          "bytes": 137822
+        },
+        {
+          "w": 1672,
+          "bytes": 146609
+        }
+      ]
+    }
+  },
+  "/images/operations/groups-mice-coach-briefing.png": {
+    "slug": "groups-mice-coach-briefing",
+    "sourceWidth": 1536,
+    "sourceHeight": 1024,
+    "maxCss": 620,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1240
+    ],
+    "sourceShortfall": 0,
+    "dpr2Shortfall": false,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 11916
+        },
+        {
+          "w": 640,
+          "bytes": 22963
+        },
+        {
+          "w": 828,
+          "bytes": 33476
+        },
+        {
+          "w": 1080,
+          "bytes": 46998
+        },
+        {
+          "w": 1240,
+          "bytes": 56965
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 22574
+        },
+        {
+          "w": 640,
+          "bytes": 44144
+        },
+        {
+          "w": 828,
+          "bytes": 61032
+        },
+        {
+          "w": 1080,
+          "bytes": 85256
+        },
+        {
+          "w": 1240,
+          "bytes": 101540
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 23935
+        },
+        {
+          "w": 640,
+          "bytes": 49641
+        },
+        {
+          "w": 828,
+          "bytes": 73200
+        },
+        {
+          "w": 1080,
+          "bytes": 108268
+        },
+        {
+          "w": 1240,
+          "bytes": 133061
+        }
+      ]
+    }
+  },
+  "/images/operations/fleet-mixed-vehicle-lineup.png": {
+    "slug": "fleet-mixed-vehicle-lineup",
+    "sourceWidth": 1667,
+    "sourceHeight": 944,
+    "maxCss": 1905,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1600,
+      1667
+    ],
+    "sourceShortfall": 238,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 9266
+        },
+        {
+          "w": 640,
+          "bytes": 19292
+        },
+        {
+          "w": 828,
+          "bytes": 29319
+        },
+        {
+          "w": 1080,
+          "bytes": 46014
+        },
+        {
+          "w": 1280,
+          "bytes": 60286
+        },
+        {
+          "w": 1600,
+          "bytes": 86002
+        },
+        {
+          "w": 1667,
+          "bytes": 92302
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 17168
+        },
+        {
+          "w": 640,
+          "bytes": 36932
+        },
+        {
+          "w": 828,
+          "bytes": 56002
+        },
+        {
+          "w": 1080,
+          "bytes": 86012
+        },
+        {
+          "w": 1280,
+          "bytes": 113184
+        },
+        {
+          "w": 1600,
+          "bytes": 155112
+        },
+        {
+          "w": 1667,
+          "bytes": 167392
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 18371
+        },
+        {
+          "w": 640,
+          "bytes": 40888
+        },
+        {
+          "w": 828,
+          "bytes": 63361
+        },
+        {
+          "w": 1080,
+          "bytes": 99430
+        },
+        {
+          "w": 1280,
+          "bytes": 132333
+        },
+        {
+          "w": 1600,
+          "bytes": 192118
+        },
+        {
+          "w": 1667,
+          "bytes": 206413
+        }
+      ]
+    }
+  },
+  "/images/operations/operations-centre-24-7.png": {
+    "slug": "operations-centre-24-7",
+    "sourceWidth": 1536,
+    "sourceHeight": 1024,
+    "maxCss": 1905,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1536
+    ],
+    "sourceShortfall": 369,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 8539
+        },
+        {
+          "w": 640,
+          "bytes": 17528
+        },
+        {
+          "w": 828,
+          "bytes": 25806
+        },
+        {
+          "w": 1080,
+          "bytes": 37857
+        },
+        {
+          "w": 1280,
+          "bytes": 48676
+        },
+        {
+          "w": 1536,
+          "bytes": 62395
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 13784
+        },
+        {
+          "w": 640,
+          "bytes": 27590
+        },
+        {
+          "w": 828,
+          "bytes": 41594
+        },
+        {
+          "w": 1080,
+          "bytes": 61308
+        },
+        {
+          "w": 1280,
+          "bytes": 77782
+        },
+        {
+          "w": 1536,
+          "bytes": 100422
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 16418
+        },
+        {
+          "w": 640,
+          "bytes": 35206
+        },
+        {
+          "w": 828,
+          "bytes": 52742
+        },
+        {
+          "w": 1080,
+          "bytes": 80865
+        },
+        {
+          "w": 1280,
+          "bytes": 105222
+        },
+        {
+          "w": 1536,
+          "bytes": 138966
+        }
+      ]
+    }
+  },
+  "/images/operations/operational-scale-real-fleet-lineup.png": {
+    "slug": "operational-scale-real-fleet-lineup",
+    "sourceWidth": 2560,
+    "sourceHeight": 1440,
+    "maxCss": 650,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1300
+    ],
+    "sourceShortfall": 0,
+    "dpr2Shortfall": false,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 7462
+        },
+        {
+          "w": 640,
+          "bytes": 15498
+        },
+        {
+          "w": 828,
+          "bytes": 24739
+        },
+        {
+          "w": 1080,
+          "bytes": 39535
+        },
+        {
+          "w": 1280,
+          "bytes": 53614
+        },
+        {
+          "w": 1300,
+          "bytes": 55512
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 13046
+        },
+        {
+          "w": 640,
+          "bytes": 28038
+        },
+        {
+          "w": 828,
+          "bytes": 45170
+        },
+        {
+          "w": 1080,
+          "bytes": 70864
+        },
+        {
+          "w": 1280,
+          "bytes": 95960
+        },
+        {
+          "w": 1300,
+          "bytes": 99288
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 14741
+        },
+        {
+          "w": 640,
+          "bytes": 31712
+        },
+        {
+          "w": 828,
+          "bytes": 50488
+        },
+        {
+          "w": 1080,
+          "bytes": 79976
+        },
+        {
+          "w": 1280,
+          "bytes": 109376
+        },
+        {
+          "w": 1300,
+          "bytes": 112186
+        }
+      ]
+    }
+  },
+  "/images/operations/field-team-hotel-operation.png": {
+    "slug": "field-team-hotel-operation",
+    "sourceWidth": 1536,
+    "sourceHeight": 1024,
+    "maxCss": 1105,
+    "widths": [
+      400,
+      640,
+      828,
+      1080,
+      1280,
+      1536
+    ],
+    "sourceShortfall": 0,
+    "dpr2Shortfall": true,
+    "files": {
+      "avif": [
+        {
+          "w": 400,
+          "bytes": 10886
+        },
+        {
+          "w": 640,
+          "bytes": 20776
+        },
+        {
+          "w": 828,
+          "bytes": 29543
+        },
+        {
+          "w": 1080,
+          "bytes": 42914
+        },
+        {
+          "w": 1280,
+          "bytes": 53548
+        },
+        {
+          "w": 1536,
+          "bytes": 69172
+        }
+      ],
+      "webp": [
+        {
+          "w": 400,
+          "bytes": 20338
+        },
+        {
+          "w": 640,
+          "bytes": 37738
+        },
+        {
+          "w": 828,
+          "bytes": 54214
+        },
+        {
+          "w": 1080,
+          "bytes": 76720
+        },
+        {
+          "w": 1280,
+          "bytes": 95844
+        },
+        {
+          "w": 1536,
+          "bytes": 122586
+        }
+      ],
+      "jpg": [
+        {
+          "w": 400,
+          "bytes": 22336
+        },
+        {
+          "w": 640,
+          "bytes": 45014
+        },
+        {
+          "w": 828,
+          "bytes": 66103
+        },
+        {
+          "w": 1080,
+          "bytes": 98470
+        },
+        {
+          "w": 1280,
+          "bytes": 127671
+        },
+        {
+          "w": 1536,
+          "bytes": 167371
+        }
+      ]
+    }
+  },
+  "/brand/swt-elite-logo.png": {
+    "slug": "swt-elite-logo",
+    "sourceWidth": 650,
+    "sourceHeight": 497,
+    "widths": [
+      200,
+      320,
+      400
+    ],
+    "files": {
+      "webp": [
+        {
+          "w": 200,
+          "bytes": 20786
+        },
+        {
+          "w": 320,
+          "bytes": 33974
+        },
+        {
+          "w": 400,
+          "bytes": 44976
+        }
+      ],
+      "png": [
+        {
+          "w": 200,
+          "bytes": 24471
+        },
+        {
+          "w": 320,
+          "bytes": 44004
+        },
+        {
+          "w": 400,
+          "bytes": 59246
+        }
+      ]
+    }
+  }
+}

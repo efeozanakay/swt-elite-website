@@ -1,84 +1,154 @@
 import Image from "next/image";
 import { Reveal } from "@/components/Reveal";
 
+/**
+ * Partner marks are sized by their own artwork, not by their file.
+ *
+ * Six of the seven files are the same 640x220 canvas, but the mark inside
+ * each occupies a wildly different share of it: ForYou's is 97px wide,
+ * Rocket DMC's is 444px. Sizing by file width, as this section used to,
+ * therefore had almost no relation to how large each logo actually looked.
+ * Measured from the pixels, the rendered marks spanned 26px to 81px of
+ * optical height, a 3.1x spread, which is what made the group read as
+ * scattered rather than composed.
+ *
+ * `ink` is each mark's true bounding box within its file, measured by
+ * scanning for pixels that are both opaque and darker than near-white.
+ * `width` is the target rendered width of that box. Everything else is
+ * derived, so the file's own padding no longer leaks into the layout: the
+ * artwork is cropped to its mark and the spacing between logos is real
+ * spacing rather than accumulated transparent margin.
+ *
+ * Widths come from equalising optical weight, w * h * sqrt(coverage),
+ * where coverage is the share of the bounding box that is actually ink.
+ * Plain area normalisation over-punishes solid marks like Sonar Tour;
+ * the square-root damping keeps them in proportion. Rocket DMC lands
+ * almost exactly where it already was, so this is a correction of the
+ * outliers rather than a re-scaling of the set.
+ */
 type Partner = {
   name: string;
   file: string;
-  tightCrop: boolean;
-  maxWidth: number;
-  /** Extra filter classes appended after the shared grayscale treatment.
-   * Used only where a logo's source colors convert to a visibly lighter
-   * gray than the others at the same nominal size — darkens post-grayscale
-   * luminance without reintroducing color, so the monochrome look holds. */
-  extraFilter?: string;
+  /** Intrinsic file dimensions. */
+  fw: number;
+  fh: number;
+  /** Measured bounding box of the mark within the file, in file pixels. */
+  ink: { x: number; y: number; w: number; h: number };
+  /** Target rendered width of the mark at lg, in CSS pixels. */
+  width: number;
+  /** Grid placement. Kept explicit so Tailwind sees static class names. */
+  place: string;
+  /**
+   * Post-grayscale luminance correction. Measured mean ink luminance runs
+   * from 84 (Sonar Tour) to 186 (Diana Travel) across the set, so the
+   * lightest marks need bringing down to sit at the same tonal weight as
+   * the rest. Targets roughly 135, the middle of the uncorrected cluster.
+   * Sonar Tour is left alone: it is a dense filled mark and brightening it
+   * would wash it out rather than balance it.
+   */
+  filter?: string;
 };
 
-// "top" pair is unchanged from before. "trio" and "pair" replace the old
-// uniform 2-column flow for the remaining five logos, which left Trend
-// Sport Travel alone in a trailing row — now a balanced 3-across row with
-// a centred 2-up row beneath it.
-const TOP: Partner[] = [
-  { name: "ForYou Travel", file: "foryou-travel.png", tightCrop: true, maxWidth: 235 },
-  { name: "Onextur", file: "onextur.png", tightCrop: true, maxWidth: 235 },
-];
-
-const TRIO: Partner[] = [
-  { name: "Rocket DMC", file: "rocket-dmc.png", tightCrop: false, maxWidth: 300 },
-  { name: "Lucca Tour", file: "lucca-tour.png", tightCrop: false, maxWidth: 300 },
-  { name: "Diana Travel", file: "diana-travel.png", tightCrop: false, maxWidth: 300 },
-];
-
-const PAIR: Partner[] = [
-  { name: "Sonar Tour", file: "sonar-tour.png", tightCrop: false, maxWidth: 300 },
-  // ~20% smaller again on top of the earlier reduction, per review.
-  // extraFilter: measured post-grayscale luminance directly from the
-  // source PNGs (median 164/255 for TST vs 121 for Rocket DMC and 139 for
-  // Lucca Tour — TST's greens simply convert to a lighter gray than their
-  // wordmarks' original colors do). brightness-[85%] on top of the
-  // existing grayscale scales TST's luminance down to ~140, matching
-  // Lucca Tour almost exactly, without reintroducing any color.
+// Order and grouping are unchanged: two, then three, then two. Only the
+// sizing, cropping and grid beneath them are new.
+const PARTNERS: Partner[] = [
+  {
+    name: "ForYou Travel",
+    file: "foryou-travel.png",
+    fw: 640,
+    fh: 220,
+    ink: { x: 270, y: 63, w: 97, h: 95 },
+    width: 79,
+    place: "md:col-start-3 md:col-span-4",
+    filter: "brightness-[74%]",
+  },
+  {
+    name: "Onextur",
+    file: "onextur.png",
+    fw: 640,
+    fh: 220,
+    ink: { x: 260, y: 63, w: 120, h: 93 },
+    width: 90,
+    place: "md:col-span-4",
+  },
+  {
+    name: "Rocket DMC",
+    file: "rocket-dmc.png",
+    fw: 640,
+    fh: 220,
+    ink: { x: 98, y: 81, w: 444, h: 56 },
+    width: 206,
+    place: "md:col-span-4",
+  },
+  {
+    name: "Lucca Tour",
+    file: "lucca-tour.png",
+    fw: 640,
+    fh: 220,
+    ink: { x: 184, y: 69, w: 272, h: 83 },
+    width: 138,
+    place: "md:col-span-4",
+  },
+  {
+    name: "Diana Travel",
+    file: "diana-travel.png",
+    fw: 640,
+    fh: 220,
+    ink: { x: 189, y: 74, w: 264, h: 75 },
+    width: 152,
+    place: "md:col-span-4",
+    filter: "brightness-[73%]",
+  },
+  {
+    name: "Sonar Tour",
+    file: "sonar-tour.png",
+    fw: 640,
+    fh: 220,
+    ink: { x: 204, y: 66, w: 231, h: 88 },
+    width: 98,
+    place: "md:col-start-3 md:col-span-4",
+  },
   {
     name: "Trend Sport Travel",
     file: "trend-sport-travel.png",
-    tightCrop: true,
-    maxWidth: 136,
-    extraFilter: "brightness-[85%]",
+    fw: 651,
+    fh: 415,
+    ink: { x: 0, y: 15, w: 633, h: 386 },
+    width: 103,
+    place: "col-span-2 md:col-span-4",
+    filter: "brightness-[78%]",
   },
 ];
 
-function PartnerLogo({
-  partner,
-  fixedWidth = false,
-}: {
-  partner: Partner;
-  /** Grid tracks below (grid-cols-N / fr units) resolve `w-full` +
-   * `max-w` correctly, letting items shrink on mobile. `grid-cols-[auto
-   * auto]` (used for the centred pair) sizes its tracks from content, and
-   * a percentage-width child inside an auto track collapses to 0×0 in
-   * this case — so that row passes `fixedWidth` to use an explicit pixel
-   * width instead, which content-sized grid tracks can measure. */
-  fixedWidth?: boolean;
-}) {
+function PartnerLogo({ partner }: { partner: Partner }) {
+  // One scale factor takes the mark from file space to rendered space, so
+  // the crop box and the artwork inside it can never drift apart.
+  const k = partner.width / partner.ink.w;
+  const px = (n: number) => `calc(${n.toFixed(1)}px * var(--ls))`;
+
   return (
     <li
-      className={`relative mx-auto ${fixedWidth ? "" : "w-full"} ${
-        partner.tightCrop ? "aspect-[8/5]" : "aspect-[32/11]"
-      }`}
-      style={
-        fixedWidth
-          ? { width: partner.maxWidth }
-          : { maxWidth: partner.maxWidth }
-      }
+      className={`relative overflow-hidden ${partner.place}`}
+      style={{
+        width: px(partner.width),
+        height: px(partner.ink.h * k),
+      }}
     >
       <Image
         src={`/partners/${partner.file}`}
         alt={`${partner.name} logo`}
-        fill
+        width={Math.round(partner.fw * k)}
+        height={Math.round(partner.fh * k)}
         quality={100}
-        sizes={`(min-width: 1024px) ${partner.maxWidth}px, 42vw`}
-        className={`grayscale transition duration-300 ease-editorial hover:grayscale-0 ${
-          partner.tightCrop ? "object-cover" : "object-contain"
-        } ${partner.extraFilter ?? ""}`}
+        className={`absolute max-w-none grayscale transition duration-300 ease-editorial hover:grayscale-0 ${
+          partner.filter ?? ""
+        }`}
+        style={{
+          width: px(partner.fw * k),
+          height: px(partner.fh * k),
+          left: px(-partner.ink.x * k),
+          top: px(-partner.ink.y * k),
+        }}
       />
     </li>
   );
@@ -86,36 +156,40 @@ function PartnerLogo({
 
 export function Partners() {
   return (
-    <section className="py-20 sm:py-24 lg:py-28">
-      <div className="mx-auto w-full max-w-[1120px] px-6 sm:px-8">
+    <section className="bg-ivory py-20 md:py-24 lg:py-28">
+      <div className="edge wrap">
         <Reveal>
-          <p className="text-[11px] uppercase tracking-[0.24em] text-graphite">
-            Partners
-          </p>
+          <p className="eyebrow">Partners</p>
 
-          <h2 className="mt-5 max-w-[610px] font-serif text-[36px] leading-[1.16] tracking-[-0.025em] text-graphite sm:text-[42px] lg:text-[48px]">
+          <h2 className="mt-5 max-w-2xl font-display text-display text-ink">
             Working with tour operators and DMC partners across Europe and
             Türkiye.
           </h2>
         </Reveal>
 
         <Reveal delay={100} className="mt-16">
-          <div className="border-t border-graphite/20 pt-12">
-            <ul className="grid grid-cols-2 items-center gap-x-16 gap-y-16 sm:gap-x-24 sm:gap-y-20">
-              {TOP.map((partner) => (
-                <PartnerLogo key={partner.file} partner={partner} />
-              ))}
-            </ul>
+          <div className="border-t border-graphite/20 pt-14 lg:pt-16">
+            {/*
+              One grid rather than three, so every mark aligns to the same
+              columns and there is a single gap value to read. The two,
+              three, two grouping is unchanged; each row is centred on the
+              twelve-column field by its first item's col-start, which is
+              what turns the narrow-wide-narrow shape into a deliberate
+              symmetric block instead of three unrelated rows.
 
-            <ul className="mt-16 grid grid-cols-1 items-center justify-items-center gap-y-16 sm:mt-20 lg:grid-cols-3 lg:gap-x-14 lg:gap-y-0">
-              {TRIO.map((partner) => (
-                <PartnerLogo key={partner.file} partner={partner} />
-              ))}
-            </ul>
+              Fixed auto-rows give the composition a constant vertical
+              pitch. Without it, row height followed whichever mark
+              happened to be tallest and the spacing between rows drifted.
 
-            <ul className="mx-auto mt-16 grid w-fit grid-cols-1 items-center justify-items-center gap-y-16 sm:mt-20 lg:grid-cols-[auto_auto] lg:gap-x-16">
-              {PAIR.map((partner) => (
-                <PartnerLogo key={partner.file} partner={partner} fixedWidth />
+              --ls scales the whole set from one place; the marks keep
+              their exact aspect ratios at every breakpoint because every
+              dimension derives from the same factor.
+            */}
+            <ul
+              className="mx-auto grid max-w-[960px] grid-cols-2 items-center justify-items-center gap-x-6 gap-y-12 [--ls:0.58] [grid-auto-rows:calc(92px*var(--ls))] md:grid-cols-12 md:gap-y-14 md:[--ls:0.68] lg:gap-x-6 lg:gap-y-16 lg:[--ls:1]"
+            >
+              {PARTNERS.map((partner) => (
+                <PartnerLogo key={partner.file} partner={partner} />
               ))}
             </ul>
           </div>

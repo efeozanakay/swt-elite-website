@@ -4,19 +4,28 @@ import { Reveal } from "@/components/Reveal";
 export function CapabilitySequence() {
   return (
     <section id="capabilities" className="bg-ivory">
-      <div className="edge wrap py-28 sm:py-36">
+      <div className="edge wrap py-28 md:py-32 lg:py-36">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Capabilities</p>
-          <h2 className="font-display text-display-sm text-ink">
+          <h2 className="font-display text-display text-ink">
             Four disciplines, one operation on the ground.
           </h2>
         </Reveal>
       </div>
 
+      {/*
+        Blocks 01, 02 and 04 stay stacked through md and only split at
+        lg. Splitting them at tablet would put each photograph in roughly
+        a 400px column; stacked, they run the full 753px. These are
+        large-format documentary photographs and they carry the section,
+        so width matters more here than the vertical space stacking
+        costs. The text also reads better at 688px than in the 3-col
+        (284px) measure block 01 gets at lg.
+      */}
       {/* 01 — Ground Handling: text left, wide image right. Gap tightened
           (10→8) and column re-split (5/7→3/9) to give the photograph
           substantially more presence, per the desktop scale pass. */}
-      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 sm:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 md:pb-28 lg:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
         <Reveal className="lg:col-span-3">
           <span className="font-sans text-small text-graphite">01</span>
           <p className="eyebrow mb-5 mt-3">Ground Handling</p>
@@ -35,7 +44,8 @@ export function CapabilitySequence() {
             alt="SWT representative meeting arriving guests inside the airport"
             aspect="16 / 10"
             position="62% 40%"
-            sizes="(min-width: 1024px) 74vw, 100vw"
+            // measured 327 / 673 / 653 / 917 / 928
+            sizes="(min-width: 1440px) 928px, (min-width: 1024px) 64vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
       </div>
@@ -46,14 +56,15 @@ export function CapabilitySequence() {
           Gap tightened (10→8) and column re-split (6/5→8/4) so the
           vehicle and branding read immediately, per the desktop scale
           pass. */}
-      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 sm:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="edge wrap grid grid-cols-1 gap-12 pb-24 md:pb-28 lg:pb-32 lg:grid-cols-12 lg:items-center lg:gap-8">
         <Reveal className="order-2 lg:order-1 lg:col-span-8">
           <Photo
             src="/images/operations/transportation-airport-vito.png"
             alt="SWT-branded black executive minivan at the airport with a ground-operations representative"
             aspect="3 / 2"
             position="48% 52%"
-            sizes="(min-width: 1024px) 62vw, 100vw"
+            // measured 327 / 673 / 577 / 811 / 821
+            sizes="(min-width: 1440px) 821px, (min-width: 1024px) 57vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
         <Reveal
@@ -73,7 +84,16 @@ export function CapabilitySequence() {
         </Reveal>
       </div>
 
-      {/* 03 — Destination Services: full-bleed band, lower-left text over image */}
+      {/* 03 — Destination Services: full-bleed band, lower-left text over image.
+
+          The 21/11 band is only 196px tall at 375px while the overlay
+          block is ~257px, so the text used to spill above the photo and
+          render ivory-on-ivory: the "03", the eyebrow and the headline's
+          first line were all effectively invisible on every phone.
+          Enforce a minimum band height below sm so the overlay always has
+          image beneath it, reusing the min-h idiom OperationsCentre
+          already applies to its own overlay. sm:min-h-0 hands control
+          back to the 21/11 aspect once the band is naturally tall enough. */}
       <Reveal>
         <div className="relative w-full">
           <Photo
@@ -81,8 +101,15 @@ export function CapabilitySequence() {
             alt="SWT hotel representative assisting guests in a resort lobby"
             aspect="21 / 11"
             position="50% 32%"
+            // full-bleed band: measured 375 / 753 / 1009 / 1425 / 1905
+            sizes="100vw"
+            className="min-h-[480px] sm:min-h-0"
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/10 to-transparent" />
+          {/* Text covers a much larger share of the band on mobile, so the
+              scrim has to reach higher and hold more density there. The
+              original lighter treatment resumes at sm, where the band is
+              wide and the text sits in the lower third. */}
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/55 via-60% to-charcoal/0 sm:from-charcoal/70 sm:via-charcoal/10 sm:via-50%" />
           <div className="on-dark edge wrap absolute inset-x-0 bottom-0 pb-10 sm:pb-14">
             <span className="font-sans text-small text-ivory/70">03</span>
             <p className="eyebrow mb-4 mt-2">Destination Services</p>
@@ -100,7 +127,7 @@ export function CapabilitySequence() {
       {/* 04 — Groups & MICE: single approved photograph. Gap tightened
           (10→8) and image column widened (5→6) to give it editorial
           authority comparable to Ground Handling/Transportation. */}
-      <div className="edge wrap grid grid-cols-1 gap-12 py-24 sm:py-32 lg:grid-cols-12 lg:items-center lg:gap-8">
+      <div className="edge wrap grid grid-cols-1 gap-12 py-24 md:py-28 lg:py-32 lg:grid-cols-12 lg:items-center lg:gap-8">
         <Reveal className="lg:col-span-6">
           <span className="font-sans text-small text-graphite">04</span>
           <p className="eyebrow mb-5 mt-3">Groups &amp; MICE</p>
@@ -120,7 +147,8 @@ export function CapabilitySequence() {
             aspect="3 / 2"
             position="46% 44%"
             className="lg:ml-auto lg:max-w-[620px]"
-            sizes="(min-width: 1024px) 620px, 100vw"
+            // measured 327 / 673 / 425 / 601 / 608
+            sizes="(min-width: 1440px) 608px, (min-width: 1024px) 42vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
       </div>

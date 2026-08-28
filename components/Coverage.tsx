@@ -21,11 +21,11 @@ const CITIES = [
 
 export function Coverage() {
   return (
-    <section id="coverage" className="bg-ivory py-28 sm:py-36">
+    <section id="coverage" className="bg-ivory py-28 md:py-32 lg:py-36">
       <div className="edge wrap">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Coverage</p>
-          <h2 className="font-display text-display-sm text-ink">
+          <h2 className="font-display text-display text-ink">
             One Partner. Across Türkiye.
           </h2>
         </Reveal>
@@ -104,6 +104,12 @@ export function Coverage() {
         </Reveal>
 
         <Reveal delay={120}>
+          {/*
+            Three across from sm, six only at lg. Six columns at 768
+            resolve to about 88px per cell once the gaps are taken out,
+            and the longest city name needs roughly 130px at this step,
+            so the row would break.
+          */}
           <dl className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 border-t border-graphite/20 pt-10 sm:mt-10 sm:grid-cols-3 lg:grid-cols-6">
             {CITIES.map((city) => (
               <div key={city.name}>
@@ -116,7 +122,10 @@ export function Coverage() {
               </div>
             ))}
           </dl>
-          <p className="mt-10 max-w-lg font-sans text-small italic text-graphite/70">
+          {/* graphite/70 measured 3.83:1 on ivory. /80 is the lowest step
+              that clears 4.5 and keeps the caption subordinate to the
+              city labels above it, which run at full graphite. */}
+          <p className="mt-10 max-w-lg font-sans text-small italic text-graphite/80">
             Operational network shown schematically relative to our Antalya base.
           </p>
         </Reveal>

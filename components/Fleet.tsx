@@ -26,11 +26,11 @@ const CATEGORIES = [
 
 export function Fleet() {
   return (
-    <section id="fleet" className="on-dark bg-charcoal py-28 sm:py-36">
-      <div className="edge wrap mb-12 sm:mb-16">
+    <section id="fleet" className="on-dark bg-charcoal py-28 md:py-32 lg:py-36">
+      <div className="edge wrap mb-12 lg:mb-16">
         <Reveal className="max-w-2xl">
           <p className="eyebrow mb-6">Fleet</p>
-          <h2 className="font-display text-display-sm text-ivory">
+          <h2 className="font-display text-display text-ivory">
             A fleet sized to the operation, not the other way round.
           </h2>
         </Reveal>
@@ -44,10 +44,12 @@ export function Fleet() {
           alt="Mixed SWT fleet lineup — executive vans, minibuses and coaches"
           aspect="16 / 9"
           position="50% 62%"
+          // full-bleed band: measured 375 / 753 / 1009 / 1425 / 1905
+          sizes="100vw"
         />
       </Reveal>
 
-      <div className="edge wrap mt-16 sm:mt-20">
+      <div className="edge wrap mt-16 lg:mt-20">
         <Reveal delay={160}>
           <div className="border-t border-ivory/15">
             {CATEGORIES.map((cat) => (

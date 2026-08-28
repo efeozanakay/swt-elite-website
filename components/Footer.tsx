@@ -1,5 +1,14 @@
 import { BrandMark } from "@/components/BrandMark";
 
+/**
+ * Google's documented Maps URL form, pointing at the same destination as
+ * the link originally supplied. That link carried browser-session
+ * parameters and the window dimensions it was copied from; those expire
+ * and describe a machine rather than a place, so they are not published.
+ */
+const MAPS_URL =
+  "https://www.google.com/maps/dir/?api=1&destination=Alko+Plaza%2C+Alt%C4%B1nova+Sinan%2C+No%3A3%2C+07030+Kepez%2FAntalya";
+
 const LINKS = [
   { label: "Capabilities", href: "#capabilities" },
   { label: "Fleet", href: "#fleet" },
@@ -43,11 +52,54 @@ export function Footer() {
             </a>
           </div>
 
+          {/*
+            The Antalya base is stated here rather than as a section of
+            its own. The approved page order is Final CTA straight into
+            the Footer, so the address belongs in the Location block that
+            already existed rather than in a block between them.
+          */}
           <div>
             <p className="eyebrow mb-4">Location</p>
-            <p className="font-sans text-body text-ivory/80">
-              Antalya, Türkiye
-            </p>
+            <address className="not-italic">
+              <p className="font-sans text-body text-ivory/80">
+                Alko Plaza
+                <br />
+                Altınova Sinan Mh. Sevil Sk. No:3/3
+                <br />
+                Kepez / Antalya / Türkiye
+              </p>
+            </address>
+            {/*
+              A utility affordance rather than a call to action. The
+              wordmark-and-arrow version read as a third CTA in a footer
+              that already has two, and the raw glyph sat off the baseline.
+              The project has no icon set and no icon dependency, so this
+              is drawn inline in the same hairline stroke language as the
+              Coverage schematic: stroke only, currentColor, no fill.
+            */}
+            <a
+              href={MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open SWT ELITE headquarters in Google Maps"
+              className="group mt-5 inline-flex text-ivory/60 transition-colors duration-300 hover:text-ivory"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+                className="transition-transform duration-300 ease-editorial group-hover:-translate-y-0.5"
+              >
+                <path d="M12 21c4.667-4.4 7-7.933 7-10.6a7 7 0 1 0-14 0C5 13.067 7.333 16.6 12 21Z" />
+                <circle cx="12" cy="10.4" r="2.4" />
+              </svg>
+            </a>
           </div>
 
           <div>
@@ -72,7 +124,10 @@ export function Footer() {
                 {item.label}
               </a>
             ))}
-            <span className="font-sans text-small text-ivory/30">
+            {/* Was ivory/30, which measures 2.51:1 on charcoal. ivory/50
+                is the lowest step that clears 4.5:1 and is already the
+                weight used by the copyright and legal links beside it. */}
+            <span className="font-sans text-small text-ivory/50">
               Designed by Ozzy
             </span>
           </div>

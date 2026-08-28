@@ -7,8 +7,19 @@
     @apply border-stone/40;
   }
 
+  :root {
+    /* Single source of truth for the fixed header's height. Consumed by
+       Navigation's own height and by scroll-padding-top below, so the two
+       can never drift apart. */
+    --header-h: 124px;
+  }
+
   html {
     scroll-behavior: smooth;
+    /* The header is fixed, so an unadjusted anchor jump lands the target
+       section's eyebrow and heading underneath it. Offset every in-page
+       jump by the header plus a small breathing gap. */
+    scroll-padding-top: calc(var(--header-h) + 24px);
   }
 
   body {
@@ -76,6 +87,16 @@
 
   .on-dark .link-quiet::after {
     @apply bg-ivory;
+  }
+
+ /* Keyboard-only escape hatch past the fixed header and the whole
+     nav. Off-screen until focused, so it costs nothing visually. */
+  .skip-link {
+    @apply absolute left-6 top-6 z-[100] -translate-y-[200%] border border-ink bg-ivory px-6 py-3 font-sans text-small uppercase tracking-[0.12em] text-ink transition-transform duration-200;
+  }
+
+  .skip-link:focus {
+    @apply translate-y-0;
   }
 
   .btn-primary {
