@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Newsreader, IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
+import { EnquiryProvider } from "@/components/EnquiryProvider";
 import { ORG, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -106,7 +107,7 @@ export default function RootLayout({
             __html: JSON.stringify(ORGANIZATION_JSON_LD),
           }}
         />
-        {children}
+        <EnquiryProvider>{children}</EnquiryProvider>
         <Script
           id="cloudflare-web-analytics"
           strategy="afterInteractive"

@@ -64,6 +64,27 @@ The current code does not require runtime environment variables. If external ser
 
 `next.config.mjs` configures a static export. Running `npm run build` generates the deployable output in `out/`, which is intentionally excluded from version control. The production website is available at [swtelite.com](https://swtelite.com).
 
+## Partnership enquiry form
+
+The primary CTAs open an in-site drawer rather than a `mailto:` link. It
+posts to `POST /api/enquiry`, a Cloudflare Pages Function in
+`functions/api/`, which validates the submission and sends it on through
+Resend. Validation rules live in `lib/enquiry.ts` and are shared by the
+browser and the Function so the two cannot drift apart.
+
+Pages Functions are the mechanism here because `next.config.mjs` sets
+`output: 'export'`, which rules out Next.js API routes. `functions/` sits
+at the repository root and Cloudflare picks it up at deploy;
+`public/_routes.json` limits the Worker to `/api/*` so static assets are
+served directly.
+
+`next dev` does not run Pages Functions, so `/api/enquiry` returns 404
+locally and the drawer shows its error state. Test the full path against
+a Cloudflare preview deployment, or with `wrangler pages dev out`.
+
+See `.env.example` for the required variables. Secrets belong in the
+Pages project as encrypted variables and must never be committed.
+
 ## Project status
 
 The website is live and maintained as the SWT Elite corporate presence. This repository contains the implemented single-page marketing experience; it does not include a booking engine, customer portal, database, analytics dashboard, or content-management system.
