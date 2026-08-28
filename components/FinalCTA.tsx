@@ -1,3 +1,4 @@
+import { EnquiryButton } from "@/components/EnquiryButton";
 import { Reveal } from "@/components/Reveal";
 
 export function FinalCTA() {
@@ -28,12 +29,11 @@ export function FinalCTA() {
           <p className="mt-8 max-w-md font-sans text-body-lg text-ivory/75">
             Tell us what you need on the ground.
           </p>
-          <a
-            href="mailto:info@swtelite.com"
-            className="btn-primary mt-10"
-          >
+          {/* Was a mailto, which handed the visitor to their mail
+              client and lost them. Opens the enquiry drawer instead. */}
+          <EnquiryButton className="btn-primary mt-10">
             Start a Conversation
-          </a>
+          </EnquiryButton>
         </Reveal>
       </div>
     </section>

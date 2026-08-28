@@ -1,3 +1,4 @@
+import { EnquiryButton } from "@/components/EnquiryButton";
 import { HeroMedia } from "@/components/HeroMedia";
 import { Reveal } from "@/components/Reveal";
 
@@ -76,9 +77,9 @@ export function Hero() {
             travel partners across Türkiye.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-6">
-            <a href="#handover" className="btn-primary">
+            <EnquiryButton className="btn-primary">
               Partner With Us
-            </a>
+            </EnquiryButton>
             <a href="#capabilities" className="link-quiet group">
               Explore Our Capabilities
               <span className="transition-transform duration-300 ease-editorial group-hover:translate-x-1">

@@ -47,10 +47,12 @@ export function EnquiryProvider({ children }: { children: ReactNode }) {
 
   const close = useCallback(() => {
     setIsOpen(false);
-    // After the drawer unmounts, put focus back on the exact control that
-    // opened it. Deferred a frame so the element is focusable again and
-    // the browser does not scroll to a still-hidden target.
-    requestAnimationFrame(() => triggerRef.current?.focus());
+    // Focus the originating control synchronously. This was deferred with
+    // requestAnimationFrame, which is throttled or suspended entirely in a
+    // document that is not rendering, so the callback could simply never
+    // run and focus would be stranded inside a closed dialog. The trigger
+    // is always mounted, so there is nothing to wait for.
+    triggerRef.current?.focus();
   }, []);
 
   return (

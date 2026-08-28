@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
+import { EnquiryButton } from "@/components/EnquiryButton";
 
 const LINKS = [
   { label: "Capabilities", href: "#capabilities" },
@@ -87,8 +88,7 @@ export function Navigation() {
           ))}
         </nav>
 
-        <a
-          href="#handover"
+        <EnquiryButton
           className={`hidden border px-6 py-3 font-sans text-small uppercase tracking-[0.1em] transition-colors duration-300 lg:inline-flex ${
             solid
               ? "border-ink/30 text-ink hover:border-ink"
@@ -96,7 +96,7 @@ export function Navigation() {
           }`}
         >
           Partner With Us
-        </a>
+        </EnquiryButton>
 
         <button
           ref={toggleRef}
@@ -140,14 +140,15 @@ export function Navigation() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#handover"
+          {/* Closes the menu before the drawer takes focus, so the
+              collapsing panel cannot steal it back. */}
+          <EnquiryButton
             tabIndex={open ? undefined : -1}
             className="btn-primary mt-2 w-fit"
-            onClick={() => setOpen(false)}
+            onActivate={() => setOpen(false)}
           >
             Partner With Us
-          </a>
+          </EnquiryButton>
         </div>
       </nav>
     </header>

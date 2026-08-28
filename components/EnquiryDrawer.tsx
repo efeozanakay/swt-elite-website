@@ -106,6 +106,19 @@ export function EnquiryDrawer({
     };
   }, [isOpen, onClose]);
 
+  /* The panel stays mounted so it can slide, which would otherwise leave
+     eight focusable controls sitting inside an aria-hidden subtree: an
+     invisible tab stop and a contradiction for assistive technology.
+     The inert attribute takes the whole panel out of the tab order and
+     the accessibility tree while closed. Applied through a ref because
+     React 18 does not accept it as a prop. */
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+    if (isOpen) panel.removeAttribute("inert");
+    else panel.setAttribute("inert", "");
+  }, [isOpen]);
+
   /* Reset back to a blank form once the drawer has closed, so reopening
      never shows a stale success panel or old validation errors. */
   useEffect(() => {
