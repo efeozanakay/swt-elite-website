@@ -18,7 +18,8 @@ export function People() {
             alt="SWT field team coordinating a live hotel-side operation"
             aspect="3 / 2"
             position="50% 42%"
-            sizes="(min-width: 1024px) 58vw, 100vw"
+            // measured 327 / 673 / 497 / 703 / 711
+            sizes="(min-width: 1440px) 711px, (min-width: 1024px) 49vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
 

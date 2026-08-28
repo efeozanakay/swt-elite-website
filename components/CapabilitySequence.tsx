@@ -44,7 +44,8 @@ export function CapabilitySequence() {
             alt="SWT representative meeting arriving guests inside the airport"
             aspect="16 / 10"
             position="62% 40%"
-            sizes="(min-width: 1024px) 74vw, 100vw"
+            // measured 327 / 673 / 653 / 917 / 928
+            sizes="(min-width: 1440px) 928px, (min-width: 1024px) 64vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
       </div>
@@ -62,7 +63,8 @@ export function CapabilitySequence() {
             alt="SWT-branded black executive minivan at the airport with a ground-operations representative"
             aspect="3 / 2"
             position="48% 52%"
-            sizes="(min-width: 1024px) 62vw, 100vw"
+            // measured 327 / 673 / 577 / 811 / 821
+            sizes="(min-width: 1440px) 821px, (min-width: 1024px) 57vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
         <Reveal
@@ -99,6 +101,8 @@ export function CapabilitySequence() {
             alt="SWT hotel representative assisting guests in a resort lobby"
             aspect="21 / 11"
             position="50% 32%"
+            // full-bleed band: measured 375 / 753 / 1009 / 1425 / 1905
+            sizes="100vw"
             className="min-h-[480px] sm:min-h-0"
           />
           {/* Text covers a much larger share of the band on mobile, so the
@@ -143,7 +147,8 @@ export function CapabilitySequence() {
             aspect="3 / 2"
             position="46% 44%"
             className="lg:ml-auto lg:max-w-[620px]"
-            sizes="(min-width: 1024px) 620px, 100vw"
+            // measured 327 / 673 / 425 / 601 / 608
+            sizes="(min-width: 1440px) 608px, (min-width: 1024px) 42vw, (min-width: 640px) calc(100vw - 80px), calc(100vw - 48px)"
           />
         </Reveal>
       </div>

@@ -43,7 +43,8 @@ export function OperationalProof() {
             aspect="3 / 2"
             position="55% 68%"
             className="lg:ml-auto lg:max-w-[650px]"
-            sizes="(min-width: 1024px) 650px, 100vw"
+            // measured 327 / 321 / 425 / 601 / 608 at 375 / 768 / 1024 / 1440 / 1920
+          sizes="(min-width: 1440px) 608px, (min-width: 768px) 42vw, calc(100vw - 48px)"
           />
         </Reveal>
       </div>

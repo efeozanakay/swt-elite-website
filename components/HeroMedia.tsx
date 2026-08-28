@@ -1,54 +1,59 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import manifest from "@/public/images/opt/manifest.json";
 
-const POSTER = "/images/swt-elite-hero-airport-vito.png";
+const STILL = (manifest as unknown as Record<string, {
+  slug: string;
+  sourceWidth: number;
+  sourceHeight: number;
+  files: { avif: { w: number }[]; webp: { w: number }[]; jpg: { w: number }[] };
+}>)["/images/swt-elite-hero-airport-vito.png"];
+
+const srcSet = (variants: { w: number }[], ext: string) =>
+  variants.map((v) => `/images/opt/${STILL.slug}-${v.w}.${ext} ${v.w}w`).join(", ");
 
 /**
- * The hero background film.
+ * The hero background film, and the still underneath it.
  *
- * Two accessibility obligations shape this component.
+ * The still is a real responsive <picture> rather than the video's
+ * `poster` attribute. A poster takes a single URL, so it cannot carry a
+ * srcset or negotiate a format, and the previous one was a 2MB PNG
+ * shipped to every device including phones. As the largest contentful
+ * paint candidate that was the single most expensive thing on the page.
+ * It is server-rendered, eager and high priority; the film is layered
+ * over it and only becomes visible once it has frames to show.
+ *
+ * Two accessibility obligations shape the film itself.
  *
  * The loop runs 20 seconds, so WCAG 2.2.2 requires a way to stop it. The
  * control is a plain uppercase micro-label in the corner, in the same
  * register as the eyebrows, rather than an icon button: the site has no
  * icon vocabulary and no rounded controls to borrow from.
  *
- * The film also must not start at all under prefers-reduced-motion. The
- * previous implementation set the autoplay attribute and left a note
- * saying reduced-motion handling had been dropped, so the film played
- * regardless of the setting. Autoplay is therefore not declared on the
- * element; playback is started from the effect only when motion is
- * allowed, which also means a reduced-motion visitor never sees a frame
- * of movement rather than seeing it start and then stop. The poster is
- * the same still either way, so there is no layout or art-direction
- * difference between the two paths.
+ * The film also must not start under prefers-reduced-motion. The original
+ * implementation set the autoplay attribute and carried a note saying
+ * reduced-motion handling had been dropped, so it played regardless. The
+ * <video> is now mounted only once motion is known to be allowed, which
+ * means a reduced-motion visitor never sees a frame of movement and never
+ * spends a byte on the 3.4MB file either.
  */
 export function HeroMedia() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [reduced, setReduced] = useState(false);
+  const [motionAllowed, setMotionAllowed] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [filmVisible, setFilmVisible] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-
     const apply = () => {
-      const v = videoRef.current;
-      setReduced(mq.matches);
-      if (!v) return;
+      setMotionAllowed(!mq.matches);
       if (mq.matches) {
-        v.pause();
+        videoRef.current?.pause();
         setPlaying(false);
-      } else {
-        // play() rejects when the browser blocks autoplay; the poster is
-        // already the visible frame, so failing here is not a problem.
-        v.play().then(
-          () => setPlaying(true),
-          () => setPlaying(false)
-        );
+        setFilmVisible(false);
       }
     };
-
     apply();
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
@@ -71,18 +76,49 @@ export function HeroMedia() {
   return (
     <>
       <div className="absolute inset-0" aria-hidden="true">
-        <video
-          ref={videoRef}
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster={POSTER}
-          className="absolute inset-0 h-full w-full object-cover object-[78%_38%]"
-        >
-          <source src="/videos/swt-hero-final.webm" type="video/webm" />
-          <source src="/videos/swt-hero-final.mp4" type="video/mp4" />
-        </video>
+        <picture>
+          <source type="image/avif" srcSet={srcSet(STILL.files.avif, "avif")} sizes="100vw" />
+          <source type="image/webp" srcSet={srcSet(STILL.files.webp, "webp")} sizes="100vw" />
+          <img
+            src={`/images/opt/${STILL.slug}-1280.jpg`}
+            srcSet={srcSet(STILL.files.jpg, "jpg")}
+            sizes="100vw"
+            alt=""
+            width={STILL.sourceWidth}
+            height={STILL.sourceHeight}
+            loading="eager"
+            decoding="sync"
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-[78%_38%]"
+          />
+        </picture>
+
+        {motionAllowed && (
+          <video
+            ref={videoRef}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onCanPlay={() => {
+              const v = videoRef.current;
+              if (!v) return;
+              v.play().then(
+                () => {
+                  setPlaying(true);
+                  setFilmVisible(true);
+                },
+                () => setPlaying(false)
+              );
+            }}
+            className={`absolute inset-0 h-full w-full object-cover object-[78%_38%] transition-opacity duration-700 ease-editorial ${
+              filmVisible ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <source src="/videos/swt-hero-final.webm" type="video/webm" />
+            <source src="/videos/swt-hero-final.mp4" type="video/mp4" />
+          </video>
+        )}
 
         {/* Readability treatment, left side only, so the photograph is
             never globally darkened or flattened. */}
@@ -95,10 +131,9 @@ export function HeroMedia() {
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent lg:from-charcoal/40" />
       </div>
 
-      {/* Hidden while reduced motion is in effect: there is nothing
-          playing to stop, and offering a control that does nothing is
-          worse than offering none. */}
-      {!reduced && (
+      {/* Hidden while reduced motion is in effect: nothing is playing to
+          stop, and a control that does nothing is worse than none. */}
+      {motionAllowed && (
         <button
           type="button"
           onClick={toggle}

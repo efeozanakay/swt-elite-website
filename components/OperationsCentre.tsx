@@ -22,6 +22,8 @@ export function OperationsCentre() {
             alt="SWT operations staff coordinating live transfers in the 24/7 operations centre"
             aspect="3 / 2"
             position="50% 40%"
+            // full-bleed band: measured 375 / 753 / 1009 / 1425 / 1905
+            sizes="100vw"
             className="min-h-[440px] sm:min-h-0"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-charcoal/85 via-charcoal/15 to-transparent" />

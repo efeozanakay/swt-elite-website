@@ -44,6 +44,8 @@ export function Fleet() {
           alt="Mixed SWT fleet lineup — executive vans, minibuses and coaches"
           aspect="16 / 9"
           position="50% 62%"
+          // full-bleed band: measured 375 / 753 / 1009 / 1425 / 1905
+          sizes="100vw"
         />
       </Reveal>
 
