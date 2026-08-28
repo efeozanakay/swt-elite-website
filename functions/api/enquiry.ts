@@ -39,6 +39,23 @@ const json = (body: unknown, status: number) =>
 const clean = (value: string, max = 200) =>
   value.replace(/[\r\n]+/g, " ").trim().slice(0, max);
 
+/* Email palette, taken from the site's own tokens. Kept here as literals
+   because an email cannot read the Tailwind config at runtime, and every
+   value has to be inlined into the markup anyway. */
+const CHARCOAL = "#15130F";
+const INK = "#1D1B15";
+const MUTED = "#6E6656";
+const BONE = "#EAE2D0";
+const WASH = "#FAF7F0";
+const HAIRLINE = "#E3DCCB";
+const ACCENT = "#D2601F";
+
+/* Websafe only. No webfont can be relied on in Outlook, and loading one
+   would be an external request in an email client. */
+const SANS =
+  "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
+const SERIF = "Georgia,'Times New Roman',Times,serif";
+
 const escapeHtml = (value: string) =>
   value
     .replace(/&/g, "&amp;")
@@ -122,15 +139,17 @@ export const onRequestPost: Handler<Env> = async ({ request, env }) => {
   )}`;
 
   const rows: Array<[string, string]> = [
-    ["Name", fields.name],
-    ["Company", fields.company],
-    ["Business Email", fields.email],
-    ["Country", fields.country],
-    ["Service", fields.service],
+    ["Name", fields.name.trim()],
+    ["Company", fields.company.trim()],
+    ["Business Email", fields.email.trim()],
+    ["Country", fields.country.trim()],
+    ["Service", fields.service.trim()],
   ];
 
   const text = [
-    ...rows.map(([label, value]) => `${label}: ${value.trim()}`),
+    "SWT ELITE — NEW PARTNERSHIP ENQUIRY",
+    "",
+    ...rows.map(([label, value]) => `${label}: ${value}`),
     "",
     "Message:",
     fields.message.trim(),
@@ -139,19 +158,74 @@ export const onRequestPost: Handler<Env> = async ({ request, env }) => {
     "Sent from the swtelite.com partnership enquiry form.",
   ].join("\n");
 
+  /* Label and value are separate table rows rather than a styled <strong>
+     on one line. The previous version leaned on display:inline-block with
+     a min-width, both of which Gmail and Outlook strip, so the label
+     collapsed straight into the value and arrived as "NameEfe Ozan Akay".
+
+     Everything below is table-based with inline styles, websafe fonts and
+     no external assets, which is what survives Outlook's Word renderer. */
+
+  const emailRow = (label: string, valueHtml: string) =>
+    [
+      `<tr><td style="padding:0 0 6px 0;font-family:${SANS};font-size:11px;line-height:1.3;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};">${escapeHtml(
+        label
+      ).toUpperCase()}</td></tr>`,
+      `<tr><td style="padding:0 0 26px 0;font-family:${SANS};font-size:16px;line-height:1.5;color:${INK};">${valueHtml}</td></tr>`,
+    ].join("");
+
+  const emailAddress = escapeHtml(fields.email.trim());
+
   const html = [
-    '<div style="font-family:ui-sans-serif,system-ui,sans-serif;font-size:15px;line-height:1.6;color:#1D1B15">',
-    ...rows.map(
-      ([label, value]) =>
-        `<p style="margin:0 0 6px"><strong style="display:inline-block;min-width:130px;color:#4A4638">${label}</strong>${escapeHtml(
-          value.trim()
-        )}</p>`
+    `<body style="margin:0;padding:0;background-color:${BONE};">`,
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${BONE};margin:0;padding:0;">`,
+    '<tr><td align="center" style="padding:32px 16px;">',
+
+    `<table role="presentation" width="620" cellpadding="0" cellspacing="0" border="0" style="width:620px;max-width:620px;background-color:#FFFFFF;border:1px solid ${HAIRLINE};">`,
+
+    // Header
+    '<tr><td style="padding:38px 40px 0 40px;">',
+    `<div style="font-family:${SANS};font-size:11px;line-height:1;letter-spacing:0.24em;text-transform:uppercase;color:${MUTED};">SWT Elite</div>`,
+    `<div style="font-family:${SERIF};font-size:23px;line-height:1.25;letter-spacing:0.05em;text-transform:uppercase;color:${CHARCOAL};padding-top:15px;">New Partnership Enquiry</div>`,
+    '</td></tr>',
+
+    // Single short accent rule, drawn as a table cell so Outlook honours it
+    '<tr><td style="padding:20px 40px 0 40px;">',
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="44" height="2" style="width:44px;height:2px;background-color:${ACCENT};font-size:0;line-height:0;">&nbsp;</td></tr></table>`,
+    '</td></tr>',
+
+    // Fields
+    '<tr><td style="padding:34px 40px 0 40px;">',
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">',
+    ...rows.map(([label, value]) =>
+      label === "Business Email"
+        ? emailRow(
+            label,
+            `<a href="mailto:${emailAddress}" style="color:${INK};text-decoration:underline;">${emailAddress}</a>`
+          )
+        : emailRow(label, escapeHtml(value))
     ),
-    '<p style="margin:18px 0 6px"><strong style="color:#4A4638">Message</strong></p>',
-    `<p style="margin:0;white-space:pre-wrap">${escapeHtml(fields.message.trim())}</p>`,
-    '<hr style="border:0;border-top:1px solid #C7BEA7;margin:24px 0">',
-    '<p style="margin:0;font-size:13px;color:#4A4638">Sent from the swtelite.com partnership enquiry form.</p>',
-    "</div>",
+    '</table>',
+    '</td></tr>',
+
+    // Message, set apart on its own warm ground
+    '<tr><td style="padding:6px 40px 0 40px;">',
+    `<div style="font-family:${SANS};font-size:11px;line-height:1.3;letter-spacing:0.16em;text-transform:uppercase;color:${MUTED};padding-bottom:10px;">Message</div>`,
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${WASH};border:1px solid ${HAIRLINE};"><tr><td style="padding:20px 22px;font-family:${SANS};font-size:16px;line-height:1.65;color:${INK};">${escapeHtml(
+      fields.message.trim()
+    ).replace(/\r?\n/g, "<br>")}</td></tr></table>`,
+    '</td></tr>',
+
+    // Footer
+    '<tr><td style="padding:34px 40px 36px 40px;">',
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td height="1" style="height:1px;background-color:${HAIRLINE};font-size:0;line-height:0;">&nbsp;</td></tr></table>`,
+    `<div style="font-family:${SANS};font-size:12px;line-height:1.6;color:${MUTED};padding-top:18px;">Sent from the swtelite.com partnership enquiry form.</div>`,
+    '</td></tr>',
+
+    '</table>',
+    '</td></tr>',
+    '</table>',
+    '</body>',
   ].join("");
 
   try {
