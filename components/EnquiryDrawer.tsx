@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { Turnstile } from "@/components/Turnstile";
 import {
   SERVICES,
   validateEnquiry,
@@ -46,6 +47,9 @@ export function EnquiryDrawer({
   const [errors, setErrors] = useState<EnquiryErrors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [serverMessage, setServerMessage] = useState<string | null>(null);
+  // Held in a ref rather than state: the token changing must not re-render
+  // the form, and Managed mode can hand one over at any moment.
+  const turnstileToken = useRef<string | null>(null);
 
   /* Escape, focus trap, initial focus, and background scroll lock. All
      torn down together so nothing leaks if the drawer unmounts mid-state. */
@@ -161,7 +165,7 @@ export function EnquiryDrawer({
       const response = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fields),
+        body: JSON.stringify({ ...fields, turnstileToken: turnstileToken.current }),
       });
 
       if (!response.ok) {
@@ -171,7 +175,10 @@ export function EnquiryDrawer({
           setStatus("idle");
           return;
         }
-        throw new Error(payload?.message ?? `Request failed (${response.status})`);
+        // Surface the server's own wording when it gave any, otherwise a
+        // plain sentence. Raw status codes are an internal detail and mean
+        // nothing to the person reading them.
+        throw new Error(payload?.message ?? "");
       }
 
       setStatus("success");
@@ -295,6 +302,10 @@ export function EnquiryDrawer({
                   error={errors.message}
                   onChange={update}
                 />
+
+                {/* Managed mode is invisible for nearly everyone, so this
+                    normally renders nothing and adds no gap. */}
+                <Turnstile onToken={(t) => (turnstileToken.current = t)} />
 
                 {status === "error" && (
                   <p role="alert" className="field-error">

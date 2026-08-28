@@ -70,6 +70,37 @@ export const onRequestPost: Handler<Env> = async ({ request, env }) => {
     return json({ message: "Please check the form.", errors }, 400);
   }
 
+  // Turnstile, when configured. Verified here rather than trusted from
+  // the client, which is the entire point: a token is only meaningful
+  // once Cloudflare has confirmed it, once, server-side.
+  if (env.TURNSTILE_SECRET_KEY) {
+    const token = typeof payload.turnstileToken === "string" ? payload.turnstileToken : "";
+    if (!token) {
+      return json({ message: "Please try again." }, 400);
+    }
+
+    const form = new FormData();
+    form.append("secret", env.TURNSTILE_SECRET_KEY);
+    form.append("response", token);
+    const ip = request.headers.get("CF-Connecting-IP");
+    if (ip) form.append("remoteip", ip);
+
+    try {
+      const verify = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        { method: "POST", body: form }
+      );
+      const outcome = (await verify.json()) as { success?: boolean; "error-codes"?: string[] };
+      if (!outcome.success) {
+        console.error("enquiry: turnstile rejected", JSON.stringify(outcome["error-codes"] ?? []));
+        return json({ message: "We could not verify that request." }, 403);
+      }
+    } catch (error) {
+      console.error("enquiry: turnstile verification failed", error);
+      return json({ message: "We could not verify that request." }, 502);
+    }
+  }
+
   if (!env.RESEND_API_KEY || !env.ENQUIRY_TO || !env.ENQUIRY_FROM) {
     // Deliberately explicit in the log and vague to the caller: the
     // visitor cannot act on a misconfiguration and should not be told
