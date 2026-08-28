@@ -1,5 +1,14 @@
 import { BrandMark } from "@/components/BrandMark";
 
+/**
+ * Google's documented Maps URL form, pointing at the same destination as
+ * the link originally supplied. That link carried browser-session
+ * parameters and the window dimensions it was copied from; those expire
+ * and describe a machine rather than a place, so they are not published.
+ */
+const MAPS_URL =
+  "https://www.google.com/maps/dir/?api=1&destination=Alko+Plaza%2C+Alt%C4%B1nova+Sinan%2C+No%3A3%2C+07030+Kepez%2FAntalya";
+
 const LINKS = [
   { label: "Capabilities", href: "#capabilities" },
   { label: "Fleet", href: "#fleet" },
@@ -43,11 +52,33 @@ export function Footer() {
             </a>
           </div>
 
+          {/*
+            The Antalya base is stated here rather than as a section of
+            its own. The approved page order is Final CTA straight into
+            the Footer, so the address belongs in the Location block that
+            already existed rather than in a block between them.
+          */}
           <div>
             <p className="eyebrow mb-4">Location</p>
-            <p className="font-sans text-body text-ivory/80">
-              Antalya, Türkiye
-            </p>
+            <address className="not-italic">
+              <p className="font-sans text-body text-ivory/80">
+                Alko Plaza
+                <br />
+                Altınova Sinan Mh. Sevil Sk. No:3/3
+                <br />
+                Kepez / Antalya / Türkiye
+              </p>
+            </address>
+            <a
+              href={MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 font-sans text-small uppercase tracking-[0.08em] text-ivory/70 transition-colors duration-300 hover:text-ivory"
+            >
+              View on Google Maps
+              <span aria-hidden="true">↗</span>
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
           </div>
 
           <div>

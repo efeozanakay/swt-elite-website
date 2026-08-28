@@ -1,24 +1,31 @@
 # Source assets
 
-The original, full-resolution images. Nothing here is served to the
-browser and nothing here is written to by any script — these are the
-inputs and the rollback point.
+Originals that are not served directly.
 
-`scripts/generate-images.mjs` (run via `npm run images`) reads this
-directory and writes derivatives into `public/images/opt/`, which is what
-the site actually ships. To change an image, replace the original here
-and re-run the script.
+## `swt-elite-logo.png`
 
-## Why these are not in `public/`
-
-They were, and Next copied all 21MB of them into `out/` on every build
-even though no markup referenced them any more. Keeping them outside
-`public/` preserves them in full while keeping them out of the deployed
-output.
+The brand lockup at 650x497. `BrandMark` serves lossless WebP and PNG
+derivatives of it from `public/images/opt/`, sized to how the mark is
+actually drawn, so this original is not requested by the browser. Both
+derivative formats are mathematically lossless, so the rendered mark is
+pixel-identical to this file.
 
 ## `opengraph-image.png`
 
 The original 1200x630 export. Next resolves `app/opengraph-image.*` by
 convention, so the PNG and the JPEG that is actually served cannot both
-live in `app/`. The JPEG is generated from this file at quality 84 and is
-91% smaller.
+live in `app/`.
+
+## Photography
+
+Not here. The nine photographs are in `public/images/`, served directly
+as the original lossless PNGs, which is the approved visual state.
+
+A responsive AVIF/WebP pipeline was built and then rolled back: at the
+quality it was generated with it was visibly degrading the photography.
+Measured against the originals it scored 32-38 dB PSNR, where the
+full-bleed images sat at 32-36 dB, and that is plainly visible on
+large-format work. `scripts/generate-images.mjs` is kept intact and still
+runnable for a future attempt at substantially higher quality, but its
+photographic output is not currently used or shipped. Any retry needs a
+review by eye, not a byte count.
