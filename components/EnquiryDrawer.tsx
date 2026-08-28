@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Turnstile } from "@/components/Turnstile";
+import { Turnstile, type TurnstileHandle } from "@/components/Turnstile";
 import {
   SERVICES,
   validateEnquiry,
@@ -47,9 +47,45 @@ export function EnquiryDrawer({
   const [errors, setErrors] = useState<EnquiryErrors>({});
   const [status, setStatus] = useState<Status>("idle");
   const [serverMessage, setServerMessage] = useState<string | null>(null);
-  // Held in a ref rather than state: the token changing must not re-render
+  // Held in refs rather than state: a token arriving must not re-render
   // the form, and Managed mode can hand one over at any moment.
+  //
+  // A Turnstile token is single use and expires after about 300 seconds.
+  // It used to be captured once and sent with every submission, so the
+  // second attempt, and any retry after a failed send, replayed a token
+  // the server had already redeemed. Cloudflare answers that with
+  // timeout-or-duplicate and the Function returns 403.
   const turnstileToken = useRef<string | null>(null);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  // Resolvers for submissions that arrived before a token did.
+  const tokenWaiters = useRef<Array<(token: string | null) => void>>([]);
+  // Guards against a second in-flight request. The disabled button covers
+  // the pointer; this covers everything else that can submit a form.
+  const submittingRef = useRef(false);
+
+  const receiveToken = (token: string | null) => {
+    turnstileToken.current = token;
+    if (!token) return;
+    const waiting = tokenWaiters.current;
+    tokenWaiters.current = [];
+    waiting.forEach((resolve) => resolve(token));
+  };
+
+  /** Current token, or the next one to arrive. Covers the window just
+   *  after a reset, and the moment right after the drawer opens, when the
+   *  challenge may not have resolved yet. */
+  const awaitToken = (timeoutMs = 8000) =>
+    new Promise<string | null>((resolve) => {
+      if (turnstileToken.current) return resolve(turnstileToken.current);
+      let settled = false;
+      const finish = (value: string | null) => {
+        if (settled) return;
+        settled = true;
+        resolve(value);
+      };
+      tokenWaiters.current.push(finish);
+      window.setTimeout(() => finish(turnstileToken.current), timeoutMs);
+    });
 
   /* Escape, focus trap, initial focus, and background scroll lock. All
      torn down together so nothing leaks if the drawer unmounts mid-state. */
@@ -158,14 +194,20 @@ export function EnquiryDrawer({
       return;
     }
 
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     setStatus("submitting");
     setServerMessage(null);
+
+    // Read the token as late as possible, and wait for one if the
+    // challenge has not resolved yet, so a fast submit does not post null.
+    const token = await awaitToken();
 
     try {
       const response = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...fields, turnstileToken: turnstileToken.current }),
+        body: JSON.stringify({ ...fields, turnstileToken: token }),
       });
 
       if (!response.ok) {
@@ -189,6 +231,14 @@ export function EnquiryDrawer({
           ? error.message
           : "Something went wrong."
       );
+    } finally {
+      submittingRef.current = false;
+      // The token has now been presented to the server, so it is spent
+      // whatever the outcome. Discard it and re-run the challenge, so a
+      // retry after a failed send carries a genuinely new token rather
+      // than replaying the one Cloudflare has already seen.
+      turnstileToken.current = null;
+      turnstileRef.current?.reset();
     }
   };
 
@@ -305,7 +355,7 @@ export function EnquiryDrawer({
 
                 {/* Managed mode is invisible for nearly everyone, so this
                     normally renders nothing and adds no gap. */}
-                <Turnstile onToken={(t) => (turnstileToken.current = t)} />
+                <Turnstile ref={turnstileRef} onToken={receiveToken} />
 
                 {status === "error" && (
                   <p role="alert" className="field-error">
