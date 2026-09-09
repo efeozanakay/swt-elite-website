@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 /**
  * Partner marks are sized by their own artwork, not by their file.
  *
- * Six of the seven files are the same 640x220 canvas, but the mark inside
+ * Six of the original seven files are the same 640x220 canvas, but the mark inside
  * each occupies a wildly different share of it: ForYou's is 97px wide,
  * Rocket DMC's is 444px. Sizing by file width, as this section used to,
  * therefore had almost no relation to how large each logo actually looked.
@@ -49,8 +49,7 @@ type Partner = {
   filter?: string;
 };
 
-// Order and grouping are unchanged: two, then three, then two. Only the
-// sizing, cropping and grid beneath them are new.
+// Preserve the original order; Ela completes the final row of three.
 const PARTNERS: Partner[] = [
   {
     name: "ForYou Travel",
@@ -106,7 +105,7 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 204, y: 66, w: 231, h: 88 },
     width: 98,
-    place: "md:col-start-3 md:col-span-4",
+    place: "md:col-span-4",
   },
   {
     name: "Trend Sport Travel",
@@ -115,8 +114,20 @@ const PARTNERS: Partner[] = [
     fh: 415,
     ink: { x: 0, y: 15, w: 633, h: 386 },
     width: 103,
-    place: "col-span-2 md:col-span-4",
+    place: "md:col-span-4",
     filter: "brightness-[78%]",
+  },
+  {
+    name: "Ela Excellence",
+    // Official transparent PNG from elahotels.com's Logos and Brand Guides kit.
+    file: "ela-excellence.png",
+    fw: 2363,
+    fh: 1654,
+    ink: { x: 145, y: 183, w: 2072, h: 1288 },
+    // 18% ink coverage: 116px matches the surrounding marks' optical weight.
+    // Mean grayscale luminance is 127, so no brightness correction is needed.
+    width: 116,
+    place: "md:col-span-4",
   },
 ];
 
@@ -171,11 +182,9 @@ export function Partners() {
           <div className="border-t border-graphite/20 pt-14 lg:pt-16">
             {/*
               One grid rather than three, so every mark aligns to the same
-              columns and there is a single gap value to read. The two,
-              three, two grouping is unchanged; each row is centred on the
-              twelve-column field by its first item's col-start, which is
-              what turns the narrow-wide-narrow shape into a deliberate
-              symmetric block instead of three unrelated rows.
+              columns and there is a single gap value to read. Two marks
+              are centred in the first row, followed by two rows of three.
+              Below md, the eight marks form four pairs.
 
               Fixed auto-rows give the composition a constant vertical
               pitch. Without it, row height followed whichever mark
