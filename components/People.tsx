@@ -1,5 +1,7 @@
 import { Photo } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
+import { LicenceLine } from "@/components/b2c/LicenceLine";
+import { TEAM_EXPERIENCE } from "@/lib/b2c/business";
 
 export function People() {
   return (
@@ -33,6 +35,10 @@ export function People() {
             are coordinated by experienced local teams — on the ground in
             Türkiye, not managed remotely.
           </p>
+          {/* Approved wording: the experience belongs to team members, not
+              to the company's own operating history. */}
+          <p className="mt-4 max-w-md font-sans text-body text-graphite">{TEAM_EXPERIENCE}</p>
+          <LicenceLine className="mt-8 max-w-md border-t border-graphite/20 pt-5" />
         </Reveal>
       </div>
     </section>

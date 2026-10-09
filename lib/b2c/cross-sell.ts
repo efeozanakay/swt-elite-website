@@ -4,26 +4,22 @@ import type { ImageKey } from "@/lib/b2c/images";
 /**
  * Which tour destination to suggest for a transfer's resort end.
  * A plain lookup on purpose: contextual links, not a recommendation
- * engine. Areas with no demo experiences nearby get no suggestion.
+ * engine. The tours programme is Antalya-only, so resorts outside the
+ * province (Fethiye, Bodrum, Cappadocia…) get no suggestion.
  */
 const NEAREST: Record<string, TourDestination> = {
-  "antalya-centre": "Antalya",
-  lara: "Antalya",
-  kundu: "Antalya",
-  konyaalti: "Antalya",
-  belek: "Antalya",
-  side: "Side",
-  manavgat: "Side",
+  "antalya-centre": "Antalya City",
+  lara: "Antalya City",
+  kundu: "Antalya City",
+  konyaalti: "Antalya City",
+  belek: "Belek",
+  side: "Side & Manavgat",
+  manavgat: "Side & Manavgat",
   alanya: "Alanya",
   mahmutlar: "Alanya",
   kemer: "Kemer",
   tekirova: "Kemer",
-  fethiye: "Fethiye",
-  oludeniz: "Fethiye",
-  gocek: "Fethiye",
-  goreme: "Cappadocia",
-  urgup: "Cappadocia",
-  uchisar: "Cappadocia",
+  kas: "Kaş & Demre",
 };
 
 export const tourDestinationFor = (locationId: string) => NEAREST[locationId] ?? null;

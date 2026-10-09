@@ -7,29 +7,36 @@
  * entry. Itinerary steps are a structural sample that shows how a real
  * itinerary will be laid out, not a description of a real day.
  *
+ * Scope, as approved: the first programme is Antalya-only, for guests
+ * staying in Antalya and its resorts. Nothing here departs from another
+ * city, and trips from Antalya to destinations outside the province are
+ * deliberately absent until the real catalogue confirms them.
+ *
  * Replace this module with the real catalogue. Components only depend on
  * the `Tour` shape, so the swap does not touch the UI.
  */
 import type { ImageKey } from "@/lib/b2c/images";
 
-export type TourCategory = "boat" | "culture" | "nature" | "family" | "sightseeing";
+export type TourCategory = "boat" | "rafting" | "safari" | "culture" | "nature";
 export type TourDuration = "half-day" | "full-day";
 
+/** No category has priority; this is display order only. */
 export const TOUR_CATEGORIES: { id: TourCategory; label: string; blurb: string }[] = [
-  { id: "boat", label: "Boat Trips & Sea", blurb: "Bays, coves and a day on the water." },
-  { id: "culture", label: "City & Culture", blurb: "Old towns, ancient cities and local life." },
-  { id: "nature", label: "Nature & Adventure", blurb: "Canyons, rivers and mountain roads." },
-  { id: "family", label: "Family Activities", blurb: "Easy-going days that work for all ages." },
-  { id: "sightseeing", label: "Sightseeing", blurb: "The views and landmarks worth the trip." },
+  { id: "boat", label: "Boat Excursions", blurb: "Bays, coves and a day on the water." },
+  { id: "rafting", label: "Rafting", blurb: "White water in the canyons inland." },
+  { id: "safari", label: "Jeep & ATV Safari", blurb: "Off-road tracks into the Taurus foothills." },
+  { id: "culture", label: "Culture & Sightseeing", blurb: "Old towns and ancient cities by the sea." },
+  { id: "nature", label: "Nature & Outdoors", blurb: "Forests, rivers and coastal paths." },
 ];
 
+/** Areas within Antalya province where the demo experiences take place. */
 export const TOUR_DESTINATIONS = [
-  "Antalya",
+  "Antalya City",
   "Kemer",
-  "Side",
+  "Belek",
+  "Side & Manavgat",
   "Alanya",
-  "Fethiye",
-  "Cappadocia",
+  "Kaş & Demre",
 ] as const;
 export type TourDestination = (typeof TOUR_DESTINATIONS)[number];
 
@@ -54,13 +61,15 @@ export type Tour = {
   inclusions: string[] | null;
   exclusions: string[] | null;
   image: ImageKey;
+  /** Overrides the image's default focal point for this card. */
+  focus?: string;
   featured?: boolean;
 };
 
 const SAMPLE_ITINERARY = (middle: { label: string; detail: string }[]) => [
-  { label: "Start", detail: "Meeting or pickup point to be confirmed." },
+  { label: "Start", detail: "Hotel pickup or meeting point to be confirmed." },
   ...middle,
-  { label: "Return", detail: "Return arrangements to be confirmed." },
+  { label: "Return", detail: "Return to your hotel area — arrangements to be confirmed." },
 ];
 
 const tour = (t: Omit<Tour, "price" | "inclusions" | "exclusions">): Tour => ({
@@ -88,39 +97,25 @@ export const TOURS: Tour[] = [
     featured: true,
   }),
   tour({
-    id: "side-ancient-city-sunset",
-    title: "Side Ancient City at Golden Hour",
-    destination: "Side",
-    category: "culture",
-    duration: "half-day",
-    summary: "Walk through the ancient city to the temple columns by the sea as the light drops.",
-    highlights: ["Temple of Apollo by the water", "Ancient theatre and colonnaded street", "Harbour at sunset"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Afternoon", detail: "Walk through the ancient city." },
-      { label: "Sunset", detail: "Time at the temple ruins by the sea." },
-    ]),
-    image: "ancient-coastal-ruins-sunset",
-  }),
-  tour({
-    id: "cappadocia-valleys",
-    title: "Cappadocia Valleys & Viewpoints",
-    destination: "Cappadocia",
-    category: "sightseeing",
+    id: "koprulu-canyon-rafting",
+    title: "Köprülü Canyon Rafting",
+    destination: "Side & Manavgat",
+    category: "rafting",
     duration: "full-day",
-    summary: "Fairy chimneys, rock-cut churches and the viewpoints over Göreme’s valleys.",
-    highlights: ["Fairy chimney landscapes", "Valley walks and viewpoints", "Rock-cut architecture"],
+    summary: "A day in the national park canyon, rafting the river between steep limestone walls.",
+    highlights: ["National park canyon", "Rafting on the river", "Mountain scenery"],
     itinerary: SAMPLE_ITINERARY([
-      { label: "Morning", detail: "Viewpoints above the valleys." },
-      { label: "Midday", detail: "Short valley walk." },
-      { label: "Afternoon", detail: "Rock-cut sites and village stop." },
+      { label: "Morning", detail: "Drive into the national park." },
+      { label: "Midday", detail: "Safety briefing and time on the river." },
+      { label: "Afternoon", detail: "Canyon viewpoints." },
     ]),
-    image: "cappadocia-sunrise-balloons",
+    image: "canyon-rafting",
     featured: true,
   }),
   tour({
     id: "kaleici-old-town-walk",
-    title: "Kaleiçi Old Town Walk",
-    destination: "Antalya",
+    title: "Kaleiçi Old Town & Harbour",
+    destination: "Antalya City",
     category: "culture",
     duration: "half-day",
     summary: "Narrow lanes, Ottoman houses and the old harbour at the heart of Antalya.",
@@ -130,26 +125,42 @@ export const TOURS: Tour[] = [
       { label: "Free time", detail: "Time to explore on your own." },
     ]),
     image: "antalya-kaleici-harbour",
-  }),
-  tour({
-    id: "koprulu-canyon-river",
-    title: "Köprülü Canyon Rafting",
-    destination: "Antalya",
-    category: "nature",
-    duration: "full-day",
-    summary: "A day in the national park canyon, following the river between steep limestone walls.",
-    highlights: ["National park canyon", "Rafting on the river", "Mountain scenery"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Morning", detail: "Drive into the national park." },
-      { label: "Midday", detail: "Time on and beside the river." },
-      { label: "Afternoon", detail: "Canyon viewpoints." },
-    ]),
-    image: "canyon-rafting",
     featured: true,
   }),
   tour({
-    id: "alanya-harbour-castle",
-    title: "Alanya Harbour & Castle Cruise",
+    id: "side-ancient-city-sunset",
+    title: "Side Ancient City at Golden Hour",
+    destination: "Side & Manavgat",
+    category: "culture",
+    duration: "half-day",
+    summary: "Walk through the ancient city to the temple columns by the sea as the light drops.",
+    highlights: ["Temple ruins by the water", "Ancient theatre and colonnaded street", "Harbour at sunset"],
+    itinerary: SAMPLE_ITINERARY([
+      { label: "Afternoon", detail: "Walk through the ancient city." },
+      { label: "Sunset", detail: "Time at the temple ruins by the sea." },
+    ]),
+    image: "ancient-coastal-ruins-sunset",
+    featured: true,
+  }),
+  tour({
+    id: "taurus-jeep-safari",
+    title: "Taurus Foothills Jeep Safari",
+    destination: "Kemer",
+    category: "safari",
+    duration: "full-day",
+    summary: "Off-road tracks up from the coast into forest villages, with wide views back over the sea.",
+    highlights: ["Off-road forest tracks", "Mountain village stop", "Panoramas over the coast"],
+    itinerary: SAMPLE_ITINERARY([
+      { label: "Morning", detail: "Convoy up into the foothills." },
+      { label: "Midday", detail: "Village stop." },
+      { label: "Afternoon", detail: "Viewpoints on the way down." },
+    ]),
+    image: "turquoise-cove-resort-town",
+    focus: "70% 25%",
+  }),
+  tour({
+    id: "alanya-castle-boat",
+    title: "Alanya Castle & Coast by Boat",
     destination: "Alanya",
     category: "boat",
     duration: "half-day",
@@ -162,34 +173,33 @@ export const TOURS: Tour[] = [
     image: "alanya-castle-marina",
   }),
   tour({
-    id: "kemer-family-coves",
-    title: "Family Day in the Coves",
-    destination: "Kemer",
-    category: "family",
-    duration: "half-day",
-    summary: "An easy-paced boat outing designed around younger travellers and shorter attention spans.",
-    highlights: ["Short sailing legs", "Shallow-water swim stop", "Relaxed pace"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Sail", detail: "Short leg along the coast." },
-      { label: "Swim", detail: "Shallow bay stop." },
-    ]),
-    image: "turquoise-cove-resort-town",
-  }),
-  tour({
-    id: "lycian-coast-heritage",
-    title: "Lycian Coast & Ancient Harbours",
-    destination: "Fethiye",
-    category: "sightseeing",
+    id: "demre-kekova",
+    title: "Demre, Myra & Kekova",
+    destination: "Kaş & Demre",
+    category: "culture",
     duration: "full-day",
-    summary: "Clifftop ruins, quiet bays and the old trading harbours of the Lycian coast in one long, scenic day.",
-    highlights: ["Ancient Lycian sites above the sea", "Coastal viewpoints", "Time by the water"],
+    summary: "Rock-cut tombs at Myra, then out over the sunken city of Kekova on the Lycian coast.",
+    highlights: ["Lycian rock tombs at Myra", "Kekova by boat", "The Lycian coastline"],
     itinerary: SAMPLE_ITINERARY([
-      { label: "Morning", detail: "Coastal road and first viewpoints." },
-      { label: "Midday", detail: "Ancient site above the bay." },
-      { label: "Afternoon", detail: "Harbour stop before heading back." },
+      { label: "Morning", detail: "Coastal road west to Demre." },
+      { label: "Midday", detail: "Myra and its theatre." },
+      { label: "Afternoon", detail: "Boat over Kekova." },
     ]),
     image: "lycian-coast-ruins-sunset",
-    featured: true,
+  }),
+  tour({
+    id: "belek-coast-nature",
+    title: "Belek Coast & Pine Forest Walk",
+    destination: "Belek",
+    category: "nature",
+    duration: "half-day",
+    summary: "An easy walk through the coastal pine forest to the long sandy shore.",
+    highlights: ["Coastal pine forest", "Long sandy beach", "Relaxed pace"],
+    itinerary: SAMPLE_ITINERARY([
+      { label: "Walk", detail: "Through the pine forest to the shore." },
+      { label: "Free time", detail: "Time on the beach." },
+    ]),
+    image: "mediterranean-resort-golden-hour",
   }),
 ];
 

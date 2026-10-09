@@ -19,7 +19,6 @@ import {
   type TourDuration,
 } from "@/lib/b2c/demo/tours";
 import { normalise } from "@/lib/b2c/demo/locations";
-import type { ImageKey } from "@/lib/b2c/images";
 
 type Filters = {
   q: string;
@@ -30,14 +29,6 @@ type Filters = {
 
 const EMPTY: Filters = { q: "", category: "", destination: "", duration: "" };
 
-const DESTINATION_IMAGE: Record<TourDestination, { image: ImageKey; focus?: string }> = {
-  Antalya: { image: "antalya-kaleici-harbour", focus: "68% 55%" },
-  Kemer: { image: "turquoise-cove-resort-town", focus: "62% 55%" },
-  Side: { image: "ancient-coastal-ruins-sunset", focus: "72% 50%" },
-  Alanya: { image: "alanya-castle-marina", focus: "38% 50%" },
-  Fethiye: { image: "lycian-coast-ruins-sunset", focus: "40% 55%" },
-  Cappadocia: { image: "cappadocia-sunrise-balloons", focus: "60% 45%" },
-};
 
 /** Editorial layout for the four featured experiences: a wide and a
  *  narrow tile per row, alternating sides, so the row reads as a
@@ -151,7 +142,7 @@ export function ToursExplorer() {
                     className="group relative block aspect-[4/5] w-full overflow-hidden bg-charcoal text-left text-ivory sm:aspect-[4/5] lg:aspect-auto lg:h-[30rem]"
                   >
                     <span className="absolute inset-0 transition-transform duration-[900ms] ease-editorial group-hover:scale-[1.03] motion-reduce:transform-none">
-                      <B2CImage name={t.image} alt="" sizes="(min-width: 1024px) 58vw, (min-width: 640px) 50vw, 100vw" />
+                      <B2CImage name={t.image} focus={t.focus} alt="" sizes="(min-width: 1024px) 58vw, (min-width: 640px) 50vw, 100vw" />
                     </span>
                     {/* Two scrims: a short one at the top for the tag, a
                         long one at the bottom so the title holds 4.5:1 on
@@ -306,29 +297,31 @@ export function ToursExplorer() {
       <section id="destinations" aria-labelledby="destinations-title" className="on-dark bg-charcoal py-20 text-ivory lg:py-28">
         <div className="edge wrap">
           <SectionIntro id="destinations-title" eyebrow={TOURS.destinations.eyebrow} title={TOURS.destinations.title} body={TOURS.destinations.body} />
-          <ul className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3">
+          {/* Typographic, not photographic. With nine supplied images,
+              a photo per area meant every picture on the page appeared
+              three or four times; the areas read just as well as an
+              index, and the photographs stay with the experiences. */}
+          <ul className="mt-12 grid border-t border-ivory/15 md:grid-cols-2 md:gap-x-12">
             {TOUR_DESTINATIONS.map((d) => {
-              const art = DESTINATION_IMAGE[d];
               const count = TOUR_LIST.filter((t) => t.destination === d).length;
               return (
-                <li key={d}>
+                <li key={d} className="border-b border-ivory/15">
                   <button
                     type="button"
                     onClick={() => {
                       set({ destination: d, category: "", q: "" });
                       jumpToList();
                     }}
-                    className="group relative block aspect-[4/3] w-full overflow-hidden bg-charcoal text-left text-ivory"
+                    className="group flex w-full items-center justify-between gap-6 py-5 text-left"
                   >
-                    <span className="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]">
-                      <B2CImage name={art.image} focus={art.focus} alt="" sizes="(min-width: 768px) 33vw, 50vw" />
-                    </span>
-                    <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/15 to-transparent" />
-                    <span className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-                      <span className="block font-display text-[1.5rem] leading-tight sm:text-[1.875rem]">{d}</span>
-                      <span className="mt-1 block font-sans text-[0.6875rem] uppercase tracking-[0.14em] text-ivory/80">
+                    <span>
+                      <span className="block font-display text-[1.5rem] leading-tight sm:text-[1.75rem]">{d}</span>
+                      <span className="mt-1 block font-sans text-[0.6875rem] uppercase tracking-[0.14em] text-ivory/70">
                         {TOURS.destinations.count(count)}
                       </span>
+                    </span>
+                    <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center border border-ivory/30 transition-colors duration-300 group-hover:border-brand-amber group-hover:bg-brand-amber group-hover:text-ink">
+                      <IconArrow size={16} />
                     </span>
                   </button>
                 </li>

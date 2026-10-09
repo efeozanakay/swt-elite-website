@@ -1,5 +1,7 @@
 import { locationById, type TransferLocation } from "@/lib/b2c/demo/locations";
 import { parseISODate, toISODate } from "@/lib/b2c/locale";
+import { CHILD_AGE_MAX, MAX_GROUP } from "@/lib/b2c/business";
+import { SEARCH } from "@/lib/b2c/copy";
 
 /**
  * The transfer search, as it travels between the landing page and the
@@ -18,11 +20,14 @@ export type TransferSearch = {
   returnTime: string;
   adults: number;
   children: number;
+  /** One entry per child, 0-11; -1 means not yet chosen. Needed for
+   *  Shared Shuttle child fares and for child-seat planning. */
+  ages: number[];
 };
 
 export const PASSENGER_LIMITS = {
-  adults: { min: 1, max: 16 },
-  children: { min: 0, max: 10 },
+  adults: { min: 1, max: MAX_GROUP },
+  children: { min: 0, max: 20 },
 } as const;
 
 export const EMPTY_SEARCH: TransferSearch = {
@@ -35,7 +40,12 @@ export const EMPTY_SEARCH: TransferSearch = {
   returnTime: "",
   adults: 2,
   children: 0,
+  ages: [],
 };
+
+/** Keeps the ages list the same length as the child count. */
+export const fitAges = (ages: number[], children: number) =>
+  Array.from({ length: children }, (_, i) => (ages[i] ?? -1));
 
 const clamp = (n: number, min: number, max: number) =>
   Math.min(max, Math.max(min, n));
@@ -51,6 +61,16 @@ const timeParam = (v: string | null) =>
 const dateParam = (v: string | null) => (v && parseISODate(v) ? v : "");
 
 export function searchFromParams(params: URLSearchParams): TransferSearch {
+  const children = clamp(
+    intParam(params.get("children"), 0),
+    PASSENGER_LIMITS.children.min,
+    PASSENGER_LIMITS.children.max
+  );
+  // Positional: "3,,7" means the second child's age is not chosen yet.
+  const raw = params.get("ages");
+  const ages = (raw ? raw.split(",") : [])
+    .map((a) => (a === "" ? -1 : Number(a)))
+    .map((a) => (Number.isInteger(a) && a >= 0 && a <= CHILD_AGE_MAX ? a : -1));
   return {
     trip: params.get("trip") === "return" ? "return" : "oneway",
     from: locationById(params.get("from"))?.id ?? "",
@@ -64,11 +84,8 @@ export function searchFromParams(params: URLSearchParams): TransferSearch {
       PASSENGER_LIMITS.adults.min,
       PASSENGER_LIMITS.adults.max
     ),
-    children: clamp(
-      intParam(params.get("children"), 0),
-      PASSENGER_LIMITS.children.min,
-      PASSENGER_LIMITS.children.max
-    ),
+    children,
+    ages: fitAges(ages, children),
   };
 }
 
@@ -84,12 +101,15 @@ export function searchToQuery(s: TransferSearch): string {
     if (s.returnTime) p.set("rtime", s.returnTime);
   }
   p.set("adults", String(s.adults));
-  if (s.children) p.set("children", String(s.children));
+  if (s.children) {
+    p.set("children", String(s.children));
+    p.set("ages", s.ages.map((a) => (a < 0 ? "" : String(a))).join(","));
+  }
   return p.toString();
 }
 
 export type SearchErrors = Partial<
-  Record<"from" | "to" | "date" | "returnDate", string>
+  Record<"from" | "to" | "date" | "returnDate" | "passengers", string>
 >;
 
 /** Returns an empty object when the search is complete and coherent. */
@@ -117,6 +137,12 @@ export function validateSearch(s: TransferSearch, today = new Date()) {
     if (!s.returnDate) errors.returnDate = "Choose a return date.";
     else if (s.date && s.returnDate < s.date)
       errors.returnDate = "The return can’t be before the outbound journey.";
+  }
+
+  if (s.adults + s.children > MAX_GROUP) {
+    errors.passengers = SEARCH.groupLimit;
+  } else if (s.ages.length !== s.children || s.ages.some((a) => a < 0)) {
+    errors.passengers = "Select each child’s age.";
   }
 
   return errors;

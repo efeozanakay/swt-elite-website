@@ -118,6 +118,37 @@ focal points live in `lib/b2c/images.ts`. The shared/private service
 cards keep the company's own fleet photographs. Only English is implemented; the language menu
 lists German, Turkish and Russian as in preparation and switches nothing.
 
+### Approved business content
+
+Operational and commercial facts used by the consumer pages live in
+`lib/b2c/business.ts` (support contacts, TÜRSAB licence, cancellation
+policy, child fares, shuttle waiting and luggage rules, vehicle bands)
+and `lib/b2c/airport-meeting.ts` (verified meeting points for AYT, GZP,
+ADB, BJV and DLM only). Copy quotes these modules rather than restating
+them. Add nothing there that has not been approved.
+
+### Open items before a commercial launch
+
+These cannot be resolved in code and are deliberately not faked:
+
+- **Legal texts.** Privacy notice, terms of service and final booking
+  terms do not exist yet. The footer's placeholder Privacy/Terms links
+  were removed rather than left pointing at `#`.
+- **TÜRSAB verification link.** The footer links to the TÜRSAB home
+  page. The exact agency-verification page address, and the licence's
+  current status in the live registry, need confirming.
+- **Corporate statistics.** The homepage states 300,000+ guest
+  movements, a fleet of 200+ vehicles, 6 destination teams and a 24/7
+  operations centre, and one image alt text calls the fleet photo
+  "real". These predate the consumer work and need documentary support
+  or revision; no supporting evidence has been added.
+- **Imagery.** The consumer destination and tour images are AI-generated
+  and provisional, labelled as illustrative on the page. Replace with
+  licensed or own photography before launch.
+- **Tours catalogue.** All experiences are demo content, Antalya only.
+- **Booking.** No pricing, availability, booking, payment, passenger
+  pickup-time lookup or WhatsApp assistant exists.
+
 ## Project status
 
 The website is live and maintained as the SWT Elite corporate presence. This repository contains the implemented single-page marketing experience; it does not include a booking engine, customer portal, database, analytics dashboard, or content-management system.

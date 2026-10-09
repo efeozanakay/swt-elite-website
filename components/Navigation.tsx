@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
 import { EnquiryButton } from "@/components/EnquiryButton";
 import { LanguageMenu } from "@/components/b2c/LanguageMenu";
-import { NAV } from "@/lib/b2c/copy";
+import { NAV } from "@/lib/b2c/copy-nav";
 
 type NavLink = { label: string; href: string; id?: string; wideOnly?: boolean };
 
@@ -114,11 +114,11 @@ export function Navigation({
       <div className="edge wrap flex h-[var(--header-h)] items-center justify-between gap-6">
         {travel ? (
           <Link href="/" onClick={() => setOpen(false)} className="shrink-0" aria-label="SWT Elite home">
-            <BrandMark height={118} priority />
+            <BrandMark height={118} priority className="h-[76px] w-auto lg:h-[118px]" />
           </Link>
         ) : (
           <a href="#top" onClick={() => setOpen(false)} className="shrink-0">
-            <BrandMark height={118} priority />
+            <BrandMark height={118} priority className="h-[76px] w-auto lg:h-[118px]" />
           </a>
         )}
 

@@ -9,7 +9,11 @@ import { TransferSearchForm } from "@/components/b2c/TransferSearchForm";
 import { TravelShell } from "@/components/b2c/TravelShell";
 import { Photo } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
-import { PRICE_PLACEHOLDER, PROTOTYPE, SERVICES, TRANSFERS } from "@/lib/b2c/copy";
+import { AirportMeetingPicker } from "@/components/b2c/AirportMeetingPicker";
+import { LicenceLine } from "@/components/b2c/LicenceLine";
+import { SupportBlock } from "@/components/b2c/SupportBlock";
+import { DEPARTURE_PICKUP, FLIGHT_MONITORING } from "@/lib/b2c/business";
+import { MEETING, PRICE_PLACEHOLDER, PROTOTYPE, SERVICES, TRANSFERS } from "@/lib/b2c/copy";
 import { TOURS as TOUR_LIST } from "@/lib/b2c/demo/tours";
 
 export const metadata: Metadata = {
@@ -88,7 +92,7 @@ export default function TransfersPage() {
             <TransferSearchForm readUrl />
           </div>
           <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-3 font-sans text-small text-graphite">
-            {["Shared Shuttle or Private Transfer", "Airport ⇄ hotel, both directions", "One-way or round trip"].map((t) => (
+            {TRANSFERS.assurances.map((t) => (
               <li key={t} className="flex items-center gap-2">
                 <IconCheck size={16} className="text-brand-navy" />
                 {t}
@@ -162,17 +166,30 @@ export default function TransfersPage() {
           <div className="lg:col-span-7">
             <SectionIntro id="how-title" eyebrow={TRANSFERS.how.eyebrow} title={TRANSFERS.how.title} />
             <ol className="mt-12 border-t border-ivory/15">
+              {/* li > Reveal, not Reveal > li: an <ol> may only contain
+                  <li> children, and the wrapper div broke that. */}
               {TRANSFERS.how.steps.map((step, i) => (
-                <Reveal key={step.name} delay={i * 80}>
-                  <li className="grid grid-cols-[3rem_1fr] gap-x-4 border-b border-ivory/15 py-6 sm:grid-cols-[4rem_14rem_1fr] sm:items-baseline">
+                <li key={step.name} className="border-b border-ivory/15">
+                  <Reveal delay={i * 80} className="grid grid-cols-[3rem_1fr] gap-x-4 py-6 sm:grid-cols-[4rem_14rem_1fr] sm:items-baseline">
                     <span className="font-display text-display-sm text-brand-amber">{String(i + 1).padStart(2, "0")}</span>
                     <h3 className="font-display text-[1.375rem] leading-snug">{step.name}</h3>
                     <p className="col-start-2 mt-2 font-sans text-body text-ivory/70 sm:col-start-3 sm:mt-0">{step.detail}</p>
-                  </li>
-                </Reveal>
+                  </Reveal>
+                </li>
               ))}
             </ol>
           </div>
+        </div>
+      </section>
+
+      {/* ---------------- Airport meeting points ---------------- */}
+      <section id="meeting" aria-labelledby="meeting-title" className="bg-ivory py-20 text-ink md:py-24">
+        <div className="edge wrap">
+          <SectionIntro id="meeting-title" eyebrow={MEETING.eyebrow} title={MEETING.title} body={MEETING.body} />
+          <div className="mt-10 border-t border-graphite/20 pt-8">
+            <AirportMeetingPicker />
+          </div>
+          <p className="mt-8 max-w-2xl font-sans text-small text-graphite">{FLIGHT_MONITORING} {DEPARTURE_PICKUP}</p>
         </div>
       </section>
 
@@ -188,14 +205,16 @@ export default function TransfersPage() {
           <Reveal delay={80} className="mt-12">
             <RouteShortcuts />
           </Reveal>
-          <p className="mt-6 font-sans text-small text-graphite">{TRANSFERS.destinations.note}</p>
+          <p className="mt-6 font-sans text-small text-graphite">
+            {TRANSFERS.destinations.note} {PROTOTYPE.imagery}
+          </p>
         </div>
       </section>
 
       {/* ---------------- Why ---------------- */}
       <section aria-labelledby="why-title" className="bg-ivory py-24 text-ink md:py-28 lg:py-32">
         <div className="edge wrap">
-          <SectionIntro id="why-title" eyebrow={TRANSFERS.why.eyebrow} title={TRANSFERS.why.title} />
+          <SectionIntro id="why-title" eyebrow={TRANSFERS.why.eyebrow} title={TRANSFERS.why.title} body={TRANSFERS.why.body} />
           <Reveal delay={80}>
             <ul className="mt-14 grid border-t border-graphite/20 sm:grid-cols-2 lg:grid-cols-4">
               {TRANSFERS.why.items.map((item, i) => (
@@ -212,6 +231,7 @@ export default function TransfersPage() {
               ))}
             </ul>
           </Reveal>
+          <LicenceLine className="mt-10" />
         </div>
       </section>
 
@@ -254,6 +274,8 @@ export default function TransfersPage() {
       </section>
 
       <Faq eyebrow={TRANSFERS.faq.eyebrow} title={TRANSFERS.faq.title} items={TRANSFERS.faq.items} />
+
+      <SupportBlock />
     </TravelShell>
   );
 }

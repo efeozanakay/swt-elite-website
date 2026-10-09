@@ -8,7 +8,8 @@ import { ToursExplorer } from "@/components/b2c/ToursExplorer";
 import { TravelShell } from "@/components/b2c/TravelShell";
 import { Photo } from "@/components/Photo";
 import { Reveal } from "@/components/Reveal";
-import { TOURS } from "@/lib/b2c/copy";
+import { PROTOTYPE, TOURS } from "@/lib/b2c/copy";
+import { LicenceLine } from "@/components/b2c/LicenceLine";
 
 export const metadata: Metadata = {
   title: TOURS.meta.title,
@@ -62,6 +63,9 @@ export default function ToursPage() {
             </div>
           </Reveal>
         </div>
+        <p className="absolute bottom-4 right-6 max-w-[18rem] text-right font-sans text-[0.75rem] text-ivory/70 sm:right-10 lg:right-16 xl:right-24">
+          {PROTOTYPE.imagery}
+        </p>
       </section>
 
       <ToursExplorer />
@@ -79,6 +83,7 @@ export default function ToursPage() {
                 </li>
               ))}
             </ul>
+            <LicenceLine className="mt-6" />
           </div>
           <Reveal delay={100} className="lg:col-span-6">
             <Photo

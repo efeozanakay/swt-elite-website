@@ -14,6 +14,8 @@ export const ORG = {
   name: "SWT Elite",
   /** From the brand lockup, which reads "SWT Elite — Safe Wings Travel". */
   alternateName: "Safe Wings Travel",
+  /** From the TÜRSAB agency plaque and published TÜRSAB record. */
+  legalName: "SAFE WINGS TURİZM TİCARET LİMİTED ŞİRKETİ",
   email: "info@swtelite.com",
   description:
     "Ground operations, transportation and destination services for travel partners across Türkiye.",

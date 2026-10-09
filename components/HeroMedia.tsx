@@ -23,8 +23,18 @@ import { useEffect, useRef, useState } from "react";
  * the site still respect the preference through the global rule in
  * globals.css; this is a targeted exception, not a blanket one.
  *
- * The still is the poster attribute, pointing at the original lossless
- * asset, exactly as approved.
+ * The still is the poster attribute. It points at the q95 WebP of the
+ * approved still (309KB, reviewed by eye against the 2MB original)
+ * rather than the PNG itself.
+ *
+ * Portrait phones get their own encode through <source media>, which is
+ * declarative and needs no script. The full 1660x1246 film is 3.8MB, but
+ * a portrait phone only ever shows a vertical slice of it: object-cover
+ * at 78% keeps roughly the right-hand 960px. swt-hero-mobile is that
+ * slice, cropped at the same 78% (so the same object-position frames it
+ * identically) and scaled to 720px wide: 0.7MB WebM / 1.3MB MP4.
+ * Regenerate both from swt-hero-final.mp4 with:
+ *   -vf "crop=960:1246:546:0,scale=720:-2"
  */
 export function HeroMedia() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -63,9 +73,19 @@ export function HeroMedia() {
           loop
           playsInline
           preload="auto"
-          poster="/images/swt-elite-hero-airport-vito.png"
+          poster="/images/opt/hero-airport-vito-1448.webp"
           className="absolute inset-0 h-full w-full object-cover object-[78%_38%]"
         >
+          <source
+            src="/videos/swt-hero-mobile.webm"
+            type="video/webm"
+            media="(max-width: 767px) and (orientation: portrait)"
+          />
+          <source
+            src="/videos/swt-hero-mobile.mp4"
+            type="video/mp4"
+            media="(max-width: 767px) and (orientation: portrait)"
+          />
           <source src="/videos/swt-hero-final.webm" type="video/webm" />
           <source src="/videos/swt-hero-final.mp4" type="video/mp4" />
         </video>

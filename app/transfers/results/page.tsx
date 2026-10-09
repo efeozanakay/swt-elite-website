@@ -16,8 +16,10 @@ export default function TransferResultsPage() {
   return (
     <TravelShell current="transfers" solidHeader>
       {/* The page is statically exported, so the search is read from the
-          query string in the browser. */}
-      <Suspense fallback={<div className="min-h-[70vh] bg-charcoal" aria-busy="true" />}>
+          query string in the browser and this fallback is what the HTML
+          ships with. It is a full screen tall so the footer starts below
+          the fold and does not jump when the results replace it. */}
+      <Suspense fallback={<div className="min-h-[100svh] bg-charcoal" aria-busy="true" />}>
         <TransferResults />
       </Suspense>
     </TravelShell>

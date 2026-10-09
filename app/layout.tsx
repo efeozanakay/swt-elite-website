@@ -70,6 +70,7 @@ const ORGANIZATION_JSON_LD = {
   "@id": `${SITE_URL}/#organization`,
   name: ORG.name,
   alternateName: ORG.alternateName,
+  legalName: ORG.legalName,
   url: SITE_URL,
   email: ORG.email,
   description: ORG.description,

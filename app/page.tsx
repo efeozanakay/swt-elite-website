@@ -10,6 +10,7 @@ import { OperationsCentre } from "@/components/OperationsCentre";
 import { Partners } from "@/components/Partners";
 import { People } from "@/components/People";
 import { FinalCTA } from "@/components/FinalCTA";
+import { TravelBand } from "@/components/TravelBand";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -30,6 +31,7 @@ export default function Home() {
         <OperationsCentre />
         <Partners />
         <People />
+        <TravelBand />
         <FinalCTA />
       </main>
       <Footer />

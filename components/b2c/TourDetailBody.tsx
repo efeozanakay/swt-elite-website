@@ -14,8 +14,11 @@ export function TourDetailBody({ tour, titleId }: { tour: Tour; titleId: string 
   return (
     <article>
       <div className="relative aspect-[16/10] overflow-hidden bg-charcoal sm:aspect-[5/2]">
-        <B2CImage name={tour.image} sizes="(min-width: 1024px) 1024px, 100vw" />
+        <B2CImage name={tour.image} focus={tour.focus} sizes="(min-width: 1024px) 1024px, 100vw" />
         <span className="demo-tag absolute left-4 top-4 bg-ivory/90 text-ink">Demo</span>
+        <span className="absolute bottom-3 right-3 bg-charcoal/70 px-2 py-1 font-sans text-[0.6875rem] text-ivory/90">
+          {TOURS.preview.imageNote}
+        </span>
       </div>
 
       <div className="p-6 sm:p-10">

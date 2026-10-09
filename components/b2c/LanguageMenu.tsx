@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { ACTIVE_LOCALE, LANGUAGES } from "@/lib/b2c/locale";
-import { NAV } from "@/lib/b2c/copy";
+import { NAV } from "@/lib/b2c/copy-nav";
 
 /**
  * Language indicator for the consumer pages.

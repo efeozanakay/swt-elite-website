@@ -23,7 +23,7 @@ export function TourCard({
     <article className="group relative flex h-full flex-col bg-ivory">
       <div className={`relative overflow-hidden bg-charcoal ${feature ? "aspect-[4/5]" : "aspect-[4/3]"}`}>
         <div className="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.04] motion-reduce:transform-none">
-          <B2CImage name={tour.image} alt="" sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
+          <B2CImage name={tour.image} focus={tour.focus} alt="" sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
         </div>
         <span className="demo-tag absolute left-3 top-3 bg-ivory/90 text-ink">Demo</span>
       </div>

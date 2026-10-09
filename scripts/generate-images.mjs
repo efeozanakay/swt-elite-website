@@ -111,11 +111,28 @@ const LOGO = {
   widths: [200, 320, 400],
 };
 
-const FORMATS = [
-  { ext: "avif", opts: { quality: 52, effort: 5, chromaSubsampling: "4:2:0" } },
-  { ext: "webp", opts: { quality: 80, effort: 5 } },
-  { ext: "jpg", opts: { quality: 80, mozjpeg: true, progressive: true } },
-];
+/**
+ * WebP at q95 only. The first attempt (AVIF q52 / WebP q80 / JPEG q80)
+ * was rolled back for visibly softening the photography at 32-38 dB.
+ * q95 measures 41-44 dB against the source resized with the same filter,
+ * at roughly a tenth of the PNG's bytes, and was reviewed by eye at 100%
+ * crops before shipping. Every modern browser decodes WebP, so a single
+ * format is enough; the original PNG remains the <img> fallback.
+ */
+const FORMATS = [{ ext: "webp", opts: { quality: 95, effort: 6, smartSubsample: true } }];
+
+async function psnr(reference, candidate) {
+  const [a, b] = await Promise.all([
+    sharp(reference).removeAlpha().raw().toBuffer(),
+    sharp(candidate).removeAlpha().raw().toBuffer(),
+  ]);
+  let sum = 0;
+  for (let i = 0; i < a.length; i++) {
+    const d = a[i] - b[i];
+    sum += d * d;
+  }
+  return 10 * Math.log10((255 * 255) / (sum / a.length));
+}
 
 async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
@@ -143,13 +160,16 @@ async function main() {
       for (const w of widths) {
         const name = `${entry.slug}-${w}.${ext}`;
         const dest = path.join(OUT_DIR, name);
-        const pipeline = sharp(abs).resize({ width: w, withoutEnlargement: true });
-        if (ext === "avif") await pipeline.avif(opts).toFile(dest);
-        else if (ext === "webp") await pipeline.webp(opts).toFile(dest);
-        else await pipeline.flatten({ background: "#15130F" }).jpeg(opts).toFile(dest);
+        const resized = await sharp(abs)
+          .resize({ width: w, withoutEnlargement: true, kernel: "lanczos3" })
+          .removeAlpha()
+          .png()
+          .toBuffer();
+        await sharp(resized).webp(opts).toFile(dest);
         const size = (await fs.stat(dest)).size;
         derivedBytes += size;
-        files[ext].push({ w, bytes: size });
+        const db = await psnr(resized, dest);
+        files[ext].push({ w, bytes: size, psnr: Math.round(db * 10) / 10 });
       }
     }
 
@@ -167,10 +187,11 @@ async function main() {
       files,
     };
 
-    const largest = files.avif[files.avif.length - 1];
+    const largest = files.webp[files.webp.length - 1];
+    const worst = Math.min(...files.webp.map((f) => f.psnr));
     console.log(
       `${entry.slug.padEnd(42)} ${String(meta.width).padStart(4)}px source  ` +
-        `${widths.length} widths  largest avif ${(largest.bytes / 1024).toFixed(0)}KB`
+        `${widths.length} widths  largest webp ${(largest.bytes / 1024).toFixed(0)}KB  min ${worst} dB`
     );
   }
 

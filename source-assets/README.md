@@ -18,17 +18,24 @@ live in `app/`.
 
 ## Photography
 
-Not here. The nine photographs are in `public/images/`, served directly
-as the original lossless PNGs, which is the approved visual state.
+Not here. The nine photographs are in `public/images/` as the original
+lossless PNGs, which remain the source of truth and the `<img>` fallback.
 
-A responsive AVIF/WebP pipeline was built and then rolled back: at the
-quality it was generated with it was visibly degrading the photography.
-Measured against the originals it scored 32-38 dB PSNR, where the
-full-bleed images sat at 32-36 dB, and that is plainly visible on
-large-format work. `scripts/generate-images.mjs` is kept intact and still
-runnable for a future attempt at substantially higher quality, but its
-photographic output is not currently used or shipped. Any retry needs a
-review by eye, not a byte count.
+The first responsive AVIF/WebP pipeline (AVIF q52 / WebP q80) was rolled
+back for visibly degrading the photography at 32-38 dB PSNR. The current
+`scripts/generate-images.mjs` produces WebP at q95 only: 39-43 dB against
+the source resized with the same filter (lowest at the 400px widths),
+reviewed by eye at 100% crops before shipping. `Photo` serves them by
+srcset, which took a full mobile scroll of the homepage from 21.4MB of
+images to 2.2MB.
+
+## Hero film
+
+`public/videos/swt-hero-mobile.{webm,mp4}` are the portrait-phone
+encodes of `swt-hero-final`: the 960px slice a phone actually shows,
+cropped at the same 78% framing and scaled to 720px (0.7MB / 1.3MB,
+against 3.8MB / 3.5MB). See `components/HeroMedia.tsx` for the ffmpeg
+filter.
 
 ## `b2c/`
 

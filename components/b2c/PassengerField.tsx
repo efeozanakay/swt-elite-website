@@ -2,28 +2,39 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { SEARCH, RESULTS } from "@/lib/b2c/copy";
-import { PASSENGER_LIMITS } from "@/lib/b2c/transfer-search";
+import { CHILD_AGE_MAX } from "@/lib/b2c/business";
+import { PASSENGER_LIMITS, fitAges } from "@/lib/b2c/transfer-search";
 
 /**
  * Passenger count as a disclosure: one compact cell in the search bar
- * that opens to two steppers. Native number inputs were rejected because
- * their spin buttons are tiny on touch screens and invisible on iOS.
+ * that opens to two steppers and, when there are children, an age picker
+ * per child. Ages are collected now because Shared Shuttle child fares
+ * depend on them (under 3 free, 3-11 half fare) and child seats are
+ * planned from them. Native number inputs were rejected because their
+ * spin buttons are tiny on touch screens and invisible on iOS.
  */
 export function PassengerField({
   adults,
   childCount,
+  ages,
   onChange,
+  error,
+  buttonRef: externalRef,
   className = "",
 }: {
   adults: number;
   childCount: number;
-  onChange: (next: { adults: number; children: number }) => void;
+  ages: number[];
+  onChange: (next: { adults: number; children: number; ages: number[] }) => void;
+  error?: string;
+  buttonRef?: React.RefObject<HTMLButtonElement>;
   className?: string;
 }) {
   const id = useId();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const ownRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = externalRef ?? ownRef;
 
   useEffect(() => {
     if (!open) return;
@@ -42,29 +53,20 @@ export function PassengerField({
       document.removeEventListener("pointerdown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, buttonRef]);
 
   const rows = [
-    {
-      key: "adults" as const,
-      label: SEARCH.adults,
-      hint: SEARCH.adultsHint,
-      value: adults,
-      ...PASSENGER_LIMITS.adults,
-      noun: "adult",
-    },
-    {
-      key: "children" as const,
-      label: SEARCH.children,
-      hint: SEARCH.childrenHint,
-      value: childCount,
-      ...PASSENGER_LIMITS.children,
-      noun: "child",
-    },
+    { key: "adults" as const, label: SEARCH.adults, hint: SEARCH.adultsHint, value: adults, ...PASSENGER_LIMITS.adults, noun: "adult" },
+    { key: "children" as const, label: SEARCH.children, hint: SEARCH.childrenHint, value: childCount, ...PASSENGER_LIMITS.children, noun: "child" },
   ];
 
-  const set = (key: "adults" | "children", v: number) =>
-    onChange({ adults, children: childCount, [key]: v });
+  const set = (key: "adults" | "children", v: number) => {
+    const next = { adults, children: childCount, [key]: v };
+    onChange({ ...next, ages: fitAges(ages, next.children) });
+  };
+
+  const setAge = (i: number, age: number) =>
+    onChange({ adults, children: childCount, ages: ages.map((a, j) => (j === i ? age : a)) });
 
   return (
     <div ref={rootRef} className={`relative ${className}`}>
@@ -73,7 +75,9 @@ export function PassengerField({
         type="button"
         aria-expanded={open}
         aria-controls={`${id}-panel`}
+        aria-describedby={error ? `${id}-error` : undefined}
         onClick={() => setOpen((v) => !v)}
+        data-invalid={error ? "true" : undefined}
         className="sf-cell w-full text-left"
       >
         <span className="sf-label" id={`${id}-label`}>
@@ -89,12 +93,17 @@ export function PassengerField({
           </svg>
         </span>
       </button>
+      {error && (
+        <p id={`${id}-error`} className="sf-error">
+          {error}
+        </p>
+      )}
 
       <div
         id={`${id}-panel`}
         role="group"
         aria-labelledby={`${id}-label`}
-        className={`absolute right-0 top-full z-30 mt-1 w-full min-w-[17rem] border border-graphite/25 bg-ivory p-5 shadow-[0_24px_48px_-24px_rgba(21,19,15,0.5)] ${
+        className={`absolute right-0 top-full z-30 mt-1 max-h-[70vh] w-full min-w-[18rem] overflow-y-auto border border-graphite/25 bg-ivory p-5 shadow-[0_24px_48px_-24px_rgba(21,19,15,0.5)] ${
           open ? "" : "hidden"
         }`}
       >
@@ -107,30 +116,46 @@ export function PassengerField({
               <p className="font-sans text-small text-graphite">{row.hint}</p>
             </div>
             <div className="flex items-center gap-3">
-              <StepButton
-                label={SEARCH.decrease(row.noun)}
-                disabled={row.value <= row.min}
-                onClick={() => set(row.key, row.value - 1)}
-              >
+              <StepButton label={SEARCH.decrease(row.noun)} disabled={row.value <= row.min} onClick={() => set(row.key, row.value - 1)}>
                 −
               </StepButton>
-              <output
-                aria-labelledby={`${id}-${row.key}`}
-                aria-live="polite"
-                className="w-6 text-center font-sans text-body tabular-nums text-ink"
-              >
+              <output aria-labelledby={`${id}-${row.key}`} aria-live="polite" className="w-6 text-center font-sans text-body tabular-nums text-ink">
                 {row.value}
               </output>
-              <StepButton
-                label={SEARCH.increase(row.noun)}
-                disabled={row.value >= row.max}
-                onClick={() => set(row.key, row.value + 1)}
-              >
+              <StepButton label={SEARCH.increase(row.noun)} disabled={row.value >= row.max} onClick={() => set(row.key, row.value + 1)}>
                 +
               </StepButton>
             </div>
           </div>
         ))}
+
+        {childCount > 0 && (
+          <div className="border-b border-graphite/15 py-3">
+            <p className="font-sans text-small text-graphite">{SEARCH.childAgesHint}</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {ages.map((age, i) => (
+                <label key={i} className="sf-cell min-h-0 py-2" data-invalid={error && age < 0 ? "true" : undefined}>
+                  <span className="sf-label">{SEARCH.childAge(i + 1)}</span>
+                  <select
+                    value={age}
+                    onChange={(e) => setAge(i, Number(e.target.value))}
+                    className="sf-input cursor-pointer"
+                  >
+                    <option value={-1} disabled>
+                      {SEARCH.childAgePlaceholder}
+                    </option>
+                    {Array.from({ length: CHILD_AGE_MAX + 1 }, (_, a) => (
+                      <option key={a} value={a}>
+                        {SEARCH.childAgeOption(a)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
         <button
           type="button"
           onClick={() => {
@@ -163,7 +188,7 @@ function StepButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center border border-graphite/30 font-sans text-body-lg text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-graphite/30"
+      className="flex h-11 w-11 items-center justify-center border border-graphite/30 font-sans text-body-lg text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-graphite/30"
     >
       {children}
     </button>

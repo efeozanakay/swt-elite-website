@@ -11,7 +11,16 @@
     /* Single source of truth for the fixed header's height. Consumed by
        Navigation's own height and by scroll-padding-top below, so the two
        can never drift apart. */
-    --header-h: 124px;
+    --header-h: 88px;
+  }
+
+  /* The lockup needs its full 118px height on desktop; on phones and
+     tablets that made the fixed header 15% of the screen. 88px keeps
+     the mark legible (drawn at 76px) and returns the space to content. */
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 124px;
+    }
   }
 
   html {
@@ -192,13 +201,33 @@
   }
 
   /* The cell shows the focus state; the bare input inside it should not
-     draw a second ring. */
+     draw a second ring. The cell gets the site's standard 2px ring, not
+     just a darker border, so keyboard focus is unmistakable. */
   .sf-input:focus-visible {
     outline: none;
   }
 
+  /* Phones: two half-width cells hold the date and time. A filled value
+     ("10/20/2026", "02:30 PM") did not fit beside the desktop picker
+     icon, so below sm the icon goes (tapping the field opens the native
+     picker regardless) and the cell padding tightens slightly. */
+  @media (max-width: 639px) {
+    .sf-cell {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    .sf-input::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  }
+
+  .sf-cell:has(:focus-visible) {
+    outline: 2px solid theme("colors.ink");
+    outline-offset: 2px;
+  }
+
   .sf-error {
-    @apply mt-1.5 font-sans text-small text-[#B4471A];
+    @apply mt-1.5 font-sans text-small text-[#9A3A12];
   }
 
   .chip {

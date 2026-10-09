@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { BrandMark } from "@/components/BrandMark";
+import { LicenceLine } from "@/components/b2c/LicenceLine";
+import { LICENCE, SUPPORT } from "@/lib/b2c/business";
 import { FOOTER_TRAVEL } from "@/lib/b2c/copy";
 
 /**
@@ -18,11 +20,6 @@ const LINKS = [
   { label: "Fleet", href: "/#fleet" },
   { label: "Türkiye", href: "/#coverage" },
   { label: "About", href: "/#people" },
-];
-
-const LEGAL = [
-  { label: "Privacy", href: "#" },
-  { label: "Terms", href: "#" },
 ];
 
 export function Footer() {
@@ -61,12 +58,22 @@ export function Footer() {
           </nav>
 
           <div>
-            <p className="eyebrow mb-4">Partnership Enquiries</p>
+            <p className="eyebrow mb-4">Contact</p>
+            <p className="font-sans text-small text-ivory/60">General and partnership enquiries</p>
             <a
-              href="mailto:info@swtelite.com"
-              className="font-sans text-body text-ivory/80"
+              href={`mailto:${SUPPORT.email}`}
+              className="font-sans text-body text-ivory/80 transition-colors duration-300 hover:text-ivory"
             >
-              info@swtelite.com
+              {SUPPORT.email}
+            </a>
+            {/* An emergency line for travellers on the day of a transfer,
+                labelled as such so it is not mistaken for a sales line. */}
+            <p className="mt-5 font-sans text-small text-ivory/60">24/7 emergency transfer assistance</p>
+            <a
+              href={`tel:${SUPPORT.emergencyTel}`}
+              className="font-sans text-body text-ivory/80 transition-colors duration-300 hover:text-ivory"
+            >
+              {SUPPORT.emergencyPhone}
             </a>
           </div>
 
@@ -128,20 +135,19 @@ export function Footer() {
           </div>
         </div>
 
+        <div className="border-t border-ivory/10 py-6">
+          <LicenceLine tone="dark" />
+          <p className="mt-1 font-sans text-small text-ivory/60">{LICENCE.legalName}</p>
+        </div>
+
         <div className="flex flex-col gap-4 border-t border-ivory/10 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-sans text-small text-ivory/50">
+          <p className="font-sans text-small text-ivory/60">
             © {year} SWT Elite. All rights reserved.
           </p>
+          {/* Privacy and Terms links were placeholders pointing at "#".
+              They are removed until approved legal texts exist, rather
+              than shown as links that go nowhere. */}
           <div className="flex items-center gap-6">
-            {LEGAL.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="font-sans text-small text-ivory/50 transition-colors duration-300 hover:text-ivory/80"
-              >
-                {item.label}
-              </a>
-            ))}
             {/* Was ivory/30, which measures 2.51:1 on charcoal. ivory/50
                 is the lowest step that clears 4.5:1 and is already the
                 weight used by the copyright and legal links beside it. */}
