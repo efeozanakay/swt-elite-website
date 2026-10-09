@@ -63,7 +63,7 @@ export default function ToursPage() {
             </div>
           </Reveal>
         </div>
-        <p className="absolute bottom-4 right-6 max-w-[18rem] text-right font-sans text-[0.75rem] text-ivory/70 sm:right-10 lg:right-16 xl:right-24">
+        <p className="absolute bottom-4 right-6 max-w-[18rem] text-right font-sans text-[0.75rem] text-ivory/70 sm:right-10 lg:right-12 xl:right-16">
           {PROTOTYPE.imagery}
         </p>
       </section>

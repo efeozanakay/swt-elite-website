@@ -55,8 +55,11 @@ const intParam = (v: string | null, fallback: number) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
+/** Times are on a 5-minute grid. Anything else (from an old or edited
+ *  link) is dropped rather than shown as an awkward value. */
+export const TIME_STEP_MINUTES = 5;
 const timeParam = (v: string | null) =>
-  v && /^([01]\d|2[0-3]):[0-5]\d$/.test(v) ? v : "";
+  v && /^([01]\d|2[0-3]):[0-5]\d$/.test(v) && Number(v.slice(3)) % TIME_STEP_MINUTES === 0 ? v : "";
 
 const dateParam = (v: string | null) => (v && parseISODate(v) ? v : "");
 

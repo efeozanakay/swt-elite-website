@@ -36,8 +36,6 @@ type Partner = {
   ink: { x: number; y: number; w: number; h: number };
   /** Target rendered width of the mark at lg, in CSS pixels. */
   width: number;
-  /** Grid placement. Kept explicit so Tailwind sees static class names. */
-  place: string;
   /**
    * Post-grayscale luminance correction. Measured mean ink luminance runs
    * from 84 (Sonar Tour) to 186 (Diana Travel) across the set, so the
@@ -49,7 +47,7 @@ type Partner = {
   filter?: string;
 };
 
-// Preserve the original order; Ela completes the final row of three.
+// Preserve the original order: two rows of four.
 const PARTNERS: Partner[] = [
   {
     name: "ForYou Travel",
@@ -58,7 +56,6 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 270, y: 63, w: 97, h: 95 },
     width: 79,
-    place: "md:col-start-3 md:col-span-4",
     filter: "brightness-[74%]",
   },
   {
@@ -68,7 +65,6 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 260, y: 63, w: 120, h: 93 },
     width: 90,
-    place: "md:col-span-4",
   },
   {
     name: "Rocket DMC",
@@ -77,7 +73,6 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 98, y: 81, w: 444, h: 56 },
     width: 206,
-    place: "md:col-span-4",
   },
   {
     name: "Lucca Tour",
@@ -86,7 +81,6 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 184, y: 69, w: 272, h: 83 },
     width: 138,
-    place: "md:col-span-4",
   },
   {
     name: "Diana Travel",
@@ -95,7 +89,6 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 189, y: 74, w: 264, h: 75 },
     width: 152,
-    place: "md:col-span-4",
     filter: "brightness-[73%]",
   },
   {
@@ -105,7 +98,6 @@ const PARTNERS: Partner[] = [
     fh: 220,
     ink: { x: 204, y: 66, w: 231, h: 88 },
     width: 98,
-    place: "md:col-span-4",
   },
   {
     name: "Trend Sport Travel",
@@ -114,7 +106,6 @@ const PARTNERS: Partner[] = [
     fh: 415,
     ink: { x: 0, y: 15, w: 633, h: 386 },
     width: 103,
-    place: "md:col-span-4",
     filter: "brightness-[78%]",
   },
   {
@@ -127,7 +118,6 @@ const PARTNERS: Partner[] = [
     // 18% ink coverage: 116px matches the surrounding marks' optical weight.
     // Mean grayscale luminance is 127, so no brightness correction is needed.
     width: 116,
-    place: "md:col-span-4",
   },
 ];
 
@@ -138,29 +128,40 @@ function PartnerLogo({ partner }: { partner: Partner }) {
   const px = (n: number) => `calc(${n.toFixed(1)}px * var(--ls))`;
 
   return (
-    <li
-      className={`relative overflow-hidden ${partner.place}`}
-      style={{
-        width: px(partner.width),
-        height: px(partner.ink.h * k),
-      }}
-    >
-      <Image
-        src={`/partners/${partner.file}`}
-        alt={`${partner.name} logo`}
-        width={Math.round(partner.fw * k)}
-        height={Math.round(partner.fh * k)}
-        quality={100}
-        className={`absolute max-w-none grayscale transition duration-300 ease-editorial hover:grayscale-0 ${
-          partner.filter ?? ""
-        }`}
+    <li className="group flex h-[calc(150px*var(--ls))] items-center justify-center border-b border-r border-graphite/15 transition-colors duration-500 ease-editorial hover:bg-white/50">
+      <span
+        className="relative block overflow-hidden"
         style={{
-          width: px(partner.fw * k),
-          height: px(partner.fh * k),
-          left: px(-partner.ink.x * k),
-          top: px(-partner.ink.y * k),
+          width: px(partner.width),
+          height: px(partner.ink.h * k),
         }}
-      />
+      >
+        {/*
+          At rest: grayscale with the per-mark luminance correction, so
+          the set reads as one even, quiet row. On hover the whole cell
+          (not just the image) drops both the grayscale and the
+          correction, so the mark shows its own brand colours exactly as
+          supplied. The previous hover removed only the grayscale and
+          kept the brightness correction, which dulled every colour
+          (Trend Sport Travel's lime turned olive).
+        */}
+        <Image
+          src={`/partners/${partner.file}`}
+          alt={`${partner.name} logo`}
+          width={Math.round(partner.fw * k)}
+          height={Math.round(partner.fh * k)}
+          quality={100}
+          className={`absolute max-w-none opacity-80 grayscale transition-[filter,opacity] duration-500 ease-editorial group-hover:opacity-100 group-hover:brightness-100 group-hover:grayscale-0 motion-reduce:transition-none ${
+            partner.filter ?? ""
+          }`}
+          style={{
+            width: px(partner.fw * k),
+            height: px(partner.fh * k),
+            left: px(-partner.ink.x * k),
+            top: px(-partner.ink.y * k),
+          }}
+        />
+      </span>
     </li>
   );
 }
@@ -178,30 +179,22 @@ export function Partners() {
           </h2>
         </Reveal>
 
-        <Reveal delay={100} className="mt-16">
-          <div className="border-t border-graphite/20 pt-14 lg:pt-16">
-            {/*
-              One grid rather than three, so every mark aligns to the same
-              columns and there is a single gap value to read. Two marks
-              are centred in the first row, followed by two rows of three.
-              Below md, the eight marks form four pairs.
+        <Reveal delay={100} className="mt-14 lg:mt-16">
+          {/*
+            Two rows of four, side by side, in a hairline grid: every mark
+            sits centred in an equal cell on a shared centreline, so the
+            set reads as one composed row-based wall rather than marks
+            scattered over three staggered rows. Two columns below md.
 
-              Fixed auto-rows give the composition a constant vertical
-              pitch. Without it, row height followed whichever mark
-              happened to be tallest and the spacing between rows drifted.
-
-              --ls scales the whole set from one place; the marks keep
-              their exact aspect ratios at every breakpoint because every
-              dimension derives from the same factor.
-            */}
-            <ul
-              className="mx-auto grid max-w-[960px] grid-cols-2 items-center justify-items-center gap-x-6 gap-y-12 [--ls:0.58] [grid-auto-rows:calc(92px*var(--ls))] md:grid-cols-12 md:gap-y-14 md:[--ls:0.68] lg:gap-x-6 lg:gap-y-16 lg:[--ls:1]"
-            >
-              {PARTNERS.map((partner) => (
-                <PartnerLogo key={partner.file} partner={partner} />
-              ))}
-            </ul>
-          </div>
+            --ls scales the marks and the cell height from one place; the
+            marks keep their exact aspect ratios at every breakpoint
+            because every dimension derives from the same factor.
+          */}
+          <ul className="grid grid-cols-2 border-l border-t border-graphite/15 [--ls:0.62] md:grid-cols-4 md:[--ls:0.72] lg:[--ls:0.92] xl:[--ls:1]">
+            {PARTNERS.map((partner) => (
+              <PartnerLogo key={partner.file} partner={partner} />
+            ))}
+          </ul>
         </Reveal>
       </div>
     </section>

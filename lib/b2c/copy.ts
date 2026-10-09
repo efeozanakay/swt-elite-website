@@ -283,22 +283,44 @@ export const RESULTS = {
     body: "Fix the details below to compare transfer options.",
     blocked: "Fix your journey details above to compare and select a service.",
   },
-  details_preview: {
-    title: "Travel details",
-    preview: "Preview only — not sent anywhere.",
-    childSeats: "Child seats",
-    childSeatsHint: "Free of charge, subject to confirmation.",
-    equipment: "Items to declare",
-    notes: "Notes for our operations team",
-    notesHint: "Optional. For example, the size of a wheelchair or golf bag.",
-    notesTooLong: (max: number) => `Please keep notes under ${max} characters.`,
-    check: "Check details",
-    ok: "These details look complete. In the live service they would be reviewed with your booking.",
-  },
   crossSellEyebrow: "During your stay",
   crossSell: (place: string) => `Staying in ${place}?`,
   crossSellBody: "See experiences you could add to your stay — boat days, rafting and ancient sites around Antalya.",
   crossSellCta: "Explore experiences",
+};
+
+/** The booking-details step on the results page. A prototype: it
+ *  validates and shows a review, and says plainly that nothing is sent. */
+export const BOOKING = {
+  step: "Next step",
+  title: "Booking details",
+  start: "Add booking details",
+  prototype:
+    "Prototype: you can fill in and check these details, but nothing is sent, stored or reserved. Online booking is not open yet.",
+  lead: "Lead passenger",
+  leadHint: "The person we contact about this booking and on the day of travel.",
+  emailHint: "Booking confirmation will be sent here once online booking opens.",
+  phoneHint: "With country code. Our team uses it if your flight or pickup changes.",
+  others: "Other passengers",
+  othersHint: "Names help the driver and desk team check everyone in. You can add them later.",
+  under3: "Travels free on Shared Shuttle",
+  child: "Child fare on Shared Shuttle",
+  agesNote: "Children’s ages come from your search. To change an age, edit the search above.",
+  flights: "Flight details",
+  flightsHint:
+    "We monitor arrival flights in real time and adjust the pickup if your flight is early or late. For departures, the flight time is used to plan your hotel pickup.",
+  arrival: "Arrival flight",
+  departure: "Departure flight",
+  departureTimeHint: "Scheduled time shown on your ticket.",
+  hotel: "Hotel details",
+  hotelHint: (area: string) => `Where you are staying in ${area}. The exact name helps the driver find the right entrance.`,
+  requests: "Requests for our operations team",
+  seatsHint: "Free of charge, subject to confirmation.",
+  notesHint: "Optional. For example, the size of a wheelchair or golf bag, or anything the driver should know.",
+  review: "Review details",
+  reviewTitle: "Your details — not sent",
+  notSent:
+    `Nothing has been sent or booked. When online booking opens, this is the point where you would confirm and pay. Until then, contact ${SUPPORT.email} to arrange a transfer.`,
 };
 
 export const TOURS = {

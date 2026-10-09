@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Faq } from "@/components/b2c/Faq";
 import { IconArrow, IconCheck } from "@/components/b2c/Icons";
+import { ServiceImage } from "@/components/b2c/ServiceImage";
 import { RouteShortcuts } from "@/components/b2c/RouteShortcuts";
 import { B2CImage } from "@/components/b2c/B2CImage";
 import { SectionIntro } from "@/components/b2c/SectionIntro";
@@ -30,25 +31,13 @@ export const metadata: Metadata = {
   },
 };
 
-const SERVICE_PHOTOS = {
-  shared: {
-    src: "/images/operations/fleet-mixed-vehicle-lineup.png",
-    alt: "SWT Elite minibuses and coaches parked in a row by the coast at sunset",
-    position: "30% 60%",
-  },
-  private: {
-    src: "/images/operations/transportation-airport-vito.png",
-    alt: "A private SWT Elite van with its driver outside an airport terminal",
-    position: "50% 60%",
-  },
-};
 
 export default function TransfersPage() {
   return (
     <TravelShell current="transfers">
       {/* ---------------- Hero + search ---------------- */}
       <section aria-labelledby="hero-title" className="relative bg-ivory">
-        <div className="on-dark relative flex min-h-[560px] flex-col justify-end overflow-hidden bg-charcoal pb-28 pt-[calc(var(--header-h)+3rem)] md:min-h-[640px] lg:h-[88svh] lg:max-h-[920px] lg:pb-56">
+        <div className="on-dark relative flex flex-col justify-end overflow-hidden bg-charcoal pb-24 pt-[calc(var(--header-h)+2.5rem)] md:min-h-[480px] lg:min-h-0 lg:pb-32 lg:pt-[calc(var(--header-h)+3rem)]">
           {/* Both services in one frame: a shared minibus and a private van
               at the kerb. The vehicles sit right of centre, so the focal
               point keeps them in shot on narrow screens while the sunset
@@ -79,14 +68,17 @@ export default function TransfersPage() {
                 <br />
                 <span className="italic">{TRANSFERS.hero.title[1]}</span>
               </h1>
-              <p className="mt-6 max-w-lg font-sans text-body-lg text-ivory/85">{TRANSFERS.hero.body}</p>
+              <p className="mt-5 max-w-lg font-sans text-body-lg text-ivory/85">{TRANSFERS.hero.body}</p>
             </Reveal>
           </div>
         </div>
 
         {/* The search panel overlaps the photograph so the page's single
-            most important control is above the fold at every width. */}
-        <div id="search" className="edge wrap relative z-20 -mt-16 pb-16 lg:-mt-40">
+            most important control is above the fold. The hero no longer
+            takes a fixed 88% of the viewport: it is sized by its copy, so
+            on a 1440x900 screen the whole panel sits inside the first
+            screen instead of starting at its bottom edge. */}
+        <div id="search" className="edge wrap relative z-20 -mt-14 pb-16 lg:-mt-20">
           <div className="border border-graphite/15 bg-ivory p-5 shadow-[0_40px_80px_-40px_rgba(21,19,15,0.55)] sm:p-7 lg:p-8">
             <h2 className="sr-only">Search transfers</h2>
             <TransferSearchForm readUrl />
@@ -113,11 +105,10 @@ export default function TransfersPage() {
           />
           <div className="mt-14 grid gap-6 lg:grid-cols-2">
             {[SERVICES.shared, SERVICES.private].map((svc, i) => {
-              const photo = SERVICE_PHOTOS[svc.id];
               return (
                 <Reveal key={svc.id} delay={i * 100}>
                   <article className="flex h-full flex-col border border-graphite/20 bg-white/50">
-                    <Photo src={photo.src} alt={photo.alt} aspect="16 / 9" position={photo.position} sizes="(min-width: 1024px) 50vw, 100vw" />
+                    <ServiceImage id={svc.id} sizes="(min-width: 1024px) 50vw, 100vw" />
                     <div className="flex flex-1 flex-col p-6 sm:p-8">
                       <div className="flex flex-wrap items-start justify-between gap-6">
                         <div>

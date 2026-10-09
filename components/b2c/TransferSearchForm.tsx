@@ -11,6 +11,7 @@ import {
   EMPTY_SEARCH,
   searchFromParams,
   searchToQuery,
+  TIME_STEP_MINUTES,
   timeLabel,
   validateSearch,
   type SearchErrors,
@@ -294,37 +295,85 @@ function DateField({
   );
 }
 
-function TimeField({
+/**
+ * Hour and minute as two selects, minutes on a 5-minute grid only
+ * (00, 05 … 55). A native time input with step=300 only hints at the
+ * step: it still accepts any typed minute and shows awkward values like
+ * 14:37. Two short selects are also easier on touch screens than the
+ * native time wheel, and work the same in every browser.
+ */
+export function TimeField({
   label,
   value,
   onChange,
   className = "",
+  required = false,
+  error,
+  hint,
+  hourRef,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   className?: string;
+  required?: boolean;
+  error?: string;
+  hint?: string;
+  hourRef?: (el: HTMLSelectElement | null) => void;
 }) {
   const id = useId();
+  const [h, m] = value ? value.split(":") : ["", ""];
+  const set = (hour: string, minute: string) => {
+    if (!hour) return onChange("");
+    onChange(`${hour}:${minute || "00"}`);
+  };
+  const describedBy = [hint && !error ? `${id}-hint` : "", error ? `${id}-error` : ""].filter(Boolean).join(" ") || undefined;
   return (
     <div className={className}>
-      <div className="sf-cell">
-        <label htmlFor={id} className="sf-label flex items-baseline justify-between gap-2">
+      <div className="sf-cell" data-invalid={error ? "true" : undefined}>
+        <span id={`${id}-label`} className="sf-label flex items-baseline justify-between gap-2">
           <span>{label}</span>
-          <span className="sr-only">({SEARCH.timeOptional})</span>
-        </label>
-        <input
-          id={id}
-          type="time"
-          value={value}
-          step={300}
-          onChange={(e) => onChange(e.target.value)}
-          className="sf-input [color-scheme:light]"
-        />
+          {!required && <span className="sr-only">({SEARCH.timeOptional})</span>}
+        </span>
+        <div className="mt-1 flex items-center gap-1" role="group" aria-labelledby={`${id}-label`} aria-describedby={describedBy}>
+          <select
+            ref={hourRef}
+            aria-label={`${label}: hour`}
+            aria-invalid={error ? true : undefined}
+            aria-required={required || undefined}
+            value={h}
+            onChange={(e) => set(e.target.value, m)}
+            className="sf-input w-auto min-w-0 flex-1 cursor-pointer tabular-nums"
+          >
+            <option value="">--</option>
+            {HOURS.map((x) => (
+              <option key={x} value={x}>{x}</option>
+            ))}
+          </select>
+          <span aria-hidden="true" className="mt-1 font-sans text-body text-graphite">:</span>
+          <select
+            aria-label={`${label}: minutes`}
+            value={h ? m : ""}
+            disabled={!h}
+            onChange={(e) => set(h, e.target.value)}
+            className="sf-input w-auto min-w-0 flex-1 cursor-pointer tabular-nums disabled:cursor-not-allowed disabled:text-graphite/60"
+          >
+            {!h && <option value="">--</option>}
+            {MINUTES.map((x) => (
+              <option key={x} value={x}>{x}</option>
+            ))}
+          </select>
+        </div>
       </div>
+      {hint && !error && <p id={`${id}-hint`} className="mt-1 font-sans text-[0.8125rem] text-graphite">{hint}</p>}
+      {error && <p id={`${id}-error`} className="sf-error">{error}</p>}
     </div>
   );
 }
+
+const pad = (n: number) => String(n).padStart(2, "0");
+const HOURS = Array.from({ length: 24 }, (_, i) => pad(i));
+const MINUTES = Array.from({ length: 60 / TIME_STEP_MINUTES }, (_, i) => pad(i * TIME_STEP_MINUTES));
 
 export function prefillTransfer(detail: PrefillDetail) {
   window.dispatchEvent(new CustomEvent(PREFILL_EVENT, { detail }));

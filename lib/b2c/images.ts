@@ -53,6 +53,14 @@ export const IMAGES: Record<ImageKey, { alt: string; focus: string }> = {
     alt: "Illustrative image: a wooden gulet anchored in a clear turquoise cove with swimmers nearby",
     focus: "55% 60%",
   },
+  /** A crop of airport-transfer-sunset on the minibus alone, for the
+   *  Shared Shuttle card. Replaced the fleet car-park photo, whose dense
+   *  rows of small vehicles aliased into a pixelated look at card size
+   *  and did not read as a shuttle. */
+  "shuttle-minibus-airport": {
+    alt: "Illustrative image: a white minibus at an airport terminal at sunset",
+    focus: "42% 55%",
+  },
   "canyon-rafting": {
     alt: "Illustrative image: a raft on a turquoise river between limestone canyon walls",
     focus: "45% 70%",

@@ -7,15 +7,14 @@ import { AirportMeeting } from "@/components/b2c/AirportMeeting";
 import { B2CImage } from "@/components/b2c/B2CImage";
 import { IconArrow, IconBag, IconCheck, IconClock, IconInfo, IconUsers } from "@/components/b2c/Icons";
 import { TransferSearchForm } from "@/components/b2c/TransferSearchForm";
-import { Photo } from "@/components/Photo";
+import { BookingDetails } from "@/components/b2c/BookingDetails";
+import { ServiceImage } from "@/components/b2c/ServiceImage";
 import {
-  EQUIPMENT_NOTE,
-  EQUIPMENT_OPTIONS,
   FLIGHT_MONITORING,
   SUPPORT,
   privateVehicleFor,
 } from "@/lib/b2c/business";
-import { MEETING, PRICE_PLACEHOLDER, PROTOTYPE, RESULTS, SEARCH, SERVICES } from "@/lib/b2c/copy";
+import { BOOKING, MEETING, PRICE_PLACEHOLDER, PROTOTYPE, RESULTS, SEARCH, SERVICES } from "@/lib/b2c/copy";
 import { areaImageFor, tourDestinationFor } from "@/lib/b2c/cross-sell";
 import { locationById, locationLabel, type TransferLocation } from "@/lib/b2c/demo/locations";
 import { formatDate } from "@/lib/b2c/locale";
@@ -29,18 +28,6 @@ import {
 
 type ServiceId = "shared" | "private";
 
-const PHOTOS: Record<ServiceId, { src: string; alt: string; position: string }> = {
-  shared: {
-    src: "/images/operations/fleet-mixed-vehicle-lineup.png",
-    alt: "SWT Elite minibuses and coaches parked by the coast",
-    position: "30% 60%",
-  },
-  private: {
-    src: "/images/operations/transportation-airport-vito.png",
-    alt: "A private SWT Elite van outside an airport terminal",
-    position: "50% 60%",
-  },
-};
 
 /**
  * Every state of this page renders inside a block at least one screen
@@ -69,6 +56,8 @@ export function TransferResults() {
   const [mounted, setMounted] = useState(false);
   const [summaryInView, setSummaryInView] = useState(false);
   const summaryRef = useRef<HTMLDivElement>(null);
+  const bookingRef = useRef<HTMLElement>(null);
+  const [bookingInView, setBookingInView] = useState(false);
   const editButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => setMounted(true), []);
@@ -93,6 +82,16 @@ export function TransferResults() {
     io.observe(node);
     return () => io.disconnect();
   }, [mounted, complete]);
+
+  // Same for the booking-details form: the bar must not sit over the
+  // fields being filled in.
+  useEffect(() => {
+    const node = bookingRef.current;
+    if (!node || typeof IntersectionObserver === "undefined") return setBookingInView(false);
+    const io = new IntersectionObserver(([e]) => setBookingInView(e.isIntersecting));
+    io.observe(node);
+    return () => io.disconnect();
+  }, [selected]);
 
   const applySearch = (next: TransferSearch) => {
     router.replace(`/transfers/results?${searchToQuery(next)}`, { scroll: false });
@@ -239,10 +238,10 @@ export function TransferResults() {
                   selected={selected === id}
                   onSelect={() => {
                     setSelected(id);
-                    // On small screens the summary sits below the cards;
+                    // On small screens the next step sits below the cards;
                     // bring it into view so the selection has a visible result.
                     if (window.matchMedia("(max-width: 1023px)").matches) {
-                      summaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                      requestAnimationFrame(() => bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
                     }
                   }}
                 />
@@ -269,6 +268,13 @@ export function TransferResults() {
                     <p className="mt-4 font-sans text-body text-ink">{RESULTS.departureNote}</p>
                   </section>
                 )}
+              </div>
+            )}
+
+            {/* ---------------- Booking details ---------------- */}
+            {selected && !invalid && from && to && (
+              <div className="mt-10">
+                <BookingDetails ref={bookingRef} search={search} from={from} to={to} service={selected} />
               </div>
             )}
           </div>
@@ -308,7 +314,14 @@ export function TransferResults() {
                       <IconCheck size={16} className="mt-0.5 shrink-0 text-brand-navy" />
                       {RESULTS.cancellation}
                     </p>
-                    <TravelDetailsPreview childCount={search.children} />
+                    <button
+                      type="button"
+                      onClick={() => bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                      className="btn-outline mt-6 w-full border-ink py-3"
+                    >
+                      {BOOKING.start}
+                      <IconArrow size={16} />
+                    </button>
                   </>
                 ) : (
                   <p className="mt-5 font-sans text-body text-graphite">{RESULTS.noSelection}</p>
@@ -375,9 +388,10 @@ export function TransferResults() {
       )}
 
       {/* Mobile: keep the choice visible once made, but only while the
-          full summary is off-screen, so the bar never covers it. */}
+          summary and the booking form are off-screen, so the bar never
+          covers them. It leads to the next step, the booking details. */}
       {selected && <div aria-hidden="true" className="h-20 lg:hidden" />}
-      {selected && !summaryInView && (
+      {selected && !summaryInView && !bookingInView && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-graphite/20 bg-ivory/95 backdrop-blur-sm lg:hidden">
           <div className="edge flex items-center justify-between gap-4 py-3">
             <p className="min-w-0 font-sans text-small">
@@ -389,12 +403,9 @@ export function TransferResults() {
             <button
               type="button"
               className="btn-outline shrink-0 px-4 py-2.5"
-              onClick={() => {
-                summaryRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                summaryRef.current?.focus({ preventScroll: true });
-              }}
+              onClick={() => bookingRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
             >
-              {RESULTS.summary}
+              {BOOKING.title}
             </button>
           </div>
         </div>
@@ -458,7 +469,6 @@ function ServiceOption({
   onSelect: () => void;
 }) {
   const svc = SERVICES[id];
-  const photo = PHOTOS[id];
   const [open, setOpen] = useState(false);
   const pax = search.adults + search.children;
   const isReturn = search.trip === "return";
@@ -487,7 +497,7 @@ function ServiceOption({
       }`}
     >
       {selected && <span aria-hidden="true" className="absolute inset-x-0 top-0 z-10 h-1 bg-brand-amber" />}
-      <Photo src={photo.src} alt={photo.alt} aspect="16 / 9" position={photo.position} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" />
+      <ServiceImage id={id} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" />
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
@@ -571,104 +581,5 @@ function ServiceOption({
         </div>
       </div>
     </article>
-  );
-}
-
-const NOTES_MAX = 300;
-
-/**
- * The requests a real booking will collect: child seats, items to
- * declare and a note for operations. Validated, but deliberately not
- * submitted anywhere: there is no booking system behind this preview,
- * and the panel says so.
- */
-function TravelDetailsPreview({ childCount }: { childCount: number }) {
-  const id = useId();
-  const [seats, setSeats] = useState(0);
-  const [items, setItems] = useState<string[]>([]);
-  const [notes, setNotes] = useState("");
-  const [checked, setChecked] = useState<null | "ok" | "error">(null);
-  const tooLong = notes.length > NOTES_MAX;
-  const copy = RESULTS.details_preview;
-
-  return (
-    <form
-      noValidate
-      onSubmit={(e) => {
-        e.preventDefault();
-        setChecked(tooLong ? "error" : "ok");
-      }}
-      className="mt-6 border-t border-graphite/15 pt-5"
-      aria-labelledby={`${id}-title`}
-    >
-      <div className="flex items-baseline justify-between gap-3">
-        <h3 id={`${id}-title`} className="font-sans text-small font-medium uppercase tracking-[0.12em] text-ink">{copy.title}</h3>
-        <span className="font-sans text-[0.75rem] text-graphite">{copy.preview}</span>
-      </div>
-
-      {childCount > 0 && (
-        <div className="mt-4 flex items-center justify-between gap-4">
-          <div>
-            <p className="font-sans text-small text-ink" id={`${id}-seats`}>{copy.childSeats}</p>
-            <p className="font-sans text-[0.8125rem] text-graphite">{copy.childSeatsHint}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <button type="button" aria-label="One fewer child seat" disabled={seats <= 0} onClick={() => setSeats(seats - 1)} className="flex h-11 w-11 items-center justify-center border border-graphite/30 disabled:opacity-35">−</button>
-            <output aria-labelledby={`${id}-seats`} className="w-5 text-center font-sans text-body tabular-nums">{seats}</output>
-            <button type="button" aria-label="One more child seat" disabled={seats >= childCount} onClick={() => setSeats(seats + 1)} className="flex h-11 w-11 items-center justify-center border border-graphite/30 disabled:opacity-35">+</button>
-          </div>
-        </div>
-      )}
-
-      <fieldset className="mt-4">
-        <legend className="font-sans text-small text-ink">{copy.equipment}</legend>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {EQUIPMENT_OPTIONS.map((o) => {
-            const on = items.includes(o.id);
-            return (
-              <label key={o.id} className={`chip cursor-pointer has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 ${on ? "border-ink bg-ink text-ivory" : ""}`}>
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={on}
-                  onChange={() => setItems(on ? items.filter((i) => i !== o.id) : [...items, o.id])}
-                />
-                {o.label}
-              </label>
-            );
-          })}
-        </div>
-        <p className="mt-2 font-sans text-[0.8125rem] text-graphite">{EQUIPMENT_NOTE}</p>
-      </fieldset>
-
-      <label className="mt-4 block">
-        <span className="font-sans text-small text-ink">{copy.notes}</span>
-        <span className="block font-sans text-[0.8125rem] text-graphite">{copy.notesHint}</span>
-        <textarea
-          value={notes}
-          onChange={(e) => {
-            setNotes(e.target.value);
-            setChecked(null);
-          }}
-          rows={3}
-          aria-invalid={tooLong || undefined}
-          aria-describedby={tooLong ? `${id}-notes-error` : undefined}
-          className="mt-2 w-full border border-graphite/25 bg-white/70 p-3 font-sans text-small text-ink focus:border-ink"
-        />
-        <span className={`block text-right font-sans text-[0.75rem] ${tooLong ? "text-[#9A3A12]" : "text-graphite"}`}>
-          {notes.length}/{NOTES_MAX}
-        </span>
-        {tooLong && (
-          <span id={`${id}-notes-error`} className="sf-error block">
-            {copy.notesTooLong(NOTES_MAX)}
-          </span>
-        )}
-      </label>
-
-      <button type="submit" className="btn-outline mt-3 w-full py-3">{copy.check}</button>
-      <p aria-live="polite" className="mt-2 font-sans text-small text-graphite">
-        {checked === "ok" ? copy.ok : ""}
-      </p>
-    </form>
   );
 }

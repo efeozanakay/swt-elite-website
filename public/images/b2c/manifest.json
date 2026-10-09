@@ -89,6 +89,15 @@
       1448
     ]
   },
+  "shuttle-minibus-airport": {
+    "width": 1080,
+    "height": 608,
+    "widths": [
+      480,
+      800,
+      1080
+    ]
+  },
   "turquoise-cove-resort-town": {
     "width": 1448,
     "height": 1086,

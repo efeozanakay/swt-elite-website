@@ -108,7 +108,7 @@ export function HeroMedia() {
         type="button"
         onClick={toggle}
         aria-pressed={!playing}
-        className="absolute bottom-7 right-6 z-20 font-sans text-eyebrow uppercase tracking-[0.2em] text-ivory/80 transition-colors duration-300 hover:text-ivory sm:right-10 lg:bottom-9 lg:right-16 xl:right-24"
+        className="absolute bottom-7 right-6 z-20 font-sans text-eyebrow uppercase tracking-[0.2em] text-ivory/80 transition-colors duration-300 hover:text-ivory sm:right-10 lg:bottom-9 lg:right-12 xl:right-16"
       >
         {playing ? "Pause" : "Play"}
         <span className="sr-only"> background film</span>

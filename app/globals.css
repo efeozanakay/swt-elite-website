@@ -61,8 +61,12 @@
 }
 
 @layer components {
+  /* Desktop gutters were 64px (lg) and 96px (xl), which left the header
+     logo and hero copy sitting noticeably inward. 48px / 64px moves the
+     whole canvas edge left together, so logo, hero and every section
+     below stay on one shared line. */
   .edge {
-    @apply px-6 sm:px-10 lg:px-16 xl:px-24;
+    @apply px-6 sm:px-10 lg:px-12 xl:px-16;
   }
 
   .wrap {
