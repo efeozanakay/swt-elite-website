@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { BrandMark } from "@/components/BrandMark";
+import { FOOTER_TRAVEL } from "@/lib/b2c/copy";
 
 /**
  * Google's documented Maps URL form, pointing at the same destination as
@@ -9,11 +11,13 @@ import { BrandMark } from "@/components/BrandMark";
 const MAPS_URL =
   "https://www.google.com/maps/dir/?api=1&destination=Alko+Plaza%2C+Alt%C4%B1nova+Sinan%2C+No%3A3%2C+07030+Kepez%2FAntalya";
 
+// Root-relative, so the same footer works on the travel pages, where
+// the corporate sections are not on the page.
 const LINKS = [
-  { label: "Capabilities", href: "#capabilities" },
-  { label: "Fleet", href: "#fleet" },
-  { label: "Türkiye", href: "#coverage" },
-  { label: "About", href: "#people" },
+  { label: "Capabilities", href: "/#capabilities" },
+  { label: "Fleet", href: "/#fleet" },
+  { label: "Türkiye", href: "/#coverage" },
+  { label: "About", href: "/#people" },
 ];
 
 const LEGAL = [
@@ -25,21 +29,35 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="on-dark border-t border-ivory/10 bg-charcoal pt-20">
+    <footer id="contact" className="on-dark border-t border-ivory/10 bg-charcoal pt-20">
       <div className="edge wrap">
         <BrandMark height={138} />
 
         <div className="mt-16 grid grid-cols-1 gap-12 border-t border-ivory/10 py-12 sm:grid-cols-2 lg:grid-cols-4">
-          <nav aria-label="Footer" className="flex flex-col gap-4">
-            {LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="font-sans text-small uppercase tracking-[0.08em] text-ivory/70 transition-colors duration-300 hover:text-ivory"
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav aria-label="Footer" className="flex flex-col gap-10">
+            <div className="flex flex-col gap-4">
+              {LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="font-sans text-small uppercase tracking-[0.08em] text-ivory/70 transition-colors duration-300 hover:text-ivory"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            <div className="flex flex-col gap-4">
+              <p className="eyebrow">{FOOTER_TRAVEL.title}</p>
+              {FOOTER_TRAVEL.links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="font-sans text-small uppercase tracking-[0.08em] text-ivory/70 transition-colors duration-300 hover:text-ivory"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </nav>
 
           <div>

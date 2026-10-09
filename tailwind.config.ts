@@ -16,6 +16,18 @@ const config: Config = {
         // use only (see brand/SWT-DESIGN-BIBLE.md): never a background fill.
         "swt-orange": "#D2601F",
         "swt-blue": "#1F3A5C",
+        // Sampled from the official lockup (source-assets/images/
+        // swt-elite-logo.png), not approximated. Used by the consumer
+        // pages, where a booking interface needs one unmistakable
+        // action colour. Amber is a fill only: ink text on amber
+        // measures 9.6:1, but amber text on ivory fails, so it is never
+        // used for type.
+        brand: {
+          amber: "#FAA529",
+          "amber-deep": "#E8901A",
+          blue: "#5175BA",
+          navy: "#0B4E9D",
+        },
       },
       fontFamily: {
         display: ["var(--font-display)"],

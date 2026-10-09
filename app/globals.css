@@ -95,7 +95,10 @@
     @apply absolute left-6 top-6 z-[100] -translate-y-[200%] border border-ink bg-ivory px-6 py-3 font-sans text-small uppercase tracking-[0.12em] text-ink transition-transform duration-200;
   }
 
-  .skip-link:focus {
+  /* :focus-visible, not :focus: after a client-side navigation the
+     router moves focus programmatically, and a mouse visitor should not
+     see the skip link appear because of it. */
+  .skip-link:focus-visible {
     @apply translate-y-0;
   }
 
@@ -147,6 +150,67 @@
 
   .on-dark .btn-ghost {
     @apply border-ivory/30 text-ivory hover:border-ivory;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Consumer travel pages (/transfers, /tours).
+   Same square, hairline vocabulary as the corporate site, with one
+   addition: an amber action colour taken from the logo, because a booking
+   flow needs a single unmistakable primary control.
+   --------------------------------------------------------------------- */
+@layer components {
+  .btn-action {
+    @apply inline-flex items-center justify-center gap-3 bg-brand-amber px-7 py-4 font-sans text-small font-medium uppercase tracking-[0.12em] text-ink transition-colors duration-300 hover:bg-brand-amber-deep disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-3 border border-ink/25 px-6 py-3.5 font-sans text-small uppercase tracking-[0.12em] text-ink transition-colors duration-300 hover:border-ink;
+  }
+
+  .on-dark .btn-outline {
+    @apply border-ivory/35 text-ivory hover:border-ivory;
+  }
+
+  /* Boxed field for the search panel. The corporate drawer's bottom-rule
+     field suits a long form on a dark ground; a dense search bar needs
+     each control to read as its own hit target. */
+  .sf-cell {
+    @apply relative flex min-h-[4.25rem] flex-col justify-center border border-graphite/20 bg-white/70 px-4 py-2.5 transition-colors duration-200 focus-within:border-ink hover:border-graphite/45;
+  }
+
+  .sf-cell[data-invalid="true"] {
+    @apply border-swt-orange;
+  }
+
+  .sf-label {
+    @apply font-sans text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-graphite;
+  }
+
+  .sf-input {
+    @apply mt-1 w-full min-w-0 appearance-none truncate border-0 bg-transparent p-0 font-sans text-body text-ink outline-none placeholder:text-graphite/60;
+  }
+
+  /* The cell shows the focus state; the bare input inside it should not
+     draw a second ring. */
+  .sf-input:focus-visible {
+    outline: none;
+  }
+
+  .sf-error {
+    @apply mt-1.5 font-sans text-small text-[#B4471A];
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 whitespace-nowrap border border-graphite/25 px-4 py-2.5 font-sans text-small text-ink transition-colors duration-200 hover:border-ink;
+  }
+
+  .chip[aria-pressed="true"] {
+    @apply border-ink bg-ink text-ivory;
+  }
+
+  .demo-tag {
+    @apply inline-flex items-center gap-1.5 border border-current px-2 py-0.5 font-sans text-[0.625rem] font-medium uppercase tracking-[0.16em];
   }
 }
 

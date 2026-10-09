@@ -85,6 +85,35 @@ a Cloudflare preview deployment, or with `wrangler pages dev out`.
 See `.env.example` for the required variables. Secrets belong in the
 Pages project as encrypted variables and must never be committed.
 
+## Consumer travel pages (prototype)
+
+Three consumer-facing pages extend the corporate site without replacing
+it. The homepage, its sections and its SEO are unchanged apart from two
+navigation links and a Travel group in the footer.
+
+| Route | Purpose |
+| --- | --- |
+| `/transfers` | Airport transfer landing page and search |
+| `/transfers/results` | Shared Shuttle vs Private Transfer comparison (noindex) |
+| `/tours` | Tours & Experiences discovery with filters and a detail preview |
+
+```text
+components/b2c/   Travel page components (search form, results, tours explorer)
+lib/b2c/copy.ts   All customer-facing copy, ready to split per locale
+lib/b2c/demo/     DEMO DATA ONLY: locations and illustrative tours
+lib/b2c/transfer-search.ts  Search state, URL encoding and validation
+```
+
+This is a frontend prototype. There are no prices, no availability, no
+booking, no checkout and no backend: every price renders as "—", and the
+pages say so. Tours are illustrative examples, labelled "Demo". The
+search state lives in the URL, so results can be reloaded and shared.
+
+Destination and tour imagery is drawn in code by `SceneArt`, because no
+licensed destination photography exists yet. Replace its call sites with
+`<Photo>` when it does. Only English is implemented; the language menu
+lists German, Turkish and Russian as in preparation and switches nothing.
+
 ## Project status
 
 The website is live and maintained as the SWT Elite corporate presence. This repository contains the implemented single-page marketing experience; it does not include a booking engine, customer portal, database, analytics dashboard, or content-management system.
