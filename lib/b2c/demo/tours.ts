@@ -10,7 +10,7 @@
  * Replace this module with the real catalogue. Components only depend on
  * the `Tour` shape, so the swap does not touch the UI.
  */
-import type { SceneKind, SceneTone } from "@/lib/b2c/scenes";
+import type { ImageKey } from "@/lib/b2c/images";
 
 export type TourCategory = "boat" | "culture" | "nature" | "family" | "sightseeing";
 export type TourDuration = "half-day" | "full-day";
@@ -53,7 +53,7 @@ export type Tour = {
   /** Inclusions and exclusions are unknown for every demo entry. */
   inclusions: string[] | null;
   exclusions: string[] | null;
-  scene: { kind: SceneKind; tone: SceneTone; seed: number };
+  image: ImageKey;
   featured?: boolean;
 };
 
@@ -84,7 +84,7 @@ export const TOURS: Tour[] = [
       { label: "Midday", detail: "Anchor in a bay for swimming." },
       { label: "Afternoon", detail: "Further coves before heading back to harbour." },
     ]),
-    scene: { kind: "boat", tone: "day", seed: 11 },
+    image: "gulet-turquoise-cove",
     featured: true,
   }),
   tour({
@@ -99,8 +99,7 @@ export const TOURS: Tour[] = [
       { label: "Afternoon", detail: "Walk through the ancient city." },
       { label: "Sunset", detail: "Time at the temple ruins by the sea." },
     ]),
-    scene: { kind: "ruins", tone: "dusk", seed: 4 },
-    featured: true,
+    image: "ancient-coastal-ruins-sunset",
   }),
   tour({
     id: "cappadocia-valleys",
@@ -115,7 +114,7 @@ export const TOURS: Tour[] = [
       { label: "Midday", detail: "Short valley walk." },
       { label: "Afternoon", detail: "Rock-cut sites and village stop." },
     ]),
-    scene: { kind: "valley", tone: "dawn", seed: 7 },
+    image: "cappadocia-sunrise-balloons",
     featured: true,
   }),
   tour({
@@ -130,36 +129,23 @@ export const TOURS: Tour[] = [
       { label: "Walk", detail: "Through the old town lanes to the harbour." },
       { label: "Free time", detail: "Time to explore on your own." },
     ]),
-    scene: { kind: "oldtown", tone: "dusk", seed: 21 },
+    image: "antalya-kaleici-harbour",
   }),
   tour({
     id: "koprulu-canyon-river",
-    title: "Köprülü Canyon River Day",
+    title: "Köprülü Canyon Rafting",
     destination: "Antalya",
     category: "nature",
     duration: "full-day",
     summary: "A day in the national park canyon, following the river between steep limestone walls.",
-    highlights: ["National park canyon", "River activities", "Mountain scenery"],
+    highlights: ["National park canyon", "Rafting on the river", "Mountain scenery"],
     itinerary: SAMPLE_ITINERARY([
       { label: "Morning", detail: "Drive into the national park." },
       { label: "Midday", detail: "Time on and beside the river." },
       { label: "Afternoon", detail: "Canyon viewpoints." },
     ]),
-    scene: { kind: "canyon", tone: "day", seed: 15 },
-  }),
-  tour({
-    id: "taurus-mountain-roads",
-    title: "Taurus Mountain Roads",
-    destination: "Kemer",
-    category: "nature",
-    duration: "full-day",
-    summary: "Leave the coast behind for mountain villages, forest roads and wide views over the sea.",
-    highlights: ["Mountain villages", "Forest tracks", "Panoramas over the coast"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Morning", detail: "Climb into the mountains." },
-      { label: "Midday", detail: "Village stop." },
-    ]),
-    scene: { kind: "mountains", tone: "day", seed: 33 },
+    image: "canyon-rafting",
+    featured: true,
   }),
   tour({
     id: "alanya-harbour-castle",
@@ -173,26 +159,12 @@ export const TOURS: Tour[] = [
       { label: "Cruise", detail: "Around the castle peninsula." },
       { label: "Swim stop", detail: "Time in the water if conditions allow." },
     ]),
-    scene: { kind: "coast", tone: "day", seed: 9 },
+    image: "alanya-castle-marina",
   }),
   tour({
-    id: "duden-waterfalls",
-    title: "Düden Waterfalls & City Panorama",
-    destination: "Antalya",
-    category: "sightseeing",
-    duration: "half-day",
-    summary: "The waterfalls that drop straight into the Mediterranean, and the cliffs above the city.",
-    highlights: ["Waterfalls over the sea cliffs", "Park walk", "City viewpoints"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Waterfalls", detail: "Upper and lower falls." },
-      { label: "Viewpoint", detail: "Cliffs above the city." },
-    ]),
-    scene: { kind: "waterfall", tone: "day", seed: 5 },
-  }),
-  tour({
-    id: "side-family-beach-boat",
-    title: "Family Day on the Water",
-    destination: "Side",
+    id: "kemer-family-coves",
+    title: "Family Day in the Coves",
+    destination: "Kemer",
     category: "family",
     duration: "half-day",
     summary: "An easy-paced boat outing designed around younger travellers and shorter attention spans.",
@@ -201,50 +173,23 @@ export const TOURS: Tour[] = [
       { label: "Sail", detail: "Short leg along the coast." },
       { label: "Swim", detail: "Shallow bay stop." },
     ]),
-    scene: { kind: "boat", tone: "dawn", seed: 27 },
+    image: "turquoise-cove-resort-town",
   }),
   tour({
-    id: "oludeniz-butterfly-valley",
-    title: "Ölüdeniz & Butterfly Valley",
+    id: "lycian-coast-heritage",
+    title: "Lycian Coast & Ancient Harbours",
     destination: "Fethiye",
-    category: "boat",
+    category: "sightseeing",
     duration: "full-day",
-    summary: "The famous lagoon, then along the cliffs to the valley that opens onto its own beach.",
-    highlights: ["Blue Lagoon views", "Butterfly Valley beach", "Swim stops"],
+    summary: "Clifftop ruins, quiet bays and the old trading harbours of the Lycian coast in one long, scenic day.",
+    highlights: ["Ancient Lycian sites above the sea", "Coastal viewpoints", "Time by the water"],
     itinerary: SAMPLE_ITINERARY([
-      { label: "Morning", detail: "Depart from Ölüdeniz." },
-      { label: "Midday", detail: "Butterfly Valley." },
-      { label: "Afternoon", detail: "Coves on the way back." },
+      { label: "Morning", detail: "Coastal road and first viewpoints." },
+      { label: "Midday", detail: "Ancient site above the bay." },
+      { label: "Afternoon", detail: "Harbour stop before heading back." },
     ]),
-    scene: { kind: "coast", tone: "dawn", seed: 41 },
-  }),
-  tour({
-    id: "fethiye-family-day",
-    title: "Fethiye Old Town & Market Day",
-    destination: "Fethiye",
-    category: "family",
-    duration: "half-day",
-    summary: "Harbour-front walk, the old town and time at the local market — gentle and flexible.",
-    highlights: ["Harbour promenade", "Old town lanes", "Local market"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Walk", detail: "Harbour and old town." },
-      { label: "Market", detail: "Free time." },
-    ]),
-    scene: { kind: "oldtown", tone: "day", seed: 12 },
-  }),
-  tour({
-    id: "perge-aspendos",
-    title: "Perge & Aspendos Ancient Sites",
-    destination: "Antalya",
-    category: "culture",
-    duration: "full-day",
-    summary: "Two of the region’s great ancient sites in one day, including the theatre at Aspendos.",
-    highlights: ["Aspendos theatre", "Perge colonnaded street", "Roman aqueduct"],
-    itinerary: SAMPLE_ITINERARY([
-      { label: "Morning", detail: "Perge." },
-      { label: "Afternoon", detail: "Aspendos." },
-    ]),
-    scene: { kind: "ruins", tone: "day", seed: 18 },
+    image: "lycian-coast-ruins-sunset",
+    featured: true,
   }),
 ];
 

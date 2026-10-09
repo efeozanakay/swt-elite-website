@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { IconClose, IconSearch } from "@/components/b2c/Icons";
-import { SceneArt } from "@/components/b2c/SceneArt";
+import { IconArrow, IconClock, IconClose, IconPin, IconSearch } from "@/components/b2c/Icons";
+import { B2CImage } from "@/components/b2c/B2CImage";
 import { SectionIntro } from "@/components/b2c/SectionIntro";
 import { TourCard } from "@/components/b2c/TourCard";
 import { TourDetailBody } from "@/components/b2c/TourDetailBody";
@@ -19,7 +19,7 @@ import {
   type TourDuration,
 } from "@/lib/b2c/demo/tours";
 import { normalise } from "@/lib/b2c/demo/locations";
-import type { SceneKind, SceneTone } from "@/lib/b2c/scenes";
+import type { ImageKey } from "@/lib/b2c/images";
 
 type Filters = {
   q: string;
@@ -30,14 +30,19 @@ type Filters = {
 
 const EMPTY: Filters = { q: "", category: "", destination: "", duration: "" };
 
-const DESTINATION_ART: Record<TourDestination, { kind: SceneKind; tone: SceneTone; seed: number }> = {
-  Antalya: { kind: "oldtown", tone: "dusk", seed: 31 },
-  Kemer: { kind: "mountains", tone: "day", seed: 12 },
-  Side: { kind: "ruins", tone: "dusk", seed: 2 },
-  Alanya: { kind: "coast", tone: "day", seed: 22 },
-  Fethiye: { kind: "boat", tone: "dawn", seed: 5 },
-  Cappadocia: { kind: "valley", tone: "dawn", seed: 19 },
+const DESTINATION_IMAGE: Record<TourDestination, { image: ImageKey; focus?: string }> = {
+  Antalya: { image: "antalya-kaleici-harbour", focus: "68% 55%" },
+  Kemer: { image: "turquoise-cove-resort-town", focus: "62% 55%" },
+  Side: { image: "ancient-coastal-ruins-sunset", focus: "72% 50%" },
+  Alanya: { image: "alanya-castle-marina", focus: "38% 50%" },
+  Fethiye: { image: "lycian-coast-ruins-sunset", focus: "40% 55%" },
+  Cappadocia: { image: "cappadocia-sunrise-balloons", focus: "60% 45%" },
 };
+
+/** Editorial layout for the four featured experiences: a wide and a
+ *  narrow tile per row, alternating sides, so the row reads as a
+ *  magazine spread rather than a uniform grid of thumbnails. */
+const FEATURED_SPANS = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7"];
 
 /**
  * Featured row, category entry points, the filterable listing and the
@@ -131,6 +136,50 @@ export function ToursExplorer() {
 
   return (
     <>
+      {/* ---------------- Featured ---------------- */}
+      <section aria-labelledby="featured-title" className="bg-ivory py-20 text-ink lg:py-28">
+        <div className="edge wrap">
+          <SectionIntro id="featured-title" eyebrow={TOURS.featured.eyebrow} title={TOURS.featured.title} body={TOURS.featured.body} />
+          <ul className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-12">
+            {TOUR_LIST.filter((t) => t.featured).map((t, i) => {
+              const category = TOUR_CATEGORIES.find((c) => c.id === t.category)!;
+              return (
+                <li key={t.id} className={FEATURED_SPANS[i % FEATURED_SPANS.length]}>
+                  <button
+                    type="button"
+                    onClick={(e) => open(t, e.currentTarget)}
+                    className="group relative block aspect-[4/5] w-full overflow-hidden bg-charcoal text-left text-ivory sm:aspect-[4/5] lg:aspect-auto lg:h-[30rem]"
+                  >
+                    <span className="absolute inset-0 transition-transform duration-[900ms] ease-editorial group-hover:scale-[1.03] motion-reduce:transform-none">
+                      <B2CImage name={t.image} alt="" sizes="(min-width: 1024px) 58vw, (min-width: 640px) 50vw, 100vw" />
+                    </span>
+                    {/* Two scrims: a short one at the top for the tag, a
+                        long one at the bottom so the title holds 4.5:1 on
+                        the brightest sunset frames. */}
+                    <span aria-hidden="true" className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-charcoal/45 to-transparent" />
+                    <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/35 to-transparent" />
+                    <span className="demo-tag absolute left-4 top-4 bg-ivory/90 text-ink">Demo</span>
+                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 sm:p-8">
+                      <span className="max-w-md">
+                        <span className="flex items-center gap-3 font-sans text-[0.6875rem] uppercase tracking-[0.16em] text-ivory/90"><span aria-hidden="true" className="h-px w-6 bg-brand-amber" />{category.label}</span>
+                        <span className="mt-3 block font-display text-[1.75rem] leading-[1.1] sm:text-[2.125rem]">{t.title}</span>
+                        <span className="mt-3 flex flex-wrap gap-x-5 gap-y-1 font-sans text-small text-ivory/80">
+                          <span className="flex items-center gap-1.5"><IconPin size={15} />{t.destination}</span>
+                          <span className="flex items-center gap-1.5"><IconClock size={15} />{DURATION_LABELS[t.duration]}</span>
+                        </span>
+                      </span>
+                      <span aria-hidden="true" className="hidden h-11 w-11 shrink-0 items-center justify-center border border-ivory/40 transition-colors duration-300 group-hover:border-brand-amber group-hover:bg-brand-amber group-hover:text-ink sm:flex">
+                        <IconArrow size={18} />
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
       {/* ---------------- Categories ---------------- */}
       <section aria-labelledby="categories-title" className="bg-bone py-20 text-ink lg:py-24">
         <div className="edge wrap">
@@ -237,8 +286,8 @@ export function ToursExplorer() {
               </ul>
             ) : (
               <div className="flex flex-col items-start gap-6 border border-dashed border-graphite/35 px-6 py-16 sm:items-center sm:text-center">
-                <span className="block h-24 w-36 overflow-hidden opacity-80" aria-hidden="true">
-                  <SceneArt kind="coast" tone="dawn" seed={77} />
+                <span className="flex h-14 w-14 items-center justify-center border border-graphite/30 text-graphite" aria-hidden="true">
+                  <IconSearch size={22} />
                 </span>
                 <div>
                   <p className="font-display text-display-sm">{TOURS.discover.emptyTitle}</p>
@@ -259,7 +308,7 @@ export function ToursExplorer() {
           <SectionIntro id="destinations-title" eyebrow={TOURS.destinations.eyebrow} title={TOURS.destinations.title} body={TOURS.destinations.body} />
           <ul className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3">
             {TOUR_DESTINATIONS.map((d) => {
-              const art = DESTINATION_ART[d];
+              const art = DESTINATION_IMAGE[d];
               const count = TOUR_LIST.filter((t) => t.destination === d).length;
               return (
                 <li key={d}>
@@ -272,9 +321,9 @@ export function ToursExplorer() {
                     className="group relative block aspect-[4/3] w-full overflow-hidden bg-charcoal text-left text-ivory"
                   >
                     <span className="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]">
-                      <SceneArt kind={art.kind} tone={art.tone} seed={art.seed} />
+                      <B2CImage name={art.image} focus={art.focus} alt="" sizes="(min-width: 768px) 33vw, 50vw" />
                     </span>
-                    <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/5 to-transparent" />
+                    <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/15 to-transparent" />
                     <span className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                       <span className="block font-display text-[1.5rem] leading-tight sm:text-[1.875rem]">{d}</span>
                       <span className="mt-1 block font-sans text-[0.6875rem] uppercase tracking-[0.14em] text-ivory/80">
@@ -286,7 +335,6 @@ export function ToursExplorer() {
               );
             })}
           </ul>
-          <p className="mt-6 font-sans text-small italic text-ivory/60">{PROTOTYPE.artwork}.</p>
         </div>
       </section>
 

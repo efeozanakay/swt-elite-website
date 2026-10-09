@@ -1,0 +1,102 @@
+{
+  "airport-transfer-sunset": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      480,
+      800,
+      1200,
+      1672
+    ]
+  },
+  "alanya-castle-marina": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "ancient-coastal-ruins-sunset": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "antalya-kaleici-harbour": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "canyon-rafting": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "cappadocia-sunrise-balloons": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "gulet-turquoise-cove": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "lycian-coast-ruins-sunset": {
+    "width": 1672,
+    "height": 941,
+    "widths": [
+      480,
+      800,
+      1200,
+      1672
+    ]
+  },
+  "mediterranean-resort-golden-hour": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  },
+  "turquoise-cove-resort-town": {
+    "width": 1448,
+    "height": 1086,
+    "widths": [
+      480,
+      800,
+      1200,
+      1448
+    ]
+  }
+}

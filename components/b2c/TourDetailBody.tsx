@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SceneArt } from "@/components/b2c/SceneArt";
+import { B2CImage } from "@/components/b2c/B2CImage";
 import { IconArrow, IconCheck, IconClock, IconInfo, IconPin } from "@/components/b2c/Icons";
 import { PRICE_PLACEHOLDER, TOURS } from "@/lib/b2c/copy";
 import { DURATION_LABELS, TOUR_CATEGORIES, type Tour } from "@/lib/b2c/demo/tours";
@@ -13,8 +13,8 @@ export function TourDetailBody({ tour, titleId }: { tour: Tour; titleId: string 
   const category = TOUR_CATEGORIES.find((c) => c.id === tour.category)!;
   return (
     <article>
-      <div className="relative aspect-[16/9] bg-charcoal sm:aspect-[5/2]">
-        <SceneArt kind={tour.scene.kind} tone={tour.scene.tone} seed={tour.scene.seed} label={`Illustration for ${tour.title}`} />
+      <div className="relative aspect-[16/10] overflow-hidden bg-charcoal sm:aspect-[5/2]">
+        <B2CImage name={tour.image} sizes="(min-width: 1024px) 1024px, 100vw" />
         <span className="demo-tag absolute left-4 top-4 bg-ivory/90 text-ink">Demo</span>
       </div>
 

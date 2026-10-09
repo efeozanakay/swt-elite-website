@@ -1,4 +1,4 @@
-import { SceneArt } from "@/components/b2c/SceneArt";
+import { B2CImage } from "@/components/b2c/B2CImage";
 import { IconArrow, IconClock, IconPin } from "@/components/b2c/Icons";
 import { PRICE_PLACEHOLDER, TOURS } from "@/lib/b2c/copy";
 import { DURATION_LABELS, TOUR_CATEGORIES, type Tour } from "@/lib/b2c/demo/tours";
@@ -22,8 +22,8 @@ export function TourCard({
   return (
     <article className="group relative flex h-full flex-col bg-ivory">
       <div className={`relative overflow-hidden bg-charcoal ${feature ? "aspect-[4/5]" : "aspect-[4/3]"}`}>
-        <div className="h-full w-full transition-transform duration-700 ease-editorial group-hover:scale-[1.04] motion-reduce:transform-none">
-          <SceneArt kind={tour.scene.kind} tone={tour.scene.tone} seed={tour.scene.seed} />
+        <div className="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.04] motion-reduce:transform-none">
+          <B2CImage name={tour.image} alt="" sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw" />
         </div>
         <span className="demo-tag absolute left-3 top-3 bg-ivory/90 text-ink">Demo</span>
       </div>

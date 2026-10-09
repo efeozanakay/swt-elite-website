@@ -9,7 +9,8 @@ import { Photo } from "@/components/Photo";
 import { PRICE_PLACEHOLDER, PROTOTYPE, RESULTS, SEARCH, SERVICES } from "@/lib/b2c/copy";
 import { locationById, locationLabel, type TransferLocation } from "@/lib/b2c/demo/locations";
 import { formatDate } from "@/lib/b2c/locale";
-import { tourDestinationFor } from "@/lib/b2c/cross-sell";
+import { areaImageFor, tourDestinationFor } from "@/lib/b2c/cross-sell";
+import { B2CImage } from "@/components/b2c/B2CImage";
 import {
   searchFromParams,
   searchToQuery,
@@ -83,13 +84,24 @@ export function TransferResults() {
 
   const hotelSide = from!.kind === "airport" ? to! : from!;
   const tourDestination = tourDestinationFor(hotelSide.id);
+  const areaImage = areaImageFor(hotelSide.id);
   const pax = search.adults + search.children;
 
   return (
     <>
       {/* ---------------- Journey summary ---------------- */}
-      <section aria-labelledby="results-title" className="on-dark bg-charcoal pb-10 pt-[calc(var(--header-h)+2.5rem)] text-ivory">
-        <div className="edge wrap">
+      <section aria-labelledby="results-title" className="on-dark relative overflow-hidden bg-charcoal pb-10 pt-[calc(var(--header-h)+2.5rem)] text-ivory">
+        {/* The destination, quietly: on the right half behind the heading,
+            fading into the charcoal so it sets the scene without
+            competing with the summary or the options below. */}
+        {areaImage && (
+          <div aria-hidden="true" className="absolute inset-y-0 right-0 w-full opacity-35 lg:w-[58%] lg:opacity-70">
+            <B2CImage name={areaImage} alt="" sizes="(min-width: 1024px) 58vw, 100vw" />
+            <div className="absolute inset-0 bg-gradient-to-r from-charcoal via-charcoal/60 to-charcoal/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/30 to-charcoal/40" />
+          </div>
+        )}
+        <div className="edge wrap relative">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="min-w-0">
               <p className="eyebrow mb-4">{RESULTS.eyebrow}</p>
@@ -217,18 +229,26 @@ export function TransferResults() {
 
       {/* ---------------- Cross-sell ---------------- */}
       {tourDestination && (
-        <section aria-labelledby="xsell-title" className="bg-bone py-16 text-ink">
+        <section aria-labelledby="xsell-title" className="bg-bone py-16 text-ink lg:py-20">
           <div className="edge wrap">
-          <div className="flex flex-col gap-6 border-l-2 border-brand-amber pl-6 md:flex-row md:items-center md:justify-between">
-            <div className="max-w-xl">
-              <h2 id="xsell-title" className="font-display text-display-sm">{RESULTS.crossSell(hotelSide.name)}</h2>
-              <p className="mt-2 font-sans text-body text-graphite">{RESULTS.crossSellBody}</p>
+            <div className="grid overflow-hidden border border-graphite/15 bg-ivory md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+              {areaImage && (
+                <div className="relative aspect-[16/9] md:aspect-auto md:min-h-[16rem]">
+                  <B2CImage name={areaImage} sizes="(min-width: 768px) 40vw, 100vw" />
+                </div>
+              )}
+              <div className="flex flex-col items-start justify-center gap-6 border-t-2 border-brand-amber p-6 sm:p-10 md:border-l-2 md:border-t-0">
+                <div className="max-w-lg">
+                  <p className="eyebrow mb-3">{RESULTS.crossSellEyebrow}</p>
+                  <h2 id="xsell-title" className="font-display text-display-sm">{RESULTS.crossSell(hotelSide.name)}</h2>
+                  <p className="mt-3 font-sans text-body text-graphite">{RESULTS.crossSellBody}</p>
+                </div>
+                <Link href={`/tours?destination=${encodeURIComponent(tourDestination)}#discover`} className="btn-outline">
+                  {RESULTS.crossSellCta}
+                  <IconArrow size={16} />
+                </Link>
+              </div>
             </div>
-            <Link href={`/tours?destination=${encodeURIComponent(tourDestination)}#discover`} className="btn-outline shrink-0">
-              {RESULTS.crossSellCta}
-              <IconArrow size={16} />
-            </Link>
-          </div>
           </div>
         </section>
       )}

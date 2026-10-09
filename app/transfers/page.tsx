@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Faq } from "@/components/b2c/Faq";
 import { IconArrow, IconCheck } from "@/components/b2c/Icons";
 import { RouteShortcuts } from "@/components/b2c/RouteShortcuts";
-import { SceneArt } from "@/components/b2c/SceneArt";
+import { B2CImage } from "@/components/b2c/B2CImage";
 import { SectionIntro } from "@/components/b2c/SectionIntro";
 import { TransferSearchForm } from "@/components/b2c/TransferSearchForm";
 import { TravelShell } from "@/components/b2c/TravelShell";
@@ -46,16 +45,25 @@ export default function TransfersPage() {
       {/* ---------------- Hero + search ---------------- */}
       <section aria-labelledby="hero-title" className="relative bg-ivory">
         <div className="on-dark relative flex min-h-[560px] flex-col justify-end overflow-hidden bg-charcoal pb-28 pt-[calc(var(--header-h)+3rem)] md:min-h-[640px] lg:h-[88svh] lg:max-h-[920px] lg:pb-56">
-          <Image
-            src="/images/swt-elite-hero-airport-vito.png"
-            alt={TRANSFERS.hero.imageAlt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[68%_60%]"
-          />
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-charcoal/85 via-charcoal/45 to-charcoal/0" />
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-transparent to-transparent" />
+          {/* Both services in one frame: a shared minibus and a private van
+              at the kerb. The vehicles sit right of centre, so the focal
+              point keeps them in shot on narrow screens while the sunset
+              sky on the left carries the headline under a scrim. */}
+          <B2CImage name="airport-transfer-sunset" alt={TRANSFERS.hero.imageAlt} sizes="100vw" priority focus="66% 70%" />
+          {/* Scrim weighted to the type only: a left-side gradient that has
+              faded out before the vehicles, and a short top band for the
+              header. Kept light so the sunset and both vehicles read. */}
+          <div aria-hidden="true" className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-charcoal/80 via-charcoal/40 to-transparent lg:w-[70%]" />
+          <div aria-hidden="true" className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-charcoal/45 to-transparent" />
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-charcoal/55 to-transparent" />
+          {/* The white minibus sits directly behind the body copy at desktop
+              widths. A soft local pool of shade behind the text block,
+              rather than a heavier full-width scrim, keeps the copy at
+              reading contrast without dimming the rest of the frame. */}
+          {/* Below lg the copy spans the full width and crosses the van, so
+              the whole frame takes an even shade instead. */}
+          <div aria-hidden="true" className="absolute inset-0 bg-charcoal/35 lg:hidden" />
+          <div aria-hidden="true" className="absolute inset-0 hidden lg:block bg-[radial-gradient(ellipse_48%_42%_at_22%_58%,rgba(21,19,15,0.72),transparent_100%)]" />
           <div className="edge wrap relative w-full">
             <Reveal immediate className="max-w-3xl">
               <p className="eyebrow mb-6 flex items-center gap-3">
@@ -180,9 +188,7 @@ export default function TransfersPage() {
           <Reveal delay={80} className="mt-12">
             <RouteShortcuts />
           </Reveal>
-          <p className="mt-6 font-sans text-small text-graphite">
-            {TRANSFERS.destinations.note} <span className="italic">{PROTOTYPE.artwork}.</span>
-          </p>
+          <p className="mt-6 font-sans text-small text-graphite">{TRANSFERS.destinations.note}</p>
         </div>
       </section>
 
@@ -210,8 +216,13 @@ export default function TransfersPage() {
       </section>
 
       {/* ---------------- Tours cross-sell ---------------- */}
-      <section aria-labelledby="stay-title" className="on-dark overflow-hidden bg-charcoal text-ivory">
-        <div className="edge wrap grid items-center gap-12 py-24 lg:grid-cols-12 lg:py-28">
+      <section aria-labelledby="stay-title" className="on-dark relative overflow-hidden bg-charcoal text-ivory">
+        {/* Full-bleed landscape behind the bridge to Tours: the page turns
+            from getting there to being there. */}
+        <B2CImage name="lycian-coast-ruins-sunset" alt="" sizes="100vw" focus="55% 50%" />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-charcoal/90 via-charcoal/65 to-charcoal/30" />
+        <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-transparent to-charcoal/40" />
+        <div className="edge wrap relative grid items-center gap-12 py-24 lg:grid-cols-12 lg:py-32">
           <div className="lg:col-span-5">
             <SectionIntro
               id="stay-title"
@@ -219,21 +230,21 @@ export default function TransfersPage() {
               title={TRANSFERS.tours.title}
               body={TRANSFERS.tours.body}
             />
-            <Link href="/tours" className="btn-outline mt-10">
+            <Link href="/tours" className="btn-action mt-10">
               {TRANSFERS.tours.cta}
               <IconArrow size={16} />
             </Link>
           </div>
           <ul className="grid grid-cols-3 gap-3 lg:col-span-7">
-            {TOUR_LIST.filter((t) => t.featured).map((t, i) => (
+            {TOUR_LIST.filter((t) => t.featured).slice(0, 3).map((t, i) => (
               <li key={t.id} className={i === 1 ? "translate-y-8" : ""}>
                 <Link href={`/tours?tour=${t.id}`} className="group block">
-                  <span className="block aspect-[3/4] overflow-hidden">
-                    <span className="block h-full transition-transform duration-700 ease-editorial group-hover:scale-[1.04]">
-                      <SceneArt kind={t.scene.kind} tone={t.scene.tone} seed={t.scene.seed} />
+                  <span className="relative block aspect-[3/4] overflow-hidden ring-1 ring-ivory/15">
+                    <span className="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]">
+                      <B2CImage name={t.image} alt="" sizes="(min-width: 1024px) 260px, 33vw" />
                     </span>
                   </span>
-                  <span className="mt-3 block font-sans text-[0.6875rem] uppercase tracking-[0.14em] text-ivory/60">{t.destination}</span>
+                  <span className="mt-3 block font-sans text-[0.6875rem] uppercase tracking-[0.14em] text-ivory/75">{t.destination}</span>
                   <span className="mt-1 block font-display text-[1.0625rem] leading-snug sm:text-[1.25rem]">{t.title}</span>
                 </Link>
               </li>

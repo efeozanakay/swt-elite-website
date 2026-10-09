@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "images": "node scripts/generate-images.mjs"
+    "images": "node scripts/generate-images.mjs",
+    "images:b2c": "node scripts/generate-b2c-images.mjs"
   },
   "dependencies": {
     "next": "14.2.35",

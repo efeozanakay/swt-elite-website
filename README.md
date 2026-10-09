@@ -102,6 +102,7 @@ components/b2c/   Travel page components (search form, results, tours explorer)
 lib/b2c/copy.ts   All customer-facing copy, ready to split per locale
 lib/b2c/demo/     DEMO DATA ONLY: locations and illustrative tours
 lib/b2c/transfer-search.ts  Search state, URL encoding and validation
+lib/b2c/images.ts  Image registry: alt text and focal points
 ```
 
 This is a frontend prototype. There are no prices, no availability, no
@@ -109,9 +110,12 @@ booking, no checkout and no backend: every price renders as "—", and the
 pages say so. Tours are illustrative examples, labelled "Demo". The
 search state lives in the URL, so results can be reloaded and shared.
 
-Destination and tour imagery is drawn in code by `SceneArt`, because no
-licensed destination photography exists yet. Replace its call sites with
-`<Photo>` when it does. Only English is implemented; the language menu
+Destination, tour and hero imagery for these pages was supplied by SWT
+Elite. Originals live in `source-assets/b2c/` (not deployed); run
+`npm run images:b2c` to regenerate the responsive WebP set in
+`public/images/b2c/`, which `B2CImage` serves with `srcset`. Alt text and
+focal points live in `lib/b2c/images.ts`. The shared/private service
+cards keep the company's own fleet photographs. Only English is implemented; the language menu
 lists German, Turkish and Russian as in preparation and switches nothing.
 
 ## Project status

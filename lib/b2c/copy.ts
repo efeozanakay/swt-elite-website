@@ -32,7 +32,6 @@ export const PROTOTYPE = {
   pricing: "Prices are not shown in this preview.",
   booking: "Online booking isn’t open yet. This preview ends at your selection — nothing is reserved or charged.",
   tours: "The experiences below are illustrative examples used to design this page. They are not yet available to book.",
-  artwork: "Illustration — destination photography to follow",
 };
 
 export const PRICE_PLACEHOLDER = "—";
@@ -121,7 +120,7 @@ export const TRANSFERS = {
     eyebrow: "Airport transfers — Türkiye",
     title: ["Travel your way.", "We take care of the rest."],
     body: "Shared shuttles and private transfers between Türkiye’s airports and your hotel — in either direction, arranged by a local operator.",
-    imageAlt: "An SWT Elite van waiting outside an airport terminal at dusk",
+    imageAlt: "A minibus and a private van waiting at an airport terminal kerb at sunset",
   },
   compare: {
     eyebrow: "Two ways to travel",
@@ -223,6 +222,7 @@ export const RESULTS = {
     title: "Start with your journey.",
     body: "Tell us where you’re going and we’ll show both transfer options.",
   },
+  crossSellEyebrow: "During your stay",
   crossSell: (place: string) => `Staying in ${place}?`,
   crossSellBody: "See experiences you could add to your stay — boat days, old towns and ancient sites nearby.",
   crossSellCta: "Explore experiences",
@@ -238,6 +238,11 @@ export const TOURS = {
     title: ["Discover more", "of Türkiye."],
     body: "Ancient cities by the sea, quiet coves and valleys of stone — the places worth leaving the sun lounger for.",
     cta: "Find an experience",
+  },
+  featured: {
+    eyebrow: "Featured experiences",
+    title: "Four days worth planning around.",
+    body: "On the water, above the valleys, down the river and along the ancient coast.",
   },
   categories: {
     eyebrow: "Explore by interest",

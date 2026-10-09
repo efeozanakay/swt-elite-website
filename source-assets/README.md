@@ -29,3 +29,12 @@ large-format work. `scripts/generate-images.mjs` is kept intact and still
 runnable for a future attempt at substantially higher quality, but its
 photographic output is not currently used or shipped. Any retry needs a
 review by eye, not a byte count.
+
+## `b2c/`
+
+Supplied imagery for the consumer travel pages (/transfers, /tours),
+renamed to descriptive English slugs. `npm run images:b2c` derives the
+WebP widths in `public/images/b2c/` and their manifest. Quality is q86,
+chosen by eye against q92 at 100% crops; the script prints PSNR per
+variant (31-38 dB, low because these sources are dense with fine
+texture) so any change to the settings is measurable.

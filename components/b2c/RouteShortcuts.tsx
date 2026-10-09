@@ -1,18 +1,18 @@
 "use client";
 
-import { SceneArt } from "@/components/b2c/SceneArt";
+import { B2CImage } from "@/components/b2c/B2CImage";
 import { IconArrow } from "@/components/b2c/Icons";
 import { prefillTransfer } from "@/components/b2c/TransferSearchForm";
 import { TRANSFERS } from "@/lib/b2c/copy";
 import { locationById } from "@/lib/b2c/demo/locations";
-import type { SceneKind, SceneTone } from "@/lib/b2c/scenes";
+import type { ImageKey } from "@/lib/b2c/images";
 
-const ROUTES: { to: string; scene: SceneKind; tone: SceneTone; seed: number }[] = [
-  { to: "belek", scene: "coast", tone: "dusk", seed: 3 },
-  { to: "side", scene: "ruins", tone: "dusk", seed: 8 },
-  { to: "alanya", scene: "coast", tone: "day", seed: 14 },
-  { to: "kemer", scene: "mountains", tone: "dawn", seed: 6 },
-  { to: "antalya-centre", scene: "oldtown", tone: "night", seed: 2 },
+const ROUTES: { to: string; image: ImageKey; focus?: string }[] = [
+  { to: "belek", image: "mediterranean-resort-golden-hour", focus: "50% 60%" },
+  { to: "side", image: "ancient-coastal-ruins-sunset", focus: "74% 50%" },
+  { to: "alanya", image: "alanya-castle-marina", focus: "38% 50%" },
+  { to: "kemer", image: "turquoise-cove-resort-town", focus: "62% 55%" },
+  { to: "antalya-centre", image: "antalya-kaleici-harbour", focus: "70% 55%" },
 ];
 
 /**
@@ -37,7 +37,7 @@ export function RouteShortcuts() {
               className="group relative block aspect-[3/4] w-full overflow-hidden bg-charcoal text-left text-ivory"
             >
               <span className="absolute inset-0 transition-transform duration-700 ease-editorial group-hover:scale-[1.04]">
-                <SceneArt kind={r.scene} tone={r.tone} seed={r.seed} />
+                <B2CImage name={r.image} focus={r.focus} alt="" sizes="(min-width: 1024px) 250px, (min-width: 640px) 33vw, 70vw" />
               </span>
               <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/10 to-transparent" />
               <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-5">
