@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "images": "node scripts/generate-images.mjs",
-    "images:b2c": "node scripts/generate-b2c-images.mjs"
+    "images:b2c": "node scripts/generate-b2c-images.mjs",
+    "test:rules": "tsc -p scripts/booking-rules && node scripts/booking-rules/rules.test.cjs"
   },
   "dependencies": {
     "next": "14.2.35",

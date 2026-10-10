@@ -1,0 +1,178 @@
+/**
+ * Copy for the step-by-step booking flow, My Transfer and the
+ * post-booking discovery section. Same house rules as copy.ts: no prices,
+ * no availability, no promises that operations have not approved, and
+ * no wording that implies a booking or payment was made.
+ */
+import { AIRPORT_DESK_PAYMENT, SUPPORT } from "@/lib/b2c/business";
+import type { StepId } from "@/lib/b2c/booking/draft";
+
+export const FLOW = {
+  eyebrow: "Book your transfer",
+  steps: {
+    transfer: { label: "Select Transfer", title: "Choose your transfer", short: "Transfer" },
+    extras: { label: "Extras", title: "Extras and requests", short: "Extras" },
+    details: { label: "Passenger Details", title: "Passenger and travel details", short: "Details" },
+    review: { label: "Review Booking", title: "Review your booking", short: "Review" },
+    payment: { label: "Payment Method", title: "How would you like to pay?", short: "Payment" },
+  } satisfies Record<StepId, { label: string; title: string; short: string }>,
+  stepOf: (n: number, total: number) => `Step ${n} of ${total}`,
+  next: (label: string) => `Next: ${label}`,
+  back: "Back",
+  continue: "Continue",
+  continueTo: (label: string) => `Continue to ${label}`,
+  stepNavLabel: "Booking progress",
+  completed: "completed",
+  current: "current step",
+  errors: (n: number) => (n === 1 ? "One detail needs attention before you continue." : `${n} details need attention before you continue.`),
+  prototype:
+    "Preview: you can complete every step, but nothing is reserved, sent, stored on a server or charged. Online booking is not open yet.",
+  summary: "Journey summary",
+  showSummary: "Show journey summary",
+  editSearch: "Edit journey",
+  closeEdit: "Close",
+  service: "Service",
+  price: "Price",
+  priceUnavailable: "Not available in this preview",
+  priceNote: "Prices will be shown here when booking opens. No price is estimated in this preview.",
+  extras: {
+    seats: "Child seats",
+    seatsHint: "Free of charge, subject to confirmation. One per child at most.",
+    seatsNone: "Child seats are for children travelling with you. Add children in your journey search to request one.",
+    declare: "Special equipment",
+    declareHint: "Please declare anything that needs space in the vehicle so it can be planned for.",
+    wheelchairNote:
+      "A wheelchair-accessible vehicle can’t be promised until our operations team confirms it. We will contact you before your transfer.",
+    notes: "Notes and special requests",
+    notesHint: "Optional. For example, the size of a wheelchair or golf bag, mobility needs, or anything the driver should know.",
+    none: "No extras requested",
+  },
+  details: {
+    flightDateHint: "Usually the transfer date. Choose the next day for an early-morning flight.",
+    arrivalTimeHint: "Scheduled landing time from your ticket.",
+    departureTimeHint: "Scheduled departure time from your ticket.",
+    terminal: "Arrival terminal",
+    terminalHint: "Tells us which desk will meet you. Choose “Not sure yet” if you don’t know.",
+    terminalUnknown: "Not sure yet",
+    arrivalDate: (date: string) => `Landing on ${date}`,
+    requestsSummary: "Extras and requests",
+    change: "Change",
+  },
+  review: {
+    supplied: "Supplied by you",
+    suppliedHint: "Check these details. You can go back and change any of them.",
+    confirmed: "Confirmed by SWT ELITE operations",
+    confirmedHint: "These are set by our operations team after booking and shared with you before you travel.",
+    edit: "Edit",
+    ops: [
+      { term: "Pickup time", detail: "Arrival journeys meet your monitored flight. For journeys to the airport, the pickup time is set by operations and sent to your hotel reception." },
+      { term: "Vehicle", detail: "Assigned by operations for your group and luggage." },
+      { term: "Journey duration", detail: "Varies with traffic and season; shared when confirmed." },
+      { term: "Extras", detail: "Child seats and special equipment are confirmed by operations." },
+      { term: "Price", detail: "Not available in this preview." },
+    ],
+    cancellation: "Cancellation",
+    paymentNext: "Payment method",
+    paymentNextBody: "You’ll choose how to pay in the next step.",
+  },
+  payment: {
+    desk: {
+      title: "Pay at the airport desk",
+      badge: "Antalya Airport arrivals",
+      body: `Reserve now and pay at the SWT ELITE transfer desk when you land at ${AIRPORT_DESK_PAYMENT.airportLabel}.`,
+      accepted: "Accepted at the desk",
+      where: "Where to pay",
+      whereUnknown: "Your desk depends on your arrival terminal. Add it in Passenger Details, or use the list below.",
+      roundTrip: AIRPORT_DESK_PAYMENT.roundTrip,
+      unavailable: "Not available for this itinerary",
+    },
+    online: {
+      title: "Pay online by card",
+      badge: "Prototype — not available yet",
+      body: "Online card payment is planned. In this preview no card details are collected and no payment is taken.",
+    },
+    legend: "Payment method",
+    statusNote:
+      "Booking, payment and reconfirmation are tracked separately. A booking is only marked as paid after a payment has been recorded.",
+  },
+  finish: "Finish preview",
+  finishNote: "Finishing the preview does not reserve or pay for anything.",
+};
+
+export const COMPLETE = {
+  eyebrow: "Preview complete",
+  title: "You’ve reached the end of the booking preview.",
+  body: "Nothing has been reserved, sent or charged. When online booking opens, this is where you would receive your booking reference and confirmation email.",
+  next: "What will happen after a real booking",
+  steps: [
+    "A confirmation email with your booking reference and a secure link to My Transfer.",
+    "The day before each journey, a reminder asking you to confirm you’re still travelling.",
+    "Pickup details for journeys to the airport, once our operations team has set them.",
+  ],
+  contact: `To arrange a transfer today, email ${SUPPORT.email}.`,
+  myTransfer: "See how My Transfer will work",
+  restart: "Start a new search",
+  edit: "Back to payment method",
+};
+
+export const DISCOVER = {
+  eyebrow: "During your stay",
+  title: (place: string) => `Explore ${place}`,
+  body: "Illustrative experiences near where you’re staying. They show how recommendations will appear; none can be booked yet.",
+  all: (place: string) => `See all experiences in ${place}`,
+  demoNote: "Demo experiences — not yet bookable. No prices or availability are shown.",
+};
+
+export const MANAGE = {
+  meta: {
+    title: "My Transfer | SWT Elite",
+    description: "Review your SWT ELITE transfer booking, payment status and pickup details.",
+  },
+  eyebrow: "My Transfer",
+  title: "Your transfer booking",
+  demoLabel: "Demo data.",
+  demoBanner:
+    "This page shows fictional bookings to design how My Transfer will work. It does not retrieve any real reservation or personal data.",
+  access: {
+    title: "How you’ll access your booking",
+    body: "Your booking will open from the secure link in your confirmation email or reminder, or after signing in. A booking reference on its own will never open booking details.",
+  },
+  scenario: "Demo scenario",
+  reference: "Booking reference",
+  bookingStatus: "Booking",
+  payment: "Payment",
+  paymentMethod: "Method",
+  paymentStatus: "Status",
+  paymentCovers: (n: number) => (n > 1 ? "Covers both journeys" : "Covers this journey"),
+  paidReturn: "Paid with your arrival payment. No further payment is needed for this journey.",
+  deskDueShort: "Due at the airport desk on arrival",
+  deskIncluded: "Included in the single payment at the airport desk on arrival — not charged separately.",
+  deskDue: "Pay at the desk when you land, by cash or card (POS terminal).",
+  outbound: "Arrival journey",
+  outboundGeneric: "Outbound journey",
+  returnJourney: "Return journey",
+  pickup: "Pickup",
+  pickupMeets: "We monitor your flight and meet you on arrival.",
+  pickupPending: "Pickup time not set yet",
+  pickupPendingHotel: "Our operations team sets it and sends it to your hotel reception, who can give it to you.",
+  pickupPendingOther: "It will be shared with you once confirmed.",
+  duration: "Journey duration",
+  durationUnavailable: "Shared when confirmed",
+  vehicle: "Vehicle",
+  vehiclePending: "Assigned by operations",
+  reconfirmation: "Your confirmation",
+  confirmAction: "Confirm I’m travelling",
+  confirmDone: "Thanks — confirmed. (Demo: nothing was sent.)",
+  reportChange: "Something has changed",
+  meeting: "Meeting at the airport",
+  passengers: "Passengers",
+  flight: "Flight",
+  accommodation: "Accommodation",
+  extras: "Requested extras",
+  notes: "Notes for operations",
+  emergency: "24/7 emergency transfer assistance",
+  emergencyBody: "For urgent help on the day — for example if you can’t find your driver.",
+  reminder: "Reminder preview",
+  reminderNote: "How the planned day-before reminder would read for this journey. Nothing is scheduled or sent.",
+  discover: "Explore your destination",
+};

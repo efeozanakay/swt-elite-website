@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../.rules-build",
+    "rootDir": "../..",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "incremental": false,
+    "isolatedModules": false,
+    "plugins": []
+  },
+  "include": ["../../lib/b2c/booking/**/*.ts", "../../lib/b2c/discovery.ts"]
+}

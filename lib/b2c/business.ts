@@ -115,3 +115,28 @@ export const EQUIPMENT_OPTIONS = [
 
 export const EQUIPMENT_NOTE =
   "Requests are reviewed by our operations team and confirmed with your booking. A wheelchair-accessible vehicle can’t be promised until it has been confirmed.";
+
+/**
+ * Pay at the airport desk: approved for eligible Antalya Airport (AYT)
+ * arrival bookings. The customer reserves without paying online and
+ * pays the SWT ELITE desk on arrival. Eligibility is derived from the
+ * itinerary in lib/b2c/booking/payment-eligibility.ts; it is never
+ * offered universally.
+ */
+export const AIRPORT_DESK_PAYMENT = {
+  airportId: "ayt",
+  airportLabel: "Antalya Airport (AYT)",
+  methods: ["Cash", "Credit or debit card (physical POS terminal at the desk)"],
+  points: [
+    { terminal: "int_t1", label: "International Terminal 1", desk: "Desk 44" },
+    { terminal: "int_t2", label: "International Terminal 2", desk: "Desk 74" },
+    {
+      terminal: "domestic",
+      label: "Domestic arrivals",
+      desk: "Desk 44",
+      note: "A representative meets you and takes you to SWT ELITE Desk 44 in International Terminal 1.",
+    },
+  ],
+  roundTrip:
+    "On a round trip, the outbound and return transfers can be paid together in one payment at the desk on arrival. Once paid, no further payment is requested for the return.",
+} as const;

@@ -237,8 +237,8 @@ export const TRANSFERS = {
 
 export const RESULTS = {
   meta: {
-    title: "Transfer Options | SWT Elite",
-    description: "Compare Shared Shuttle and Private Transfer options for your journey.",
+    title: "Book Your Transfer | SWT Elite",
+    description: "Choose Shared Shuttle or Private Transfer, add extras and your travel details, and review your booking.",
   },
   eyebrow: "Your transfer",
   title: "Choose your transfer",
@@ -425,6 +425,7 @@ export const FOOTER_TRAVEL = {
   links: [
     { label: NAV.transfers, href: "/transfers" },
     { label: NAV.tours, href: "/tours" },
+    { label: "My Transfer (preview)", href: "/my-transfer" },
   ],
 };
 

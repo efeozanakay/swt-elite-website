@@ -17,13 +17,18 @@ import { MEETING } from "@/lib/b2c/copy";
 export function AirportMeeting({
   airportId,
   tone = "light",
+  initialTerminal,
 }: {
   airportId: string;
   tone?: "light" | "dark";
+  /** Terminal label to show first, e.g. from a booking's flight. */
+  initialTerminal?: string | null;
 }) {
   const id = useId();
   const info = meetingFor(airportId);
-  const [terminal, setTerminal] = useState(0);
+  const [terminal, setTerminal] = useState(() =>
+    Math.max(0, info?.points.findIndex((p) => p.terminal === initialTerminal) ?? 0)
+  );
   const dark = tone === "dark";
   const muted = dark ? "text-ivory/75" : "text-graphite";
 
